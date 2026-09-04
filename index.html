@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1E2836">
+<title>密度與浮沉（起始模板）｜國中理化模擬</title>
+<!-- Font Awesome 6：唯一允許的外部資源（DEV_SPEC 鐵律 10） -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+/* ═══ 1. CSS 變數（對照 ../_shared/design/DESIGN_SPEC.md 第 2 節） ═══ */
+:root{
+  /* UI 等比放大係數（DEV_SPEC 5.4）：由 JS 的 uiScale() 依裝置實體像素設定，不是斷點。
+     只有「字級」乘 --u，元件尺寸（按鈕 44、圖示鈕 34、膠囊／分頁 40、滑桿把手 24）維持固定 px——
+     兩者都放大會讓版面比例跑掉，且與既有模擬長得不一樣。canvas 內的字級則乘 JS 的 U。
+     **固定尺寸容器內的圖示字級（.logo / .icon-btn / 核取勾）也不乘**，否則大屏會撐破容器。 */
+  --u:1;
+  /* 版面放大係數：只有教室大屏 ≠ 1。**寫成固定 px 的欄寬乘的是 --ul，不是 --u**——
+     平板放大字級是為了近距離可讀，版面跟著放大只會從畫布挖走空間；大屏是 6 公尺外看，
+     整個版面必須等比放大，否則固定寬的欄裝不下放大後的字。本模板用比例欄（1fr 2fr 1fr）
+     所以沒用到它，改用固定 px 欄寬時務必乘 --ul。 */
+  --ul:1;
+  --c-primary:#2A6FDB;
+  --c-primary-dark:#1E57B0;
+  --c-primary-soft:#E8F0FD;
+  --c-primary-soft-bd:#C4D7F5;
+  --c-nav:#1E2836;
+  --c-nav-idle:#9DAABB;
+  --c-bg:#F6F7F9;
+  --c-surface:#FFFFFF;
+  --c-bd:#E2E5EA;
+  /* 以下四個值取自 DESIGN_SPEC 第 2 節的「合格色定案表」，不是該節開頭那張表的舊值。
+     舊值（#CFD5DD / #7A8496 / #2F9E63 / #D64545）都沒過對比度門檻，三個既有模擬曾各自
+     加深成不同的值——直接照抄這裡，不要再自己調一版。 */
+  --c-bd-ctl:#8A93A1;      /* 控制邊框，非文字門檻 3：白卡 3.10 */
+  --c-text:#1C2433;
+  --c-text-2:#445062;
+  --c-text-3:#67717F;      /* 輔助文字，文字門檻 4.5：白卡 4.95 */
+  --c-ok:#24794C;          /* 介面文字用的成功色；畫布圖形的綠仍是 #2F9E63 */
+  --c-warn:#C62F2F;        /* 介面文字用的警示色；畫布圖形的紅仍是 #D64545 */
+  --c-slider-bg:#D3D9E1;   /* 滑桿未填軌底。唯一定義處，不得在 CSS 裡再寫一次字面量 */
+}
+
+/* ═══ 2. base：字體、上下標、觸控（DEV_SPEC 第 3、4、5 節） ═══ */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden;overscroll-behavior:none}
+body{
+  font-family:system-ui,-apple-system,"Segoe UI","PingFang TC","Microsoft JhengHei",sans-serif;
+  color:var(--c-text);
+  line-height:1.5;
+  -webkit-text-size-adjust:100%;
+}
+/* 上下標標準做法：line-height:0 不撐高行盒，跨 Windows/iPadOS 不跑版 */
+sub,sup{font-size:.62em;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.55em}
+sub{bottom:-.22em}
+/* 視覺分數（需要強調分數結構時才用；一般寫斜線式） */
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.15;font-size:.9em}
+.frac>.num{border-bottom:1.5px solid currentColor;padding:0 .25em}
+.frac>.den{padding:0 .25em}
+.num-val{font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:pointer}
+/* 互動區禁選字、去 iOS 點擊灰底與長按選單 */
+.app{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+button,.chip,input[type="range"],label.check,label.switch{touch-action:manipulation}
+canvas{touch-action:none;display:block}
+/* 捲動容器（.panel/.datacol）內的滑桿只鎖水平：寫成 none 會讓手指落在滑桿上時捲不動列表，
+   而且學生想捲動就會直接改掉參數值（DEV_SPEC 5.2） */
+.panel input[type="range"],.datacol input[type="range"]{touch-action:pan-y}
+/* 上面關掉了 iOS 的系統點擊閃現，就必須自己補回按下回饋，否則觸控時按任何鈕都沒有立即反應 */
+button:active,.chip:active,label.check:active,label.switch:active{transform:scale(.96);filter:brightness(.94)}
+/* 視覺尺寸 vs 感應範圍（鐵律 6）：DESIGN_SPEC 的圖示鈕 34、膠囊與分頁 38 是刻意的視覺規格，
+   但命中區一律要撐到 44px。用透明 ::after 擴大，不佔版面空間、視覺完全不變。
+   直接把視覺高度改成 44 會撐壞版面；命中區留在 34/38 則違反鐵律 6，兩者都不對。 */
+.icon-btn,.chip,.navtab{position:relative}
+.icon-btn::after,.chip::after,.navtab::after{
+  content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:100%;height:100%;min-width:44px;min-height:44px;
+}
+
+/* ═══ 3. 版面：Header / 三欄 / 抽屜 / 導覽列（../_shared/design/layout.html） ═══
+   本模板預設有抽屜。要做的模擬沒有隨時間推進的動畫（沒有播放/暫停）→ 把 .drawer 整層刪掉，
+   動作鈕改掛左欄下方的動作卡，作法見 DESIGN_SPEC 第 1 節「抽屜的存廢」，
+   現行實作見 Density_experiment。刪抽屜時 main 的 padding 下緣要由 0 改回 12px */
+.app{
+  height:100vh;   /* fallback */
+  height:100dvh;  /* iPad Safari 工具列收合時的正確高度 */
+  display:flex;flex-direction:column;background:var(--c-bg);
+}
+.topbar{height:50px;flex:none;display:flex;align-items:center;gap:12px;padding:0 18px;background:var(--c-surface);border-bottom:1px solid var(--c-bd)}
+/* 固定尺寸容器內的字級不乘 --u：28px 的方塊配 calc(14px * 2.3)＝32.2px 的字，實測溢出 10px */
+.logo{width:28px;height:28px;border-radius:7px;background:var(--c-primary);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex:none}
+.title{font-size:calc(17px * var(--u));font-weight:700}
+/* gap 需 ≥10：兩顆 34px 圖示鈕的 44px 命中盒各向外溢出 5px，gap:8 會讓它們互相重疊（回流自 Density_experiment） */
+.topbar .actions{margin-left:auto;display:flex;gap:12px}
+/* 同上：34px 容器配 calc(15px * 2.3)＝34.5px 的圖示會撐破，字級一律固定 */
+.icon-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--c-bd-ctl);background:var(--c-surface);display:flex;align-items:center;justify-content:center;color:var(--c-text-2);font-size:14px}
+
+main{flex:1;position:relative;display:grid;grid-template-columns:1fr 2fr 1fr;gap:12px;padding:12px 14px 0;min-height:0}
+.panel{background:var(--c-surface);border:1px solid var(--c-bd);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:16px;min-width:0;overflow-y:auto}
+.panel h2{font-size:calc(13px * var(--u));font-weight:700;margin:0}
+.stage{position:relative;border-radius:10px;border:1px solid #C4D3E8;overflow:hidden;min-width:0;min-height:0}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%}
+/* 固定位置的說明標籤放 HTML 圖層，不畫進 canvas（DEV_SPEC 4.4） */
+.stage-label{position:absolute;left:12px;bottom:12px;font-size:calc(12px * var(--u));color:#3B5578;background:rgba(255,255,255,.78);padding:3px 9px;border-radius:5px;pointer-events:none}
+.datacol{display:flex;flex-direction:column;gap:10px;min-width:0;overflow-y:auto}
+.datacard{background:var(--c-surface);border:1px solid var(--c-bd);border-radius:10px;padding:13px 15px;flex:1;display:flex;flex-direction:column;justify-content:center}
+.datacard .lbl{font-size:calc(12px * var(--u));color:var(--c-text-3)}
+.datacard .val{font-size:calc(23px * var(--u));font-weight:700;font-variant-numeric:tabular-nums;min-width:5ch}
+.datacard .unit{font-size:calc(12px * var(--u));font-weight:400;color:var(--c-text-3)}
+.datacard.state{background:var(--c-primary-soft);border-color:var(--c-primary-soft-bd)}
+.datacard.state .lbl{color:#3B5AA0}
+.datacard.state .val{font-size:calc(20px * var(--u));color:var(--c-primary)}
+
+.drawer{flex:none;margin:12px 14px;background:var(--c-surface);border:1px solid var(--c-bd);border-radius:12px;padding:10px 20px 12px;box-shadow:0 -4px 12px rgba(28,36,51,.05)}
+/* 抽屜不設把手（DESIGN_SPEC 第 1 節，2026-09-02）：抽屜是固定的、不能拖曳收合，
+   一條不能拉的把手等於騙學生去拉它。要能拖曳收合再談把手。 */
+.drawer .row{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.playbtns{display:flex;gap:8px;flex:none}
+.round-btn{width:44px;height:44px;border-radius:50%;background:var(--c-bg);border:1px solid var(--c-bd-ctl);color:var(--c-text-2);display:flex;align-items:center;justify-content:center;font-size:calc(15px * var(--u))}
+.round-btn.primary{background:var(--c-primary);border-color:var(--c-primary);color:#fff;font-size:calc(17px * var(--u))}
+/* 速度改用分段切換器後不必再撐寬（原本的寬度是留給滑桿軌道的），也不需要數值欄——倍率寫在區段上 */
+.speed{display:flex;align-items:center;gap:10px;flex:none}
+.speed .name{font-size:calc(13px * var(--u));color:var(--c-text-2);font-weight:700;flex:none}
+.mobile-tabs{display:none;gap:8px;flex:none}
+
+/* gap 6 讓分頁的 44px 命中區只隔 6px，觸控易誤按隔壁頁（回流自 dissolution-sim 審查 C3） */
+.bottomnav{height:56px;flex:none;display:flex;align-items:center;padding:0 18px;background:var(--c-nav);gap:10px}
+.navtab{white-space:nowrap;flex:none;height:38px;padding:0 18px;border-radius:8px;color:var(--c-nav-idle);font-size:calc(13.5px * var(--u));display:flex;align-items:center}
+.navtab[aria-selected="true"]{background:var(--c-primary);color:#fff;font-weight:700}
+
+/* 分頁切換：同一檔案內用 display 切換，不做多頁 html */
+.screen{display:none;position:absolute;inset:0}
+.screen.active{display:block}
+.placeholder{height:100%;display:flex;align-items:center;justify-content:center;color:var(--c-text-3);font-size:calc(14px * var(--u));background:var(--c-surface);border-radius:10px;border:1px solid var(--c-bd)}
+
+/* ═══ 4. 元件（../_shared/design/components-spec.html） ═══ */
+.chips{display:flex;flex-direction:column;gap:6px}
+/* 膠囊：h40 全圓角（DESIGN_SPEC 第 4 節）。舊值 h38/r8 與規範正文不符，2026-09-02 對齊 */
+.chip{white-space:nowrap;height:40px;padding:0 14px;border-radius:20px;background:var(--c-surface);border:1px solid var(--c-bd-ctl);color:var(--c-text-2);font-size:calc(13px * var(--u));display:flex;align-items:center}
+.chip[aria-pressed="true"]{background:var(--c-primary);border-color:var(--c-primary);color:#fff;font-weight:700}
+
+/* 分段切換器（DESIGN_SPEC 第 4 節）：容器內多檔擇一，選中那格白底浮起。
+   判準只有一條——**選了它，畫面上其他的控制項或整組內容會跟著改變**；
+   膠囊選完，旁邊的控制項原封不動。已知場合：切換左右欄的內容頁面、動畫速度倍率、
+   切換操作模式（例：自動／手動拉紙，切過去之後設定區的選單會換一組）。
+   **挑參數值不要用它**（顆粒大小、溶質種類、打點頻率那種用上面的膠囊）。
+   容器總高 1+3+36+3+1 ＝ 44，與圓鈕、按鈕、下拉觸發鈕齊高。
+   底色用本規範既有的分層慣例（--c-bg 底 ＋ --c-bd-ctl 邊框），不是 iOS 那種深灰容器。 */
+/* flex:none 不可省：放在縱向 flex 容器內會被 flex-shrink 壓掉零點幾 px，總高就不再是 44 */
+.seg{display:inline-flex;flex:none;background:var(--c-bg);border:1px solid var(--c-bd-ctl);border-radius:10px;padding:3px}
+/* 兩態字重都是 700：字重一變字寬就變，相鄰區段會左右跳動（DEV_SPEC 3.2 版面不得依賴精確字寬） */
+.seg button{position:relative;flex:1 0 auto;min-width:56px;height:36px;padding:0 14px;border-radius:8px;
+  font-size:calc(13px * var(--u));font-weight:700;color:var(--c-text-3);
+  display:flex;align-items:center;justify-content:center;white-space:nowrap;transition:background .15s,color .15s}
+/* 這個陰影是 DESIGN_SPEC 第 6 節的三個例外之一（抽屜、滑桿把手、分段切換器選中格） */
+.seg button[aria-pressed="true"]{background:var(--c-surface);color:var(--c-text);box-shadow:0 1px 3px rgba(28,36,51,.16)}
+/* 視覺 36、命中區 44（鐵律 6） */
+.seg button::after{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:100%;height:44px;min-width:44px}
+
+/* 下拉選單（DESIGN_SPEC 第 4 節）：一律用這組自訂元件，禁止用原生 <select>——
+   原生的展開清單由作業系統繪製，列高、選中底色、圓角、陰影全都套不上，Windows 與 iPadOS 也長得不一樣。
+   三個刻意偏離舊規範的地方，不要改回去：
+     1. 選項列高 44（規範舊值 42）——列本身就是命中區，42 違反 DEV_SPEC 鐵律 6。
+     2. 清單浮出式（top:calc(100%+4px)、四角圓、四邊框），不是與觸發鈕相連的連體式——
+        連體式在 56px 高的卡片內會被裁切。
+     3. 字級 13px（不是 16px）——自訂元件不受 DEV_SPEC 3.2「select ≥16px」的 iOS 限制，
+        才能與膠囊、按鈕的控制標籤級距對齊。 */
+/* .dd 是 flex:1，必須放在橫向容器內才會撐滿；直接丟進直排的 .panel 會吃掉整欄高度 */
+.ddrow{display:flex;align-items:center;gap:10px}
+.ddrow .name{flex:none;font-size:calc(13px * var(--u));font-weight:700;color:var(--c-text-2)}
+.dd{position:relative;flex:1;min-width:0}
+.dd-btn{width:100%;height:44px;border-radius:10px;border:1px solid var(--c-bd-ctl);background:var(--c-surface);
+  color:var(--c-text);font-size:calc(13px * var(--u));font-weight:700;display:flex;align-items:center;gap:6px;padding:0 10px}
+.dd-btn .v{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dd-btn i{flex:none;font-size:calc(11px * var(--u));color:var(--c-text-3);transition:transform .15s}
+.dd-btn:disabled{background:var(--c-bg);border-color:var(--c-bd);color:var(--c-text-3);cursor:default}
+.dd.open .dd-btn{border-color:var(--c-primary);box-shadow:0 0 0 3px rgba(42,111,219,.15)}
+.dd.open .dd-btn i{transform:rotate(180deg)}
+.dd-list{display:none;position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:30;padding:4px;
+  background:var(--c-surface);border:1px solid var(--c-bd-ctl);border-radius:10px;box-shadow:0 6px 18px rgba(28,36,51,.14)}
+.dd.open .dd-list{display:block}
+.dd-list button{width:100%;height:44px;border-radius:8px;padding:0 10px;display:flex;align-items:center;
+  font-size:calc(13px * var(--u));color:var(--c-text-2)}
+.dd-list button[aria-selected="true"]{background:var(--c-primary-soft);color:var(--c-primary);font-weight:700}
+
+.sliderbox .head{display:flex;justify-content:space-between;font-size:calc(13px * var(--u));margin-bottom:2px}
+.sliderbox .head .name{color:var(--c-text-2);font-weight:700}
+.sliderbox .head .val{font-weight:700;font-variant-numeric:tabular-nums}
+.sliderbox .minmax{display:flex;justify-content:space-between;font-size:calc(11.5px * var(--u));color:var(--c-text-3)}
+/* 滑桿：軌 7px、把手 24px、感應高度 44px（透明區）。兩個尺寸是 DESIGN_SPEC 第 4 節的定值，不是範圍。
+   thumb 的 margin-top 必須等於 (軌高 − 把手) ÷ 2 ＝ (7 − 24) ÷ 2 ＝ −8.5px，
+   改尺寸時三處（track / thumb / margin-top）要一起重算，只改一處會讓把手離開軌道中線 */
+input[type="range"]{-webkit-appearance:none;appearance:none;width:100%;height:44px;margin:0;background:transparent}
+input[type="range"]::-webkit-slider-runnable-track{height:7px;border-radius:4px;background:linear-gradient(to right,var(--c-primary) var(--fill,50%),var(--c-slider-bg) var(--fill,50%))}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#fff;border:2px solid var(--c-primary);margin-top:-8.5px;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+input[type="range"]::-moz-range-track{height:7px;border-radius:4px;background:var(--c-slider-bg)}
+input[type="range"]::-moz-range-progress{height:7px;border-radius:4px;background:var(--c-primary)}
+input[type="range"]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#fff;border:2px solid var(--c-primary);box-shadow:0 1px 3px rgba(0,0,0,.2)}
+
+label.check{display:flex;align-items:center;gap:8px;font-size:calc(13px * var(--u));color:var(--c-text-2);min-height:44px}
+label.check input{position:absolute;opacity:0;width:0;height:0}
+label.check .box{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--c-bd-ctl);background:var(--c-surface);display:flex;align-items:center;justify-content:center;color:#fff;font-size:calc(12px * var(--u));flex:none}
+label.check input:checked+.box{background:var(--c-primary);border-color:var(--c-primary)}
+label.check .box i{visibility:hidden}
+label.check input:checked+.box i{visibility:visible}
+
+label.switch{display:flex;align-items:center;gap:8px;font-size:calc(13px * var(--u));color:var(--c-text-2);min-height:44px}
+label.switch input{position:absolute;opacity:0;width:0;height:0}
+label.switch .track{width:52px;height:30px;border-radius:15px;background:var(--c-bd-ctl);position:relative;flex:none;transition:background .15s}
+label.switch .track::after{content:"";position:absolute;left:3px;top:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .15s}
+label.switch input:checked+.track{background:var(--c-primary)}
+label.switch input:checked+.track::after{left:25px}
+
+/* 說明彈窗 */
+.modal{position:fixed;inset:0;background:rgba(28,36,51,.45);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.modal.open{display:flex}
+.modal .box{background:var(--c-surface);border-radius:14px;padding:24px 26px;max-width:520px;max-height:80%;overflow-y:auto;user-select:text;-webkit-user-select:text}
+.modal h3{font-size:calc(17px * var(--u));margin:0 0 10px}
+.modal p{font-size:calc(13.5px * var(--u));color:var(--c-text-2);margin:0 0 10px}
+
+/* hover 一律包在 (hover:hover)，iPad 點擊才不會殘留 hover 狀態 */
+@media (hover:hover){
+  .icon-btn:hover,.round-btn:hover{border-color:var(--c-primary);color:var(--c-primary)}
+  .round-btn.primary:hover{background:var(--c-primary-dark);color:#fff}
+  .chip[aria-pressed="false"]:hover{border-color:var(--c-primary)}
+  .seg button[aria-pressed="false"]:hover{color:var(--c-text-2)}
+  .navtab[aria-selected="false"]:hover{color:#fff}
+}
+
+/* ═══ 5. 響應式：<900px（涵蓋所有 iPad 直向 768/820/834）左右欄摺入底部分頁 ═══ */
+@media (max-width:899px){
+  main{grid-template-columns:1fr}
+  .panel,.datacol{display:none}
+  .mobile-tabs{display:flex}
+  body.show-settings .panel{display:flex;position:absolute;left:14px;right:14px;bottom:0;max-height:62%;z-index:5;box-shadow:0 8px 28px rgba(28,36,51,.25)}
+  body.show-data .datacol{display:flex;position:absolute;left:14px;right:14px;bottom:0;max-height:62%;z-index:5}
+  body.show-data .datacard{flex:none;box-shadow:0 8px 28px rgba(28,36,51,.18)}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <!-- Header -->
+  <header class="topbar">
+    <div class="logo">理</div>
+    <div class="title">密度與浮沉（起始模板）</div>
+    <div class="actions">
+      <button class="icon-btn" id="btnHelp" aria-label="操作說明"><i class="fa-solid fa-question"></i></button>
+      <button class="icon-btn" id="btnFull" aria-label="全螢幕"><i class="fa-solid fa-expand"></i></button>
+    </div>
+  </header>
+
+  <!-- 三欄：設定｜畫布｜數據 -->
+  <main>
+    <!-- 左欄：設定 -->
+    <section class="panel" id="panelSettings">
+      <h2>設定</h2>
+      <div class="chips" id="matChips">
+        <button class="chip" data-mat="wood" aria-pressed="true">木塊</button>
+        <button class="chip" data-mat="iron" aria-pressed="false">鐵塊</button>
+        <button class="chip" data-mat="custom" aria-pressed="false">自訂</button>
+      </div>
+      <!-- 下拉選單：選項多或含數值時用它（2–4 個短選項用上面的膠囊）。
+           禁止用原生 <select>，理由見上面 .dd 的註解與 DESIGN_SPEC 第 4 節。
+           結構固定：.dd > .dd-btn(.v + i) ＋ .dd-list > button[role="option"] -->
+      <div class="ddrow">
+        <span class="name">液體</span>
+        <div class="dd" id="ddLiquid">
+          <button class="dd-btn" aria-expanded="false">
+            <span class="v">水（1.00 g/cm³）</span><i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="dd-list" role="listbox">
+            <button role="option" data-v="water" aria-selected="true">水（1.00 g/cm³）</button>
+            <button role="option" data-v="oil" aria-selected="false">沙拉油（0.92 g/cm³）</button>
+            <button role="option" data-v="brine" aria-selected="false">鹽水（1.20 g/cm³）</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sliderbox">
+        <div class="head"><span class="name">質量</span><span class="val"><span id="massVal">6.5</span> kg</span></div>
+        <input type="range" id="massSlider" min="0.5" max="12" step="0.1" value="6.5" aria-label="質量">
+        <div class="minmax"><span>0.5</span><span>12.0</span></div>
+      </div>
+      <div class="sliderbox">
+        <div class="head"><span class="name">體積</span><span class="val"><span id="volVal">10.0</span> L</span></div>
+        <input type="range" id="volSlider" min="0.5" max="12" step="0.1" value="10" aria-label="體積">
+        <div class="minmax"><span>0.5</span><span>12.0</span></div>
+      </div>
+      <label class="check">
+        <input type="checkbox" id="chkForces" checked>
+        <span class="box"><i class="fa-solid fa-check"></i></span>顯示力的箭頭
+      </label>
+    </section>
+
+    <!-- 中欄：模擬畫布（分頁 1）＋其他分頁 -->
+    <div class="stage" id="stageWrap">
+      <div class="screen active" id="screen0">
+        <canvas id="bgCanvas"></canvas>
+        <canvas id="fgCanvas"></canvas>
+        <div class="stage-label num-val">水 ρ = 1.00 g/cm³　（可左右拖曳方塊）</div>
+      </div>
+      <div class="screen" id="screen1"><div class="placeholder">「密度比較」分頁——實作時在此放本分頁內容</div></div>
+      <div class="screen" id="screen2"><div class="placeholder">「挑戰任務」分頁——實作時在此放本分頁內容</div></div>
+    </div>
+
+    <!-- 右欄：數據 -->
+    <section class="datacol" id="panelData">
+      <div class="datacard"><div class="lbl">物體密度</div><div class="val"><span id="outRho">0.65</span> <span class="unit">g/cm³</span></div></div>
+      <div class="datacard"><div class="lbl">浮力</div><div class="val"><span id="outBuoy">63.7</span> <span class="unit">N</span></div></div>
+      <div class="datacard"><div class="lbl">排開水體積</div><div class="val"><span id="outDisp">6.5</span> <span class="unit">L</span></div></div>
+      <div class="datacard state"><div class="lbl">狀態</div><div class="val" id="outState">漂浮</div></div>
+    </section>
+  </main>
+
+  <!-- 底部抽屜：播放控制（沒有動畫可播就把這一層刪掉，見上方版面章節的註解） -->
+  <div class="drawer">
+    <div class="row">
+      <div class="playbtns">
+        <button class="round-btn primary" id="btnPlay" aria-label="播放"><i class="fa-solid fa-play"></i></button>
+        <button class="round-btn" id="btnStep" aria-label="單步"><i class="fa-solid fa-forward-step"></i></button>
+        <button class="round-btn" id="btnReset" aria-label="重置"><i class="fa-solid fa-rotate-left"></i></button>
+      </div>
+      <!-- 動畫速度：分段切換器三檔（DESIGN_SPEC 第 6 節）。原本是滑桿 0.25–2×，
+           三個模擬各做各的（膠囊三檔／滑桿三檔／沒有），2026-09-02 統一成這個。
+           標籤不可寫成裸的「速度」——那個詞留給物理量（DEV_SPEC 第 9 節第 3 條） -->
+      <div class="speed">
+        <span class="name">動畫速度</span>
+        <div class="seg" id="segSpeed" role="group" aria-label="動畫速度">
+          <button data-speed="0.5" aria-pressed="false">0.5×</button>
+          <button data-speed="1" aria-pressed="true">1×</button>
+          <button data-speed="2" aria-pressed="false">2×</button>
+        </div>
+      </div>
+      <label class="switch"><input type="checkbox" id="chkSlow"><span class="track"></span>慢動作</label>
+      <div class="mobile-tabs">
+        <button class="chip" id="tabSettings" aria-pressed="false"><i class="fa-solid fa-gear" style="margin-right:6px"></i>設定</button>
+        <button class="chip" id="tabData" aria-pressed="false"><i class="fa-solid fa-chart-simple" style="margin-right:6px"></i>數據</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 底部導覽列：單元內分頁（PhET screens） -->
+  <nav class="bottomnav" id="nav">
+    <button class="navtab" data-screen="0" aria-selected="true">浮沉實驗</button>
+    <button class="navtab" data-screen="1" aria-selected="false">密度比較</button>
+    <button class="navtab" data-screen="2" aria-selected="false">挑戰任務</button>
+  </nav>
+</div>
+
+<!-- 說明彈窗（同時示範 HTML 上下標與分數的標準寫法） -->
+<div class="modal" id="helpModal">
+  <div class="box">
+    <h3>操作說明</h3>
+    <p>拖曳左欄滑桿調整質量與體積，按 <i class="fa-solid fa-play"></i> 播放觀察浮沉；方塊可直接左右拖曳。</p>
+    <p>密度公式：ρ = <span class="frac"><span class="num">M</span><span class="den">V</span></span>，
+       物體密度小於水（1.00 g/cm³）時漂浮。</p>
+    <p>化學式寫法示範（CSS 上下標，不影響行高）：H<sub>2</sub>O、CO<sub>2</sub>、Na<sup>+</sup>、SO<sub>4</sub><sup>2−</sup>、Ca<sup>2+</sup>。</p>
+    <button class="chip" id="btnCloseHelp" style="margin-left:auto">關閉</button>
+  </div>
+</div>
+
+<script>
+'use strict';
+/* ═══ 1. 常數 ═══ */
+const FONT_STACK = 'system-ui, -apple-system, "Segoe UI", "PingFang TC", "Microsoft JhengHei", sans-serif';
+const G = 9.8;                 // m/s²
+const WATER_RHO = 1.0;         // g/cm³（= kg/L，方便換算）
+const WATER_LINE = 0.45;       // 水面在畫布高度的比例
+// 畫布繪圖色一律取自 DESIGN_SPEC 第 3 節，同一物理量跨單元同色
+const C = {
+  buoy:'#2F9E63', gravity:'#D64545',
+  air:'#FDFAF3', water1:'#DBEAFE', water2:'#93C5FD', waterLine:'rgba(42,111,219,.45)',
+  wood:'#D9A05B', woodBd:'#A8763D', iron:'#8A94A3', ironBd:'#5F6B7E',
+  custom:'#F3D34E', customBd:'#C7A82C', tick:'#5F6B7E',
+};
+const PRESETS = { wood:{mass:6.5, vol:10}, iron:{mass:11.9, vol:1.5} };
+
+/* ═══ 2. state：單一物件，重置時整個換新 ═══ */
+function initState(){
+  return {
+    screen:0, material:'wood', mass:6.5, vol:10, showForces:true,
+    speedBase:1, slow:false,
+    blockX:0.42,          // 方塊中心 x（畫布寬度比例）
+    blockTop:null,        // 方塊頂 y（px），null = 下一次 render 時放到平衡位置
+    fish:{x:0.7, dir:1},  // 魚的 x 比例與方向
+    bubbles:[{x:.2,y:.9},{x:.55,y:.72},{x:.85,y:.6}],
+  };
+}
+let state = initState();
+
+/* ═══ 3. 物理模型：純計算，不碰 DOM / canvas ═══ */
+function physics(){
+  const rho = state.mass / state.vol;                 // kg/L = g/cm³
+  const floats = rho < WATER_RHO;
+  const subFrac = Math.min(1, rho / WATER_RHO);       // 沒入比例
+  const buoyN = floats ? state.mass * G : WATER_RHO * state.vol * G;
+  const dispL = state.vol * subFrac;
+  const status = rho < 0.995 ? '漂浮' : rho > 1.005 ? '沉底' : '懸浮';
+  return { rho, floats, subFrac, buoyN, weightN: state.mass * G, dispL, status };
+}
+function update(dt){
+  // 方塊朝平衡位置緩動（阻尼趨近，避免真實流體方程的複雜度）
+  const target = equilibriumTop(physics());
+  if (state.blockTop === null) state.blockTop = target;
+  state.blockTop += (target - state.blockTop) * Math.min(1, 4 * dt);
+  // 魚游動與轉向
+  state.fish.x += 0.06 * dt * state.fish.dir;
+  if (state.fish.x > 0.92) state.fish.dir = -1;
+  if (state.fish.x < 0.08) state.fish.dir = 1;
+  // 氣泡上升，到水面回到底部
+  for (const b of state.bubbles){
+    b.y -= 0.05 * dt;
+    if (b.y < WATER_LINE + 0.04) { b.y = 0.95; b.x = 0.1 + Math.random() * 0.8; }
+  }
+}
+
+/* ═══ 4. 繪製：讀 state 畫畫面，不改 state ═══ */
+let bgCtx, fgCtx, stageW = 0, stageH = 0;
+
+function blockSide(){ return 34 + state.vol * 4; }   // 體積 → 邊長（px），示意非等比
+function equilibriumTop(ph){
+  const side = blockSide(), waterY = stageH * WATER_LINE;
+  if (ph.floats) return waterY - side * (1 - ph.subFrac);
+  if (ph.status === '懸浮') return waterY + (stageH * 0.5 - side) * 0.5;
+  return stageH - 14 - side;                          // 沉底：留底部間隙
+}
+
+function renderBg(){
+  const ctx = bgCtx; if (!ctx) return;
+  ctx.clearRect(0, 0, stageW, stageH);
+  const waterY = stageH * WATER_LINE;
+  ctx.fillStyle = C.air;
+  ctx.fillRect(0, 0, stageW, waterY);
+  const grad = ctx.createLinearGradient(0, waterY, 0, stageH);
+  grad.addColorStop(0, C.water1); grad.addColorStop(1, C.water2);
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, waterY, stageW, stageH - waterY);
+  ctx.fillStyle = C.waterLine;
+  ctx.fillRect(0, waterY - 1, stageW, 2);
+  // 右側水深刻度（靜態內容只畫在背景層，參數不變就不重繪）
+  ctx.fillStyle = C.tick;
+  for (let i = 1; i <= 4; i++){
+    ctx.fillRect(stageW - 22, waterY + (stageH - waterY) * i / 5, 16, 2);
+  }
+}
+
+function drawArrow(ctx, x, y0, y1, color, label){
+  // 力的向量標準畫法：3px 桿＋實心三角頭＋文字標籤（DESIGN_SPEC 第 3 節）
+  const dir = Math.sign(y1 - y0), head = 10;
+  ctx.strokeStyle = color; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(x, y0); ctx.lineTo(x, y1 - dir * head); ctx.stroke();
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(x, y1);
+  ctx.lineTo(x - 7, y1 - dir * head);
+  ctx.lineTo(x + 7, y1 - dir * head);
+  ctx.closePath(); ctx.fill();
+  ctx.font = `700 ${12 * U}px ${FONT_STACK}`;   // canvas 內的字級是字面量，media query 管不到，一律乘 U
+  ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  ctx.fillText(label, x + 12, (y0 + y1) / 2);
+}
+
+function render(){
+  const ctx = fgCtx; if (!ctx) return;
+  ctx.clearRect(0, 0, stageW, stageH);
+  const ph = physics();
+  const side = blockSide();
+  if (state.blockTop === null) state.blockTop = equilibriumTop(ph);
+  const bx = state.blockX * stageW - side / 2, by = state.blockTop;
+
+  // 氣泡（一顆帶 H₂O 標籤，示範 canvas 內化學式）
+  ctx.strokeStyle = 'rgba(255,255,255,.85)'; ctx.lineWidth = 1.5;
+  state.bubbles.forEach((b, i) => {
+    ctx.beginPath(); ctx.arc(b.x * stageW, b.y * stageH, 5, 0, Math.PI * 2); ctx.stroke();
+    if (i === 0) drawFormula(ctx, 'H_2O', b.x * stageW + 10, b.y * stageH + 4, 12, '#3B5578');
+  });
+
+  // 魚：sprite 貼圖，禁止動畫幀內 fillText emoji（DEV_SPEC 6.3）
+  const fishY = stageH * (WATER_LINE + 0.38);
+  ctx.drawImage(makeSprite('🐟', 30, state.fish.dir > 0), state.fish.x * stageW - 30, fishY - 30);
+
+  // 方塊
+  const matC = state.material === 'iron' ? [C.iron, C.ironBd]
+             : state.material === 'wood' ? [C.wood, C.woodBd] : [C.custom, C.customBd];
+  ctx.fillStyle = matC[0]; ctx.strokeStyle = matC[1]; ctx.lineWidth = 2;
+  roundRect(ctx, bx, by, side, side, 6); ctx.fill(); ctx.stroke();
+
+  // 力的箭頭：起點在幾何中心，長度 ∝ 力的大小
+  if (state.showForces){
+    const cx = bx + side / 2, cy = by + side / 2;
+    const scale = 60 / Math.max(ph.buoyN, ph.weightN);
+    drawArrow(ctx, cx, cy, cy - Math.max(18, ph.buoyN * scale), C.buoy, '浮力');
+    drawArrow(ctx, cx, cy, cy + Math.max(18, ph.weightN * scale), C.gravity, '重力');
+  }
+}
+function roundRect(ctx, x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+// 數據卡只在參數變更時更新，不在動畫幀內寫 DOM
+function updateReadouts(){
+  const ph = physics();
+  document.getElementById('outRho').textContent = ph.rho.toFixed(2);
+  document.getElementById('outBuoy').textContent = ph.buoyN.toFixed(1);
+  document.getElementById('outDisp').textContent = ph.dispL.toFixed(1);
+  document.getElementById('outState').textContent = ph.status;
+  document.getElementById('massVal').textContent = state.mass.toFixed(1);
+  document.getElementById('volVal').textContent = state.vol.toFixed(1);
+}
+
+/* ═══ 共用 helper：canvas 化學式（DEV_SPEC 4.4，照抄不要改） ═══ */
+function parseFormula(str){
+  const segs = []; let i = 0;
+  while (i < str.length){
+    const ch = str[i];
+    if (ch === '_' || ch === '^'){
+      const kind = ch === '_' ? 'sub' : 'sup'; let t;
+      if (str[i + 1] === '{'){ const end = str.indexOf('}', i + 2); t = str.slice(i + 2, end); i = end + 1; }
+      else { t = str[i + 1]; i += 2; }
+      segs.push({ t, [kind]: true });
+    } else {
+      let j = i;
+      while (j < str.length && str[j] !== '_' && str[j] !== '^') j++;
+      segs.push({ t: str.slice(i, j) }); i = j;
+    }
+  }
+  return segs;
+}
+function measureFormula(ctx, formula, px){
+  const segs = typeof formula === 'string' ? parseFormula(formula) : formula;
+  let w = 0;
+  for (const s of segs){
+    ctx.font = `${(s.sub || s.sup) ? Math.round(px * 0.62) : px}px ${FONT_STACK}`;
+    w += ctx.measureText(s.t).width;
+  }
+  return w;
+}
+function drawFormula(ctx, formula, x, y, px, color){
+  const segs = typeof formula === 'string' ? parseFormula(formula) : formula;
+  ctx.save();
+  ctx.fillStyle = color; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+  let cx = x;
+  for (const s of segs){
+    const size = (s.sub || s.sup) ? Math.round(px * 0.62) : px;
+    const dy = s.sub ? px * 0.20 : s.sup ? -px * 0.45 : 0;
+    ctx.font = `${size}px ${FONT_STACK}`;
+    ctx.fillText(s.t, cx, y + dy);
+    cx += ctx.measureText(s.t).width;
+  }
+  ctx.restore();
+}
+
+/* ═══ 共用 helper：emoji sprite 預渲染（DEV_SPEC 6.3，照抄不要改） ═══ */
+const spriteCache = {};
+function makeSprite(emoji, px, flip = false){
+  const key = emoji + px + (flip ? 'f' : '');
+  if (spriteCache[key]) return spriteCache[key];
+  const c = document.createElement('canvas');
+  c.width = c.height = px * 2;
+  const g = c.getContext('2d');
+  g.font = `${px}px ${FONT_STACK}`;
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  if (flip){ g.translate(c.width, 0); g.scale(-1, 1); }
+  g.fillText(emoji, px, px);
+  spriteCache[key] = c;
+  return c;
+}
+function ensureSpritesReady(emoji, px, onReady, tries = 0){
+  const s = makeSprite(emoji, px);
+  const data = s.getContext('2d').getImageData(0, 0, s.width, s.height).data;
+  const blank = !data.some(v => v !== 0);
+  if (blank && tries < 60){
+    delete spriteCache[emoji + px];
+    requestAnimationFrame(() => ensureSpritesReady(emoji, px, onReady, tries + 1));
+  } else onReady();
+}
+
+/* ═══ 5. 互動：Pointer Events（滑鼠/觸控/觸控筆單一寫法） ═══ */
+
+/* 下拉選單（DESIGN_SPEC 第 4 節）。closeAllDd() 與下面兩個 document 監聽器逐字搬自
+   motion-graphs-sim 的 .dd 實作，不要自行改寫——用 capture 與「點在自己身上不關」
+   這兩點都是踩過才寫成這樣的。 */
+function closeAllDd(){
+  for (const d of document.querySelectorAll('.dd.open')){
+    d.classList.remove('open');
+    const b = d.querySelector('.dd-btn');
+    if (b) b.setAttribute('aria-expanded', 'false');
+  }
+}
+// 點到下拉以外的任何地方就收起來。用 capture 才不會被其他 handler 先攔掉；
+// 點在下拉自己身上時不關，否則選項還沒收到 click 就消失了
+document.addEventListener('pointerdown', e => {
+  if (!e.target.closest('.dd')) closeAllDd();
+}, true);
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeAllDd();
+});
+/* 以下的綁定方式與 motion 不同：那邊的紙帶清單會增減，用 innerHTML 重建＋事件委派；
+   這裡是靜態下拉，直接綁在元素上。清單如果會動態重建，改抄 motion 的委派寫法。 */
+for (const dd of document.querySelectorAll('.dd')){
+  const btn = dd.querySelector('.dd-btn');
+  btn.addEventListener('click', () => {
+    const willOpen = !dd.classList.contains('open');
+    closeAllDd();
+    if (willOpen){
+      dd.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+    }
+  });
+  dd.querySelector('.dd-list').addEventListener('click', e => {
+    const opt = e.target.closest('button[role="option"]');
+    if (!opt) return;
+    for (const o of dd.querySelectorAll('button[role="option"]'))
+      o.setAttribute('aria-selected', String(o === opt));
+    dd.querySelector('.dd-btn .v').textContent = opt.textContent;
+    closeAllDd();
+    // 呼叫端接這個事件拿新值：dd.addEventListener('dd:change', e => e.detail.value)
+    dd.dispatchEvent(new CustomEvent('dd:change', { detail:{ value:opt.dataset.v }, bubbles:true }));
+  });
+}
+const fgCanvas = document.getElementById('fgCanvas');
+let dragging = false;
+fgCanvas.addEventListener('pointerdown', e => {
+  const r = fgCanvas.getBoundingClientRect();
+  const x = e.clientX - r.left, y = e.clientY - r.top;
+  const side = blockSide(), bx = state.blockX * stageW - side / 2;
+  if (x > bx - 10 && x < bx + side + 10 && y > state.blockTop - 10 && y < state.blockTop + side + 10){
+    dragging = true;
+    fgCanvas.setPointerCapture(e.pointerId);   // 拖出畫布邊界也不會斷
+  }
+});
+fgCanvas.addEventListener('pointermove', e => {
+  if (!dragging) return;
+  const r = fgCanvas.getBoundingClientRect();
+  state.blockX = Math.min(0.9, Math.max(0.1, (e.clientX - r.left) / stageW));
+  if (!running) render();
+});
+fgCanvas.addEventListener('pointerup', e => {
+  dragging = false;
+  fgCanvas.releasePointerCapture(e.pointerId);
+});
+
+// 材質膠囊
+document.getElementById('matChips').addEventListener('click', e => {
+  const btn = e.target.closest('.chip'); if (!btn) return;
+  for (const c of document.querySelectorAll('#matChips .chip')) c.setAttribute('aria-pressed', c === btn);
+  state.material = btn.dataset.mat;
+  const p = PRESETS[state.material];
+  if (p){
+    state.mass = p.mass; state.vol = p.vol;
+    setSlider('massSlider', p.mass); setSlider('volSlider', p.vol);
+  }
+  state.blockTop = null;   // 材質切換直接跳到新平衡位置
+  onParamChange();
+});
+
+function setSlider(id, v){
+  const el = document.getElementById(id);
+  el.value = v; refreshFill(el);
+}
+function refreshFill(el){
+  const pct = (el.value - el.min) / (el.max - el.min) * 100;
+  el.style.setProperty('--fill', pct + '%');
+}
+document.getElementById('massSlider').addEventListener('input', e => {
+  state.mass = +e.target.value; refreshFill(e.target); markCustom(); onParamChange();
+});
+document.getElementById('volSlider').addEventListener('input', e => {
+  state.vol = +e.target.value; refreshFill(e.target); markCustom(); onParamChange();
+});
+function markCustom(){
+  // 手動調滑桿即脫離預設材質
+  if (state.material === 'custom') return;
+  state.material = 'custom';
+  for (const c of document.querySelectorAll('#matChips .chip'))
+    c.setAttribute('aria-pressed', c.dataset.mat === 'custom');
+}
+function onParamChange(){
+  updateReadouts();
+  if (!running) { if (state.blockTop === null) state.blockTop = equilibriumTop(physics()); render(); }
+}
+document.getElementById('chkForces').addEventListener('change', e => {
+  state.showForces = e.target.checked;
+  if (!running) render();
+});
+/* 速度：分段切換器三檔。設值一律走 setSpeed()——播放、重置、鍵盤都走同一個入口，
+   才不會出現「state 改了但按鈕沒亮」這種漏同步（DESIGN_SPEC 第 4 節疊層那條的同一個道理） */
+function setSpeed(v){
+  state.speedBase = v;
+  for (const b of document.querySelectorAll('#segSpeed button'))
+    b.setAttribute('aria-pressed', String(+b.dataset.speed === v));
+}
+document.getElementById('segSpeed').addEventListener('click', e => {
+  const b = e.target.closest('button[data-speed]');
+  if (b) setSpeed(+b.dataset.speed);
+});
+document.getElementById('chkSlow').addEventListener('change', e => { state.slow = e.target.checked; });
+
+/* ═══ 6. 動畫迴圈（DEV_SPEC 6.2 骨架） ═══ */
+let running = false, wasRunning = false, last = 0, rafId = 0;
+function effSpeed(){ return state.speedBase * (state.slow ? 0.25 : 1); }
+function loop(ts){
+  if (!running) return;
+  const dt = Math.min((ts - last) / 1000, 0.05);   // 鉗 50ms：切分頁回來不跳格
+  last = ts;
+  update(dt * effSpeed());
+  render();
+  rafId = requestAnimationFrame(loop);
+}
+function play(){
+  if (running) return;
+  running = true; last = performance.now();
+  rafId = requestAnimationFrame(loop);
+  document.querySelector('#btnPlay i').className = 'fa-solid fa-pause';
+  document.getElementById('btnPlay').setAttribute('aria-label', '暫停');
+}
+function pause(){
+  running = false; cancelAnimationFrame(rafId);
+  document.querySelector('#btnPlay i').className = 'fa-solid fa-play';
+  document.getElementById('btnPlay').setAttribute('aria-label', '播放');
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden){ wasRunning = running; pause(); }
+  else if (wasRunning) play();
+});
+document.getElementById('btnPlay').addEventListener('click', () => running ? pause() : play());
+document.getElementById('btnStep').addEventListener('click', () => {
+  if (running) return;
+  update((1 / 60) * effSpeed()); render();
+});
+document.getElementById('btnReset').addEventListener('click', () => {
+  pause();
+  state = initState();
+  setSlider('massSlider', state.mass); setSlider('volSlider', state.vol);
+  setSpeed(state.speedBase);
+  document.getElementById('chkSlow').checked = false;
+  document.getElementById('chkForces').checked = true;
+  for (const c of document.querySelectorAll('#matChips .chip'))
+    c.setAttribute('aria-pressed', c.dataset.mat === 'wood');
+  updateReadouts(); renderBg(); render();
+});
+
+/* ═══ 7. 初始化 ═══ */
+// 實體像素只算這一處：uiScale() 與 layoutScale() 都要判裝置級別，兩邊各寫一次就是
+// 同一個常數出現兩個字面量（DEV_SPEC 第 1 節「單一真相來源」）
+function physPx(){
+  const sw = Math.max(window.screen.width || 0, window.innerWidth || 0) || 1280;
+  return sw * (window.devicePixelRatio || 1);
+}
+// UI 等比放大（DEV_SPEC 5.4）：依「實體像素」判裝置級別，不是 CSS 寬度、也不是斷點
+function uiScale(){
+  // 網址帶 ?u=1.8 直接指定倍率，蓋過自動判定。教室大屏把帶參數的網址存成書籤就好——
+  // 自動判定依賴 screen API，它在部分環境要等很久才有值、甚至一直回 0，不能當唯一手段。
+  const forced = parseFloat(new URLSearchParams(location.search).get('u'));
+  if (forced > 0) return clampScale(forced);
+  const sw = Math.max(window.screen.width || 0, window.innerWidth || 0) || 1280;
+  const cssW = window.innerWidth || sw;
+  const phys = physPx();   // 實體像素＝裝置級別
+  let u;
+  if (phys >= 3000){
+    // 教室觸控大屏。要補償的是「一個 CSS px 等於幾毫米」，那取決於系統縮放設定：
+    // 同一台 3840 大屏，Windows 100% 給 3840 CSS px（每 px 很小、要放大 2.3 倍），
+    // 200% 給 1920 CSS px（每 px 已經夠大、1.15 倍就夠）。與 CSS 寬度成正比才能
+    // 讓字的「實際物理高度」不隨縮放設定改變。
+    u = cssW / 1920 * 1.15;
+  } else if (phys >= 2000){
+    u = 1.15;   // 平板：把 12–13px 的主體字拉過 14px 的近距離可讀底線
+  } else {
+    u = 1;      // 桌機：坐 60 cm 看，現況已夠清楚
+  }
+  return clampScale(u);
+}
+// 放大到版面容不下時，flex 會被擠成負值、畫布被吃到剩幾十 px 高，整個畫面等於作廢
+function clampScale(u){
+  const cssW = window.innerWidth || 1280, cssH = window.innerHeight || 800;
+  return Math.max(1, Math.min(u, 4, cssW / 900, cssH / 620));
+}
+// 版面放大係數（DEV_SPEC 5.4）：固定 px 的欄寬乘的是它。平板只放大字級（--ul 維持 1），
+// 教室大屏連版面一起放大。手動 ?u= 一律視為大屏用途（存書籤投影），版面跟著放大。
+function layoutScale(u){
+  const forced = parseFloat(new URLSearchParams(location.search).get('u'));
+  return (forced > 0 || physPx() >= 3000) ? u : 1;
+}
+let U = uiScale(), UL = layoutScale(U);
+// 初值也必須無條件寫進 CSS。applyScale() 只在「值有變化」時才寫，若載入當下算出的 U
+// 就已經是最終值，CSS 的 --u 會一直停在 :root 的預設 1 —— canvas 用 U 排版、CSS 用 1，
+// 兩者就對不上（DEV_SPEC 第 1 節「單一真相來源」）。
+function writeScale(){
+  document.documentElement.style.setProperty('--u', String(U));
+  document.documentElement.style.setProperty('--ul', String(UL));
+}
+writeScale();
+// 回傳「這次有沒有真的改變」：有改變會讓版面尺寸變動並再觸發一次 fitAll，
+// 下一次 uiScale() 算出同值就回 false，因此不會無限循環。
+// UL 也要比對：視窗被拖到另一台螢幕時，u 可能算出同值而裝置級別已經變了（5.4-6）
+function applyScale(){
+  const u = uiScale(), ul = layoutScale(u);
+  if (Math.abs(u - U) < 1e-6 && Math.abs(ul - UL) < 1e-6) return false;
+  U = u; UL = ul;
+  writeScale();
+  return true;
+}
+
+// 畫布尺寸與 DPR（DEV_SPEC 6.1）：高 DPR 平板鉗 2，之後全用 CSS px 座標
+function fitCanvas(canvas){
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const r = canvas.getBoundingClientRect();
+  canvas.width = Math.round(r.width * dpr);
+  canvas.height = Math.round(r.height * dpr);
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return ctx;
+}
+const bgCanvas = document.getElementById('bgCanvas');
+function fitAll(){
+  applyScale();                // 視窗尺寸或所在螢幕改變時，重算放大係數
+  const r = document.getElementById('screen0').getBoundingClientRect();
+  stageW = r.width; stageH = r.height;
+  bgCtx = fitCanvas(bgCanvas);
+  fgCtx = fitCanvas(fgCanvas);
+  state.blockTop = null;       // 尺寸變了，方塊回平衡位置
+  renderBg(); render();
+}
+new ResizeObserver(fitAll).observe(document.getElementById('stageWrap'));
+
+// 換螢幕（筆電接投影機、外接不同 DPI 螢幕）時 DPR 變了但 CSS 尺寸不變，
+// ResizeObserver 不會觸發，canvas 會維持舊解析度而糊掉——課堂投影正是這個情境（DEV_SPEC 6.1）
+function watchDPR(){
+  matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`)
+    .addEventListener('change', () => { fitAll(); watchDPR(); }, { once:true });   // 每次觸發後用新 DPR 重新註冊
+}
+watchDPR();
+// screen API 在頁面剛載入時可能回報 0，uiScale() 會因此算錯 → load 後補算一次；
+// 視窗被拖到另一台螢幕時 screen.width 也會變
+window.addEventListener('load', fitAll);
+window.addEventListener('resize', fitAll);
+
+// 分頁切換（單一 html 內 display 切換）
+document.getElementById('nav').addEventListener('click', e => {
+  const tab = e.target.closest('.navtab'); if (!tab) return;
+  const n = +tab.dataset.screen;
+  if (n !== 0) pause();        // 離開模擬分頁就暫停，不浪費效能
+  state.screen = n;
+  for (const t of document.querySelectorAll('.navtab')) t.setAttribute('aria-selected', t === tab);
+  for (const s of document.querySelectorAll('.screen')) s.classList.remove('active');
+  document.getElementById('screen' + n).classList.add('active');
+  if (n === 0) fitAll();
+});
+
+// <768px：設定 / 數據以浮出面板呈現
+function bindSheet(btnId, cls, otherCls){
+  document.getElementById(btnId).addEventListener('click', e => {
+    const open = document.body.classList.toggle(cls);
+    document.body.classList.remove(otherCls);
+    document.getElementById('tabSettings').setAttribute('aria-pressed', document.body.classList.contains('show-settings'));
+    document.getElementById('tabData').setAttribute('aria-pressed', document.body.classList.contains('show-data'));
+  });
+}
+bindSheet('tabSettings', 'show-settings', 'show-data');
+bindSheet('tabData', 'show-data', 'show-settings');
+
+// 全螢幕（DEV_SPEC 5.2）：API 不存在就把按鈕藏起來，不留無效按鈕
+const appEl = document.getElementById('app');
+const fullBtn = document.getElementById('btnFull');
+// iPadOS Safari 對非影片元素有時只設 webkitIsFullScreen，三個旗標一起看才判得準
+const isFull = () => !!(document.fullscreenElement || document.webkitFullscreenElement
+                        || document.webkitIsFullScreen);
+// 畫面「實際上」是不是還佔滿螢幕。教室大屏的 exitFullscreen 會回報成功、把
+// fullscreenElement 設成 null，畫面卻沒退出——那裡的狀態機不可信，只能量視窗高度
+const isViewportFull = () => window.innerHeight >= (window.screen.height || 0) - 2;
+// 退出依序試每一種實作，不是只呼叫存在的第一個（大屏踩過，見 DEV_SPEC 5.2）
+function exitFull(){
+  const fns = [document.exitFullscreen, document.webkitExitFullscreen,
+               document.mozCancelFullScreen, document.msExitFullscreen]
+              .filter(f => typeof f === 'function');
+  if (!fns.length) return;
+  const run = i => { try { Promise.resolve(fns[i].call(document)).catch(() => {}); } catch (e) {} };
+  run(0);
+  if (fns.length > 1) setTimeout(() => { if (isViewportFull()) run(1); }, 150);
+}
+// 狀態必須看得見：圖示恆定不變的話，全螢幕相關的 bug 根本無從診斷
+function syncFullBtn(){
+  const on = isFull();
+  fullBtn.querySelector('i').className = 'fa-solid ' + (on ? 'fa-compress' : 'fa-expand');
+  fullBtn.setAttribute('aria-label', on ? '離開全螢幕' : '全螢幕');
+}
+if (appEl.requestFullscreen || appEl.webkitRequestFullscreen){
+  fullBtn.addEventListener('click', () => {
+    if (isFull()) { exitFull(); return; }
+    const enter = (appEl.requestFullscreen || appEl.webkitRequestFullscreen).bind(appEl);
+    try { Promise.resolve(enter()).catch(() => {}); } catch (e) {}
+  });
+  // 用 Esc 或系統手勢離開時圖示也要跟著切回來
+  for (const ev of ['fullscreenchange', 'webkitfullscreenchange'])
+    document.addEventListener(ev, syncFullBtn);
+  syncFullBtn();
+} else fullBtn.style.display = 'none';
+
+// 說明彈窗
+document.getElementById('btnHelp').addEventListener('click', () => document.getElementById('helpModal').classList.add('open'));
+document.getElementById('btnCloseHelp').addEventListener('click', () => document.getElementById('helpModal').classList.remove('open'));
+document.getElementById('helpModal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) e.currentTarget.classList.remove('open');
+});
+
+// 起始：滑桿填色、數據卡、sprite 就緒後強制重繪一次（字形未 ready 首繪會空白）
+for (const el of document.querySelectorAll('input[type="range"]')) refreshFill(el);
+updateReadouts();
+fitAll();
+ensureSpritesReady('🐟', 30, () => { makeSprite('🐟', 30, true); render(); });
+</script>
+</body>
+</html>
