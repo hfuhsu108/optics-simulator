@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+  body{margin:0;background:#EDEFF3;font-family:system-ui,-apple-system,"Segoe UI","PingFang TC","Microsoft JhengHei",sans-serif;color:#1C2433;-webkit-text-size-adjust:100%}
+  a{color:#2A6FDB}a:hover{color:#1E57B0}
+  sub,sup{font-size:.62em;line-height:0;position:relative;vertical-align:baseline}
+  sup{top:-.55em}sub{bottom:-.22em}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+</style>
+</helmet>
+
+<section style="padding:40px 48px 24px;display:flex;flex-direction:column;gap:18px;max-width:1500px">
+  <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+    <div style="font-size:24px;font-weight:700">F. 這一輪請挑三組（回覆代號即可）</div>
+    <div style="font-size:13px;color:#67717F">已直接改掉：平行四邊形改成<span style="font-weight:700">左高右低、不畫厚度側面</span>；物體造型<span style="font-weight:700">一律 2 格高</span>（四頁 ＋ D2 ＋ B 版的光路與像都已依 2 格重算）。</div>
+  </div>
+
+  <div style="background:#fff;border:1px solid #E2E5EA;border-radius:12px;padding:20px 22px;display:flex;flex-direction:column;gap:14px">
+    <div style="font-size:15px;font-weight:700">F1　「這裡可以拖」要怎麼說 —— 挑 1a／1b／1c／1d</div>
+    <div style="font-size:13px;color:#445062;line-height:1.6;max-width:1060px">共同前提：不靠 hover、不靠游標形狀，靜態畫面上就要看得出來；每一種都只用既有色票。</div>
+    <div style="display:flex;gap:14px;flex-wrap:wrap">
+
+      <div style="flex:1;min-width:250px;border:1px solid #E2E5EA;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:26px;height:22px;border-radius:6px;background:#1E2836;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">1a</div><div style="font-size:13px;font-weight:700">藍色膠囊把手（現行）</div></div>
+        <svg viewBox="0 0 8 7" style="width:100%;display:block;background:#fff;border-radius:8px">
+          <defs><pattern id="og" width="1" height="1" patternUnits="userSpaceOnUse"><path d="M1 0V1M0 1H1" fill="none" stroke="#D5DAE1" stroke-width="0.03"></path></pattern></defs>
+          <rect width="8" height="7" fill="url(#og)"></rect>
+          <line x1="0" y1="3.6" x2="8" y2="3.6" stroke="#7A8496" stroke-width="0.05"></line>
+          <path d="M3.2,1.2 L4.6,1.9 L4.6,6.0 L3.2,5.3 z M3.7,3.6 A0.2,0.2 0 1,0 4.1,3.6 A0.2,0.2 0 1,0 3.7,3.6 z" fill-rule="evenodd" fill="#8A94A3" stroke="#5F6B7E" stroke-width="0.05" stroke-linejoin="round"></path>
+          <rect x="3.5" y="4.6" width="0.8" height="0.42" rx="0.21" fill="#2A6FDB"></rect>
+        </svg>
+        <div style="font-size:12.5px;color:#67717F;line-height:1.5">最明顯，但學生會問「那顆藍的是什麼零件」——它不是器材的一部分，卻長在器材上。</div>
+      </div>
+
+      <div style="flex:1;min-width:250px;border:1px solid #E2E5EA;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:26px;height:22px;border-radius:6px;background:#1E2836;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">1b</div><div style="font-size:13px;font-weight:700">器材自己的握把紋</div></div>
+        <svg viewBox="0 0 8 7" style="width:100%;display:block;background:#fff;border-radius:8px">
+          <rect width="8" height="7" fill="url(#og)"></rect>
+          <line x1="0" y1="3.6" x2="8" y2="3.6" stroke="#7A8496" stroke-width="0.05"></line>
+          <path d="M3.2,1.2 L4.6,1.9 L4.6,6.0 L3.2,5.3 z M3.7,3.6 A0.2,0.2 0 1,0 4.1,3.6 A0.2,0.2 0 1,0 3.7,3.6 z" fill-rule="evenodd" fill="#8A94A3" stroke="#5F6B7E" stroke-width="0.05" stroke-linejoin="round"></path>
+          <g stroke="#5F6B7E" stroke-width="0.07" stroke-linecap="round">
+            <line x1="3.36" y1="4.5" x2="4.44" y2="5.04"></line>
+            <line x1="3.36" y1="4.82" x2="4.44" y2="5.36"></line>
+            <line x1="3.36" y1="5.14" x2="4.44" y2="5.68"></line>
+          </g>
+        </svg>
+        <div style="font-size:12.5px;color:#67717F;line-height:1.5">紋路是器材的一部分（像實驗架上的滾花），不新增顏色；代價是遠看比較安靜。</div>
+      </div>
+
+      <div style="flex:1;min-width:250px;border:1px solid #E2E5EA;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:26px;height:22px;border-radius:6px;background:#1E2836;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">1c</div><div style="font-size:13px;font-weight:700">下方留白帶的滑軌 ＋ 游標</div></div>
+        <svg viewBox="0 0 8 7" style="width:100%;display:block;background:#fff;border-radius:8px">
+          <rect width="8" height="7" fill="url(#og)"></rect>
+          <line x1="0" y1="3.6" x2="8" y2="3.6" stroke="#7A8496" stroke-width="0.05"></line>
+          <path d="M3.2,1.2 L4.6,1.9 L4.6,6.0 L3.2,5.3 z M3.7,3.6 A0.2,0.2 0 1,0 4.1,3.6 A0.2,0.2 0 1,0 3.7,3.6 z" fill-rule="evenodd" fill="#8A94A3" stroke="#5F6B7E" stroke-width="0.05" stroke-linejoin="round"></path>
+          <line x1="0.6" y1="6.5" x2="7.4" y2="6.5" stroke="#D3D9E1" stroke-width="0.14" stroke-linecap="round"></line>
+          <path d="M3.9,6.12 L3.6,6.5 L4.2,6.5 z" fill="#2A6FDB"></path>
+          <rect x="3.5" y="6.5" width="0.8" height="0.16" rx="0.08" fill="#2A6FDB"></rect>
+        </svg>
+        <div style="font-size:12.5px;color:#67717F;line-height:1.5">器材本身完全乾淨，可拖的東西全部收到下方留白帶的一條軌道上——器材與操作分開兩層。</div>
+      </div>
+
+      <div style="flex:1;min-width:250px;border:1px solid #E2E5EA;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:26px;height:22px;border-radius:6px;background:#1E2836;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">1d</div><div style="font-size:13px;font-weight:700">腳下的白色標籤（⇄ 拖）</div></div>
+        <svg viewBox="0 0 8 7" style="width:100%;display:block;background:#fff;border-radius:8px">
+          <rect width="8" height="7" fill="url(#og)"></rect>
+          <line x1="0" y1="3.6" x2="8" y2="3.6" stroke="#7A8496" stroke-width="0.05"></line>
+          <path d="M3.2,1.2 L4.6,1.9 L4.6,6.0 L3.2,5.3 z M3.7,3.6 A0.2,0.2 0 1,0 4.1,3.6 A0.2,0.2 0 1,0 3.7,3.6 z" fill-rule="evenodd" fill="#8A94A3" stroke="#5F6B7E" stroke-width="0.05" stroke-linejoin="round"></path>
+          <g>
+            <rect x="2.95" y="6.05" width="1.9" height="0.72" rx="0.36" fill="#fff" stroke="#8A93A1" stroke-width="0.05"></rect>
+            <g stroke="#2A6FDB" stroke-width="0.07" stroke-linecap="round">
+              <line x1="3.25" y1="6.41" x2="3.75" y2="6.41"></line>
+              <path d="M3.28,6.29 L3.16,6.41 L3.28,6.53" fill="none"></path>
+              <path d="M3.72,6.29 L3.84,6.41 L3.72,6.53" fill="none"></path>
+            </g>
+            <text x="4.25" y="6.56" font-size="0.42" font-weight="700" fill="#1C2433" text-anchor="middle">拖</text>
+          </g>
+        </svg>
+        <div style="font-size:12.5px;color:#67717F;line-height:1.5">最直白、可讀出「往哪個方向拖」；代價是畫面多一塊文字，四頁各兩三個標籤會有點吵。</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#fff;border:1px solid #E2E5EA;border-radius:12px;padding:20px 22px;display:flex;flex-direction:column;gap:14px">
+    <div style="font-size:15px;font-weight:700">F2　實像／虛像怎麼分 —— 挑 1e／1f／1g／1h</div>
+    <div style="font-size:13px;color:#445062;line-height:1.6;max-width:1060px">每張圖左邊是物體（藍箭頭、2 格高），中間是實像（倒立、縮小），右邊是虛像（正立、放大）。</div>
+    <div style="display:flex;gap:14px;flex-wrap:wrap">
+
+      <div style="flex:1;min-width:250px;border:1px solid #E2E5EA;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:26px;height:22px;border-radius:6px;background:#1E2836;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">1e</div><div style="font-size:13px;font-weight:700">綠框／紫虛框（現行）</div></div>
+        <svg viewBox="0 0 8 6" style="width:100%;display:block;background:#fff;border-radius:8px">
+          <rect width="8" height="6" fill="url(#og)"></rect>
+          <line x1="0" y1="3" x2="8" y2="3" stroke="#7A8496" stroke-width="0.05"></line>
+          <g transform="translate(1.4,3) scale(2)" fill="#2A6FDB"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+          <g transform="translate(4,3) scale(1.2,-1.2)" fill="#2A6FDB" fill-opacity="0.5" stroke="#2F9E63" stroke-width="0.085" stroke-linejoin="round"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+          <g transform="translate(6.4,3) scale(2.6)" fill="#2A6FDB" fill-opacity="0.28" stroke="#8B5CF6" stroke-width="0.045" stroke-dasharray="0.1 0.08" stroke-linejoin="round"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+        </svg>
+        <div style="font-size:12.5px;color:#67717F;line-height:1.5">分得最開，但綠＋紫是畫面上唯二的外來色，和器材、光線一點關係都沒有。</div>
+      </div>
+
+      <div style="flex:1;min-width:250px;border:1px solid #E2E5EA;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:26px;height:22px;border-radius:6px;background:#1E2836;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">1f</div><div style="font-size:13px;font-weight:700">同色系：實線框／虛線框</div></div>
+        <svg viewBox="0 0 8 6" style="width:100%;display:block;background:#fff;border-radius:8px">
+          <rect width="8" height="6" fill="url(#og)"></rect>
+          <line x1="0" y1="3" x2="8" y2="3" stroke="#7A8496" stroke-width="0.05"></line>
+          <g transform="translate(1.4,3) scale(2)" fill="#2A6FDB"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+          <g transform="translate(4,3) scale(1.2,-1.2)" fill="#2A6FDB" fill-opacity="0.5" stroke="#1E57B0" stroke-width="0.085" stroke-linejoin="round"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+          <g transform="translate(6.4,3) scale(2.6)" fill="#2A6FDB" fill-opacity="0.22" stroke="#1E57B0" stroke-width="0.045" stroke-dasharray="0.1 0.08" stroke-linejoin="round"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+        </svg>
+        <div style="font-size:12.5px;color:#67717F;line-height:1.5">像永遠是「物體的淡版」，只用物體自己的深一階色；實／虛的差別是<span style="font-weight:700">線的實與虛</span>——和反向延長線同一個語彙。</div>
+      </div>
+
+      <div style="flex:1;min-width:250px;border:1px solid #E2E5EA;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:26px;height:22px;border-radius:6px;background:#1E2836;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">1g</div><div style="font-size:13px;font-weight:700">腳下的基座線</div></div>
+        <svg viewBox="0 0 8 6" style="width:100%;display:block;background:#fff;border-radius:8px">
+          <rect width="8" height="6" fill="url(#og)"></rect>
+          <line x1="0" y1="3" x2="8" y2="3" stroke="#7A8496" stroke-width="0.05"></line>
+          <g transform="translate(1.4,3) scale(2)" fill="#2A6FDB"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+          <g transform="translate(4,3) scale(1.2,-1.2)" fill="#2A6FDB" fill-opacity="0.45"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+          <line x1="3.6" y1="3" x2="4.4" y2="3" stroke="#445062" stroke-width="0.1" stroke-linecap="round"></line>
+          <g transform="translate(6.4,3) scale(2.6)" fill="#2A6FDB" fill-opacity="0.45"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+          <line x1="6.0" y1="3" x2="6.8" y2="3" stroke="#445062" stroke-width="0.1" stroke-dasharray="0.16 0.12" stroke-linecap="round"></line>
+        </svg>
+        <div style="font-size:12.5px;color:#67717F;line-height:1.5">像本身完全乾淨（只有淡填色），實／虛寫在腳下那一段線上——最不干擾形狀，但要教過一次才讀得懂。</div>
+      </div>
+
+      <div style="flex:1;min-width:250px;border:1px solid #E2E5EA;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:26px;height:22px;border-radius:6px;background:#1E2836;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">1h</div><div style="font-size:13px;font-weight:700">直接寫字：實像／虛像</div></div>
+        <svg viewBox="0 0 8 6" style="width:100%;display:block;background:#fff;border-radius:8px">
+          <rect width="8" height="6" fill="url(#og)"></rect>
+          <line x1="0" y1="3" x2="8" y2="3" stroke="#7A8496" stroke-width="0.05"></line>
+          <g transform="translate(1.4,3) scale(2)" fill="#2A6FDB"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+          <g transform="translate(4,3) scale(1.2,-1.2)" fill="#2A6FDB" fill-opacity="0.45"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+          <text x="4" y="4.9" font-size="0.44" font-weight="700" text-anchor="middle" fill="#1C2433" stroke="#fff" stroke-width="0.12" paint-order="stroke">實像</text>
+          <g transform="translate(6.4,3) scale(2.6)" fill="#2A6FDB" fill-opacity="0.28"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+          <text x="6.4" y="3.62" font-size="0.44" font-weight="700" text-anchor="middle" fill="#1C2433" stroke="#fff" stroke-width="0.12" paint-order="stroke">虛像</text>
+        </svg>
+        <div style="font-size:12.5px;color:#67717F;line-height:1.5">零學習成本，也不必新增顏色；代價是畫面上多兩組字，且違反「少字」的原則。</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#fff;border:1px solid #E2E5EA;border-radius:12px;padding:20px 22px;display:flex;flex-direction:column;gap:14px">
+    <div style="font-size:15px;font-weight:700">F3　「像糊掉了」怎麼畫 —— 挑 1i／1j／1k／1l</div>
+    <div style="font-size:13px;color:#445062;line-height:1.6;max-width:1060px">四種都不用 `filter`／`shadowBlur`（DEV_SPEC 6.4 禁止每幀），都是離焦最大的同一個狀態，畫在紙屏正視窗裡。</div>
+    <div style="display:flex;gap:14px;flex-wrap:wrap">
+
+      <div style="flex:1;min-width:230px;border:1px solid #E2E5EA;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:26px;height:22px;border-radius:6px;background:#1E2836;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">1i</div><div style="font-size:13px;font-weight:700">三層同形疊加（現行）</div></div>
+        <svg viewBox="0 0 6 6" style="width:100%;display:block;background:#fff;border-radius:8px">
+          <rect x="1.2" y="0.8" width="3.6" height="4.4" rx="0.1" fill="#FDFAF3" stroke="#5F6B7E" stroke-width="0.05"></rect>
+          <g fill="#D2700F">
+            <g transform="translate(3,1.6) scale(3.0,-3.0)" opacity="0.16"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+            <g transform="translate(3,1.6) scale(2.8,-2.8)" opacity="0.28"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+            <g transform="translate(3,1.6) scale(2.6,-2.6)" opacity="0.45"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+          </g>
+        </svg>
+        <div style="font-size:12.5px;color:#67717F;line-height:1.5">問題：層與層之間有明顯的邊，看起來像三個像疊在一起，而不是一個糊掉的像。</div>
+      </div>
+
+      <div style="flex:1;min-width:230px;border:1px solid #E2E5EA;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:26px;height:22px;border-radius:6px;background:#1E2836;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">1j</div><div style="font-size:13px;font-weight:700">形狀不變，只有一圈虛線邊界</div></div>
+        <svg viewBox="0 0 6 6" style="width:100%;display:block;background:#fff;border-radius:8px">
+          <rect x="1.2" y="0.8" width="3.6" height="4.4" rx="0.1" fill="#FDFAF3" stroke="#5F6B7E" stroke-width="0.05"></rect>
+          <g transform="translate(3,1.6) scale(3.0,-3.0)" fill="none" stroke="#D2700F" stroke-width="0.055" stroke-dasharray="0.07 0.06" opacity="0.7"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+          <g transform="translate(3,1.6) scale(2.6,-2.6)" fill="#D2700F" opacity="0.3"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+        </svg>
+        <div style="font-size:12.5px;color:#67717F;line-height:1.5">「像的邊界不確定」直接用虛線說；核心變淡表示同樣的光散到更大範圍。只有兩個元素，最乾淨。</div>
+      </div>
+
+      <div style="flex:1;min-width:230px;border:1px solid #E2E5EA;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:26px;height:22px;border-radius:6px;background:#1E2836;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">1k</div><div style="font-size:13px;font-weight:700">只用輪廓線，一圈一圈散開</div></div>
+        <svg viewBox="0 0 6 6" style="width:100%;display:block;background:#fff;border-radius:8px">
+          <rect x="1.2" y="0.8" width="3.6" height="4.4" rx="0.1" fill="#FDFAF3" stroke="#5F6B7E" stroke-width="0.05"></rect>
+          <g fill="none" stroke="#D2700F" stroke-linejoin="round">
+            <g transform="translate(3,1.6) scale(3.1,-3.1)" stroke-width="0.03" opacity="0.3"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+            <g transform="translate(3,1.6) scale(2.85,-2.85)" stroke-width="0.035" opacity="0.5"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+            <g transform="translate(3,1.6) scale(2.6,-2.6)" stroke-width="0.04" opacity="0.8"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+          </g>
+        </svg>
+        <div style="font-size:12.5px;color:#67717F;line-height:1.5">像「等高線」：清晰時三圈重合成一條線，越離焦圈越散。層次是線而不是色塊，不會糊成一團。</div>
+      </div>
+
+      <div style="flex:1;min-width:230px;border:1px solid #E2E5EA;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:26px;height:22px;border-radius:6px;background:#1E2836;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">1l</div><div style="font-size:13px;font-weight:700">切成橫條、逐條錯開</div></div>
+        <svg viewBox="0 0 6 6" style="width:100%;display:block;background:#fff;border-radius:8px">
+          <rect x="1.2" y="0.8" width="3.6" height="4.4" rx="0.1" fill="#FDFAF3" stroke="#5F6B7E" stroke-width="0.05"></rect>
+          <g fill="#D2700F" opacity="0.45">
+            <rect x="2.62" y="1.6" width="0.56" height="0.46" rx="0.06"></rect>
+            <rect x="2.68" y="2.1" width="0.56" height="0.46" rx="0.06"></rect>
+            <rect x="2.76" y="2.6" width="0.56" height="0.46" rx="0.06"></rect>
+            <rect x="2.45" y="3.1" width="1.24" height="0.46" rx="0.06"></rect>
+            <rect x="2.72" y="3.6" width="0.86" height="0.46" rx="0.06"></rect>
+            <rect x="2.98" y="4.1" width="0.4" height="0.4" rx="0.06"></rect>
+          </g>
+        </svg>
+        <div style="font-size:12.5px;color:#67717F;line-height:1.5">把「同一個點被畫成一小段」畫出來——最貼近針孔成像的真實原因，但形狀最不好認。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding:40px 48px 8px;display:flex;flex-direction:column;gap:14px;max-width:1500px">
+  <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">
+    <div style="font-size:30px;font-weight:700">光的成像 — 設計稿</div>
+    <div style="font-size:14px;color:#67717F">針孔・面鏡・透鏡・眼睛　／　optics-sim　／　兩欄配置、無右欄、無抽屜</div>
+  </div>
+  <div style="background:#E8F0FD;border:1px solid #C4D7F5;border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.6;color:#1C2433">
+    <div style="font-weight:700">讀這份稿之前</div>
+    <div>版面稿是唯一定稿；本檔的說明文字若與版面稿衝突，以版面稿為準（DEV_SPEC 10.1）。所有色碼取自 DESIGN_SPEC 第 2 節合格色定案表與第 3 節，未新增任何色票；字型只用系統堆疊、字重 400／700、最小 12px。</div>
+    <div>與 <span style="font-weight:700">layout.html</span> 不同之處（依 DESIGN_BRIEF 第 2 節）：<span style="font-weight:700">兩欄 1fr 3fr、沒有右欄、沒有底部抽屜</span>；動作鈕掛左欄下方動作卡。格線分主次（每 5 格一條主格線）。畫面上不出現任何數值，F 與 2F 只有字母。</div>
+  </div>
+</section>
+
+<section style="padding:24px 48px;display:flex;flex-direction:column;gap:12px">
+  <div style="font-size:20px;font-weight:700">A. 版面稿 · 1366×768（Windows 筆電）</div>
+  <div style="font-size:13.5px;color:#445062;line-height:1.6;max-width:960px">欄寬實測：左欄 331 ／ 畫布 995（padding 14、gap 12）。畫布高 638，格邊長 ＝ 638 ÷ 16 ＝ <span style="font-weight:700">39.9px</span>，橫向約 24.9 格。光軸固定在<span style="font-weight:700">第 5 格</span>——主軸與整條光路一律收在<span style="font-weight:700">畫面上 2/3</span>（第 0–10 格），<span style="font-weight:700">下方 1/3 留白</span>，只擺紙屏的正視小窗；器材固定在橫向正中（第 12.5 格線）。物體造型（箭頭／蠟燭／F 形）<span style="font-weight:700">一律 2 格高</span>、足端貼光軸。</div>
+
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font-size:15px;font-weight:700;color:#445062">A1　分頁 1「針孔成像」— 孔徑「中」，單點光束示範開啟</div>
+    <div style="width:1366px;height:768px;display:flex;flex-direction:column;background:#F6F7F9;font-variant-numeric:tabular-nums;border:1px solid #D3D9E1;border-radius:6px;overflow:hidden;flex:none" data-screen-label="01">
+      <div style="height:50px;flex:none;display:flex;align-items:center;gap:12px;padding:0 18px;background:#fff;border-bottom:1px solid #E2E5EA">
+        <div style="width:28px;height:28px;border-radius:7px;background:#2A6FDB;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px">理</div>
+        <div style="font-size:17px;font-weight:700">光的成像</div>
+        <div style="margin-left:auto;display:flex;gap:8px">
+          <div style="width:34px;height:34px;border-radius:8px;border:1px solid #8A93A1;background:#fff;display:flex;align-items:center;justify-content:center;color:#445062;font-size:14px"><i class="fa-solid fa-circle-question"></i></div>
+          <div style="width:34px;height:34px;border-radius:8px;border:1px solid #8A93A1;background:#fff;display:flex;align-items:center;justify-content:center;color:#445062;font-size:14px"><i class="fa-solid fa-expand"></i></div>
+        </div>
+      </div>
+
+      <div style="flex:1;display:grid;grid-template-columns:1fr 3fr;grid-template-rows:1fr auto;gap:12px;padding:12px 14px;min-height:0">
+        <div style="background:#fff;border:1px solid #E2E5EA;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:6px;min-width:0;min-height:0;overflow-y:auto">
+          <div style="font-size:12px;font-weight:700;color:#67717F">器材　針孔擋板</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="font-size:13px;font-weight:700;color:#445062">孔徑大小</div>
+            <div style="display:inline-flex;flex:none;background:#F6F7F9;border:1px solid #8A93A1;border-radius:10px;padding:3px">
+              <div style="min-width:60px;height:36px;padding:0 12px;border-radius:8px;font-size:13px;font-weight:700;color:#67717F;display:flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap"><span style="width:5px;height:5px;border-radius:50%;background:#5F6B7E;flex:none"></span>小</div>
+              <div style="min-width:60px;height:36px;padding:0 12px;border-radius:8px;font-size:13px;font-weight:700;color:#1C2433;background:#fff;box-shadow:0 1px 3px rgba(28,36,51,.16);display:flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap"><span style="width:9px;height:9px;border-radius:50%;background:#5F6B7E;flex:none"></span>中</div>
+              <div style="min-width:60px;height:36px;padding:0 12px;border-radius:8px;font-size:13px;font-weight:700;color:#67717F;display:flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap"><span style="width:14px;height:14px;border-radius:50%;background:#5F6B7E;flex:none"></span>大</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="font-size:13px;font-weight:700;color:#445062">孔的形狀</div>
+            <div style="display:flex;gap:6px">
+              <div style="height:40px;padding:0 14px;border-radius:20px;background:#2A6FDB;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;white-space:nowrap"><i class="fa-solid fa-circle" style="font-size:11px"></i>圓</div>
+              <div style="height:40px;padding:0 14px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;white-space:nowrap"><i class="fa-solid fa-square" style="font-size:11px"></i>方</div>
+              <div style="height:40px;padding:0 14px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;white-space:nowrap"><i class="fa-solid fa-play" style="font-size:11px;transform:rotate(-90deg)"></i>三角</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="font-size:13px;font-weight:700;color:#445062">孔的數量</div>
+            <div style="display:flex;gap:6px">
+              <div style="height:40px;min-width:52px;border-radius:20px;background:#2A6FDB;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center">1</div>
+              <div style="height:40px;min-width:52px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center">2</div>
+              <div style="height:40px;min-width:52px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center">3</div>
+            </div>
+          </div>
+          <div style="height:1px;background:#E2E5EA;flex:none"></div>
+          <div style="font-size:12px;font-weight:700;color:#67717F">光線顯示</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;background:#2A6FDB;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none"><i class="fa-solid fa-check"></i></div>單點光束示範</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;border:1.5px solid #8A93A1;background:#fff;flex:none"></div>完整光束</div>
+          </div>
+          <div style="height:1px;background:#E2E5EA;flex:none"></div>
+          <div style="font-size:12px;font-weight:700;color:#67717F">教學輔助疊層</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;background:#2A6FDB;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none"><i class="fa-solid fa-check"></i></div>光屏</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;border:1.5px solid #8A93A1;background:#fff;flex:none"></div>屏面正視窗</div>
+          </div>
+          <div style="height:1px;background:#E2E5EA;flex:none"></div>
+          <div style="font-size:12px;font-weight:700;color:#67717F">物體</div>
+          <div style="display:flex;gap:6px">
+            <div style="height:40px;padding:0 13px;border-radius:20px;background:#2A6FDB;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;white-space:nowrap">箭頭</div>
+            <div style="height:40px;padding:0 13px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;white-space:nowrap">蠟燭</div>
+            <div style="height:40px;padding:0 13px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;white-space:nowrap">F 形</div>
+          </div>
+        </div>
+
+        <div style="grid-column:2;grid-row:1 / span 2;position:relative;background:#fff;border:1px solid #E2E5EA;border-radius:10px;overflow:hidden;min-width:0;min-height:0">
+          <svg viewBox="0 3 25 16" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
+            <defs>
+              <pattern id="mn1" width="1" height="1" patternUnits="userSpaceOnUse" patternTransform="translate(0.5,0)"><path d="M1 0V1M0 1H1" fill="none" stroke="#D5DAE1" stroke-width="0.026"></path></pattern>
+              <pattern id="mj1" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="translate(2.5,3)"><path d="M5 0V5M0 5H5" fill="none" stroke="{{ majorGrid }}" stroke-width="0.034"></path></pattern>
+              <marker id="ah1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.6" markerHeight="4.6" orient="auto-start-reverse"><path d="M0 1.6 L9 5 L0 8.4 z" fill="#D2700F"></path></marker>
+              <path id="oa1" d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path>
+            </defs>
+            <rect y="3" width="25" height="19" fill="#fff"></rect>
+            <rect y="3" width="25" height="19" fill="url(#mn1)"></rect>
+            <rect y="3" width="25" height="19" fill="url(#mj1)"></rect>
+            <line x1="0" y1="8" x2="25" y2="8" stroke="#7A8496" stroke-width="0.05"></line>
+
+            <g stroke="#D2700F" stroke-width="0.075" fill="none" stroke-linecap="round">
+              <line x1="4.5" y1="6" x2="12.55" y2="3.6"></line>
+              <line x1="4.5" y1="6" x2="12.55" y2="4.4"></line>
+              <line x1="4.5" y1="6" x2="12.55" y2="5.2"></line>
+              <line x1="4.5" y1="6" x2="12.55" y2="6"></line>
+              <line x1="4.5" y1="6" x2="12.55" y2="6.8"></line>
+              <line x1="4.5" y1="6" x2="12.55" y2="7.4"></line>
+              <line x1="4.5" y1="6" x2="12.55" y2="7.78"></line>
+              <line x1="4.5" y1="6" x2="12.55" y2="8"></line>
+              <line x1="4.5" y1="6" x2="12.55" y2="8.22"></line>
+              <line x1="4.5" y1="6" x2="12.55" y2="8.6"></line>
+              <line x1="4.5" y1="6" x2="12.55" y2="9.2"></line>
+              <line x1="4.5" y1="6" x2="12.55" y2="10"></line>
+              <line x1="4.5" y1="6" x2="12.55" y2="10.8"></line>
+              <line x1="4.5" y1="6" x2="12.55" y2="11.6"></line>
+            </g>
+
+            <path d="M11.85,3.5 L13.25,4.3 L13.25,12.5 L11.85,11.7 z M12.33,8 A0.22,0.22 0 1,0 12.77,8 A0.22,0.22 0 1,0 12.33,8 z" fill-rule="evenodd" fill="#8A94A3" stroke="#5F6B7E" stroke-width="0.05" stroke-linejoin="round"></path>
+            <rect x="12.15" y="11.25" width="0.8" height="0.5" rx="0.25" fill="#2A6FDB"></rect>
+
+            <g transform="translate(4.5,8) scale(2)" fill="#2A6FDB"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+
+            <g>
+              <path d="M19.4,3.1 L20.9,3.9 L20.9,12.9 L19.4,12.1 z" fill="#FDFAF3" stroke="#5F6B7E" stroke-width="0.05" stroke-linejoin="round"></path>
+              <g transform="translate(20.15,8) scale(2.17,-2.17)" fill="#D2700F" opacity="0.16"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+              <g transform="translate(20.15,8) scale(2.03,-2.03)" fill="#D2700F" opacity="0.28"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+              <g transform="translate(20.15,8) scale(1.89,-1.89)" fill="#D2700F" opacity="0.45"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+              <rect x="19.75" y="11.45" width="0.8" height="0.5" rx="0.25" fill="#2A6FDB"></rect>
+            </g>
+
+            <g stroke="#D2700F" stroke-width="0.075" fill="none" stroke-linecap="round" marker-end="url(#ah1)">
+              <line x1="12.55" y1="7.78" x2="20.15" y2="9.46"></line>
+              <line x1="12.55" y1="8" x2="20.15" y2="9.89"></line>
+              <line x1="12.55" y1="8.22" x2="20.15" y2="10.32"></line>
+            </g>
+          </svg>
+
+          <div style="position:absolute;left:14px;top:12px;display:flex;gap:8px;align-items:center;background:rgba(255,255,255,.88);border:1px solid #E2E5EA;border-radius:8px;padding:6px 10px;font-size:12px;color:#445062;font-weight:700;white-space:nowrap">
+            <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:18px;height:3px;background:#D2700F;border-radius:2px"></span>光線</span>
+            <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:#2A6FDB"></span>物體</span>
+            <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:#FDFAF3;border:1px solid #5F6B7E"></span>紙屏</span>
+          </div>
+          <div style="position:absolute;right:12px;bottom:12px;width:152px;background:#fff;border:1px solid #E2E5EA;border-radius:10px;padding:8px">
+            <div style="font-size:12px;color:#67717F;font-weight:700;margin-bottom:6px">屏面正視</div>
+            <svg viewBox="0 0 100 100" style="width:100%;display:block;border-radius:6px;background:#FDFAF3">
+              <g fill="#D2700F">
+                <g transform="translate(50,22) scale(1.14)" opacity="0.16"><path d="M-10,0 L-10,38 L-22,38 L0,62 L22,38 L10,38 L10,0 z"></path></g>
+                <g transform="translate(50,22) scale(1.07)" opacity="0.28"><path d="M-10,0 L-10,38 L-22,38 L0,62 L22,38 L10,38 L10,0 z"></path></g>
+                <g transform="translate(50,22)" opacity="0.45"><path d="M-10,0 L-10,38 L-22,38 L0,62 L22,38 L10,38 L10,0 z"></path></g>
+              </g>
+            </svg>
+            <div style="font-size:12px;color:#445062;margin-top:6px;line-height:1.35">倒立、等比縮放；孔越大越亮越糊</div>
+          </div>
+          <div style="position:absolute;left:14px;bottom:12px;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.9);border:1px solid #E2E5EA;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:700;color:#445062"><i class="fa-solid fa-arrows-left-right" style="color:#2A6FDB"></i>板與屏可左右拖；孔徑用左欄三段切換</div>
+        </div>
+
+        <div style="grid-column:1;grid-row:2;background:#fff;border:1px solid #E2E5EA;border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px">
+          <div style="height:44px;border-radius:10px;background:#2A6FDB;color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px"><i class="fa-solid fa-rotate-left"></i>重置這一頁</div>
+        </div>
+      </div>
+
+      <div style="height:56px;flex:none;display:flex;align-items:center;padding:0 18px;background:#1E2836;gap:10px">
+        <div style="flex:none;height:38px;padding:0 18px;border-radius:8px;background:#2A6FDB;color:#fff;font-size:13.5px;font-weight:700;display:flex;align-items:center;white-space:nowrap">針孔成像</div>
+        <div style="flex:none;height:38px;padding:0 18px;border-radius:8px;color:#9DAABB;font-size:13.5px;display:flex;align-items:center;white-space:nowrap">面鏡成像</div>
+        <div style="flex:none;height:38px;padding:0 18px;border-radius:8px;color:#9DAABB;font-size:13.5px;display:flex;align-items:center;white-space:nowrap">透鏡成像</div>
+        <div style="flex:none;height:38px;padding:0 18px;border-radius:8px;color:#9DAABB;font-size:13.5px;display:flex;align-items:center;white-space:nowrap">眼睛</div>
+      </div>
+    </div>
+    <div style="font-size:13px;color:#67717F;line-height:1.6;max-width:1366px">從物體頂端的一個發光點射出 14 道離散光線：被擋板攔下的<span style="font-weight:700">畫到板面就停、且不畫箭頭</span>（沒有到達的東西不給方向），穿過孔的三道各自帶箭頭走到紙屏，落在不同高度 → 屏上散成一段。孔徑縮小時能通過的光線變少（小＝1 道），屏上的斑點同時變小變暗——亮與糊是同一件事的兩個後果。擋板上的藍色短把手是可拖處。<br><span style="font-weight:700">這一版改了四件事</span>：① 主軸與整條光路收在<span style="font-weight:700">畫面上 2/3</span>（光軸＝第 5 格的主格線），<span style="font-weight:700">下方 1/3 全留白</span>；② 紙屏的正視小窗從右上移到<span style="font-weight:700">下方留白帶</span>、貼在紙屏正下方；③ 針孔擋板與紙屏都畫成<span style="font-weight:700">左高右低的平行四邊形</span>（左緣高、右緣低，落差 0.8 格），針孔<span style="font-weight:700">直接挖在板面上</span>（evenodd 挖空，不再是上下兩塊板夾出縫），孔徑三段＝小／中／大；④ 屏上的像<span style="font-weight:700">只做等比縮放</span>（同一條箭頭路徑的 uniform scale ＋ 上下翻轉），<span style="font-weight:700">不隨板／屏的斜面做梯形拉伸</span>。</div>
+  </div>
+</section>
+
+
+<section style="padding:8px 48px 24px;display:flex;flex-direction:column;gap:10px">
+  <div style="font-size:15px;font-weight:700;color:#445062">A2　分頁 2「面鏡成像」— 凹面鏡、物距 遠於 2F（實像、倒立、縮小）</div>
+  <div style="width:1366px;height:768px;display:flex;flex-direction:column;background:#F6F7F9;font-variant-numeric:tabular-nums;border:1px solid #D3D9E1;border-radius:6px;overflow:hidden;flex:none" data-screen-label="02">
+    <div style="height:50px;flex:none;display:flex;align-items:center;gap:12px;padding:0 18px;background:#fff;border-bottom:1px solid #E2E5EA">
+      <div style="width:28px;height:28px;border-radius:7px;background:#2A6FDB;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px">理</div>
+      <div style="font-size:17px;font-weight:700">光的成像</div>
+      <div style="margin-left:auto;display:flex;gap:8px">
+        <div style="width:34px;height:34px;border-radius:8px;border:1px solid #8A93A1;background:#fff;display:flex;align-items:center;justify-content:center;color:#445062;font-size:14px"><i class="fa-solid fa-circle-question"></i></div>
+        <div style="width:34px;height:34px;border-radius:8px;border:1px solid #8A93A1;background:#fff;display:flex;align-items:center;justify-content:center;color:#445062;font-size:14px"><i class="fa-solid fa-expand"></i></div>
+      </div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:1fr 3fr;grid-template-rows:1fr auto;gap:12px;padding:12px 14px;min-height:0">
+      <div style="background:#fff;border:1px solid #E2E5EA;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:6px;min-width:0;min-height:0;overflow-y:auto">
+        <div style="font-size:12px;font-weight:700;color:#67717F">器材</div>
+        <div style="display:inline-flex;flex:none;background:#F6F7F9;border:1px solid #8A93A1;border-radius:10px;padding:3px">
+          <div style="min-width:56px;height:36px;padding:0 10px;border-radius:8px;font-size:13px;font-weight:700;color:#67717F;display:flex;align-items:center;justify-content:center;white-space:nowrap">平面鏡</div>
+          <div style="min-width:56px;height:36px;padding:0 10px;border-radius:8px;font-size:13px;font-weight:700;color:#1C2433;background:#fff;box-shadow:0 1px 3px rgba(28,36,51,.16);display:flex;align-items:center;justify-content:center;white-space:nowrap">凹面鏡</div>
+          <div style="min-width:56px;height:36px;padding:0 10px;border-radius:8px;font-size:13px;font-weight:700;color:#67717F;display:flex;align-items:center;justify-content:center;white-space:nowrap">凸面鏡</div>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:#67717F;margin-top:2px">焦距</div>
+        <div style="display:flex;gap:6px">
+          <div style="height:40px;padding:0 15px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center">短</div>
+          <div style="height:40px;padding:0 15px;border-radius:20px;background:#2A6FDB;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center">中</div>
+          <div style="height:40px;padding:0 15px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center">長</div>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:#67717F;margin-top:2px">物體位置快捷</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <div style="height:40px;padding:0 12px;border-radius:20px;background:#2A6FDB;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;white-space:nowrap">遠於 2F</div>
+          <div style="height:40px;padding:0 12px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;white-space:nowrap">在 2F</div>
+          <div style="height:40px;padding:0 12px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;white-space:nowrap">F 與 2F 之間</div>
+          <div style="height:40px;padding:0 12px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;white-space:nowrap">在 F</div>
+          <div style="height:40px;padding:0 12px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;white-space:nowrap">近於 F</div>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:#67717F;margin-top:2px">光線顯示</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;background:#2A6FDB;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none"><i class="fa-solid fa-check"></i></div>平行光軸的光線</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;background:#2A6FDB;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none"><i class="fa-solid fa-check"></i></div>通過 F 的光線</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;background:#2A6FDB;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none"><i class="fa-solid fa-check"></i></div>射向鏡心的光線</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;border:1.5px solid #8A93A1;background:#fff;flex:none"></div>完整光束</div>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:#67717F;margin-top:2px">教學輔助疊層</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;background:#2A6FDB;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none"><i class="fa-solid fa-check"></i></div>光屏</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;border:1.5px solid #8A93A1;background:#fff;flex:none"></div>觀察者眼睛</div>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:#67717F;margin-top:2px">物體</div>
+        <div style="display:flex;gap:6px">
+          <div style="height:40px;padding:0 13px;border-radius:20px;background:#2A6FDB;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center">箭頭</div>
+          <div style="height:40px;padding:0 13px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center">蠟燭</div>
+          <div style="height:40px;padding:0 13px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center">F 形</div>
+        </div>
+      </div>
+
+      <div style="grid-column:2;grid-row:1 / span 2;position:relative;background:#fff;border:1px solid #E2E5EA;border-radius:10px;overflow:hidden;min-width:0;min-height:0">
+        <svg viewBox="0 3 25 16" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
+          <defs>
+            <pattern id="mn2" width="1" height="1" patternUnits="userSpaceOnUse" patternTransform="translate(0.5,0)"><path d="M1 0V1M0 1H1" fill="none" stroke="#D5DAE1" stroke-width="0.026"></path></pattern>
+            <pattern id="mj2" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="translate(2.5,3)"><path d="M5 0V5M0 5H5" fill="none" stroke="{{ majorGrid }}" stroke-width="0.034"></path></pattern>
+            <marker id="ah2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.6" markerHeight="4.6" orient="auto-start-reverse"><path d="M0 1.6 L9 5 L0 8.4 z" fill="#D2700F"></path></marker>
+          </defs>
+          <rect y="3" width="25" height="19" fill="#fff"></rect>
+          <rect y="3" width="25" height="19" fill="url(#mn2)"></rect>
+          <rect y="3" width="25" height="19" fill="url(#mj2)"></rect>
+          <line x1="0" y1="8" x2="25" y2="8" stroke="#7A8496" stroke-width="0.05"></line>
+
+          <path d="M16.9 4 Q18.1 8 16.9 12" fill="none" stroke="#8A94A3" stroke-width="0.34" stroke-linecap="round" transform="translate(0.16,0)"></path>
+          <path d="M16.9 4 Q18.1 8 16.9 12" fill="none" stroke="#5F6B7E" stroke-width="0.07" stroke-linecap="round"></path>
+
+          <g fill="none" stroke="#D2700F" stroke-width="0.075" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah2)">
+            <polyline points="8.5,6 17.5,6 11,10.33"></polyline>
+            <polyline points="8.5,6 17.5,9 11,9"></polyline>
+            <polyline points="8.5,6 17.5,8 11,9.44"></polyline>
+          </g>
+
+          <g fill="#445062">
+            <path d="M14.5 8 L14.28 8.44 L14.72 8.44 z"></path>
+            <path d="M11.5 8 L11.28 8.44 L11.72 8.44 z"></path>
+            <text x="14.5" y="9.28" font-size="0.52" font-weight="700" text-anchor="middle" fill="#1C2433" stroke="#fff" stroke-width="0.14" paint-order="stroke">F</text>
+            <text x="11.5" y="9.28" font-size="0.52" font-weight="700" text-anchor="middle" fill="#1C2433" stroke="#fff" stroke-width="0.14" paint-order="stroke">2F</text>
+          </g>
+
+          <g fill="#2A6FDB">
+            <path d="M8.293,8 L8.293,6.76 L8.06,6.76 L8.5,6 L8.94,6.76 L8.707,6.76 L8.707,8 z"></path>
+          </g>
+          <g fill="#2A6FDB" fill-opacity="0.5" stroke="#2F9E63" stroke-width="0.1" stroke-linejoin="round">
+            <path d="M12.897,8 L12.897,8.62 L12.78,8.62 L13,9 L13.22,8.62 L13.103,8.62 L13.103,8 z"></path>
+          </g>
+          
+
+          <g>
+            <path d="M12.25,3.1 L13.75,3.9 L13.75,12.9 L12.25,12.1 z" fill="#FDFAF3" stroke="#5F6B7E" stroke-width="0.05" stroke-linejoin="round"></path>
+            <g transform="translate(13,8) scale(1,-1)" fill="#2A6FDB" opacity="0.9"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+            <rect x="12.6" y="11.45" width="0.8" height="0.5" rx="0.25" fill="#2A6FDB"></rect>
+          </g>
+        </svg>
+        <div style="position:absolute;left:14px;top:12px;display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.88);border:1px solid #E2E5EA;border-radius:8px;padding:6px 10px;font-size:12px;color:#445062;font-weight:700;white-space:nowrap">
+          <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:18px;height:3px;background:#D2700F;border-radius:2px"></span>光線</span>
+          <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:#2A6FDB"></span>物體</span>
+          <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:#2F9E63"></span>實像</span>
+        </div>
+        <div style="position:absolute;right:14px;bottom:12px;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.9);border:1px solid #E2E5EA;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:700;color:#445062"><i class="fa-solid fa-arrows-left-right" style="color:#2A6FDB"></i>物體與光屏可左右拖</div>
+      </div>
+
+      <div style="grid-column:1;grid-row:2;background:#fff;border:1px solid #E2E5EA;border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px">
+        <div style="height:44px;border-radius:10px;background:#2A6FDB;color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px"><i class="fa-solid fa-rotate-left"></i>重置這一頁</div>
+      </div>
+    </div>
+    <div style="height:56px;flex:none;display:flex;align-items:center;padding:0 18px;background:#1E2836;gap:10px">
+      <div style="flex:none;height:38px;padding:0 18px;border-radius:8px;color:#9DAABB;font-size:13.5px;display:flex;align-items:center;white-space:nowrap">針孔成像</div>
+      <div style="flex:none;height:38px;padding:0 18px;border-radius:8px;background:#2A6FDB;color:#fff;font-size:13.5px;font-weight:700;display:flex;align-items:center;white-space:nowrap">面鏡成像</div>
+      <div style="flex:none;height:38px;padding:0 18px;border-radius:8px;color:#9DAABB;font-size:13.5px;display:flex;align-items:center;white-space:nowrap">透鏡成像</div>
+      <div style="flex:none;height:38px;padding:0 18px;border-radius:8px;color:#9DAABB;font-size:13.5px;display:flex;align-items:center;white-space:nowrap">眼睛</div>
+    </div>
+  </div>
+  <div style="font-size:13px;color:#67717F;line-height:1.6;max-width:1366px">三條特徵光線都從物體頂端出發、都在鏡面轉折、都通過像的頂端：學生看到的是「三條線交在一點」而不是三條各自的規則。鏡體用 0.34 格寬的 <span style="font-weight:700">#8A94A3</span> 背板＋前表面 <span style="font-weight:700">#5F6B7E</span> 細線，鏡面朝左（凸面向右）——四頁的器材都是這套「厚背板＋細前緣」語言。F／2F 只有字母，加白色外描邊（paint-order）壓在光線之上仍讀得到。左欄設定卡在四種尺寸下一律 `overflow-y:auto`＋`min-height:0`：這一頁的六個區塊比 768 高的視窗略多，下緣兩塊需要捲動一小段，區塊順序不變。</div>
+</section>
+
+<section style="padding:8px 48px 24px;display:flex;flex-direction:column;gap:10px">
+  <div style="font-size:15px;font-weight:700;color:#445062">A3　分頁 3「透鏡成像」— 凸透鏡、物距 遠於 2F，光屏正對在像的位置（清晰）</div>
+  <div style="width:1366px;height:768px;display:flex;flex-direction:column;background:#F6F7F9;font-variant-numeric:tabular-nums;border:1px solid #D3D9E1;border-radius:6px;overflow:hidden;flex:none" data-screen-label="03">
+    <div style="height:50px;flex:none;display:flex;align-items:center;gap:12px;padding:0 18px;background:#fff;border-bottom:1px solid #E2E5EA">
+      <div style="width:28px;height:28px;border-radius:7px;background:#2A6FDB;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px">理</div>
+      <div style="font-size:17px;font-weight:700">光的成像</div>
+      <div style="margin-left:auto;display:flex;gap:8px">
+        <div style="width:34px;height:34px;border-radius:8px;border:1px solid #8A93A1;background:#fff;display:flex;align-items:center;justify-content:center;color:#445062;font-size:14px"><i class="fa-solid fa-circle-question"></i></div>
+        <div style="width:34px;height:34px;border-radius:8px;border:1px solid #8A93A1;background:#fff;display:flex;align-items:center;justify-content:center;color:#445062;font-size:14px"><i class="fa-solid fa-expand"></i></div>
+      </div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:1fr 3fr;grid-template-rows:1fr auto;gap:12px;padding:12px 14px;min-height:0">
+      <div style="background:#fff;border:1px solid #E2E5EA;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:6px;min-width:0;min-height:0;overflow-y:auto">
+        <div style="font-size:12px;font-weight:700;color:#67717F">器材</div>
+        <div style="display:inline-flex;flex:none;background:#F6F7F9;border:1px solid #8A93A1;border-radius:10px;padding:3px">
+          <div style="min-width:56px;height:36px;padding:0 14px;border-radius:8px;font-size:13px;font-weight:700;color:#1C2433;background:#fff;box-shadow:0 1px 3px rgba(28,36,51,.16);display:flex;align-items:center;justify-content:center;white-space:nowrap">凸透鏡</div>
+          <div style="min-width:56px;height:36px;padding:0 14px;border-radius:8px;font-size:13px;font-weight:700;color:#67717F;display:flex;align-items:center;justify-content:center;white-space:nowrap">凹透鏡</div>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:#67717F;margin-top:2px">焦距</div>
+        <div style="display:flex;gap:6px">
+          <div style="height:40px;padding:0 15px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center">短</div>
+          <div style="height:40px;padding:0 15px;border-radius:20px;background:#2A6FDB;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center">中</div>
+          <div style="height:40px;padding:0 15px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center">長</div>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:#67717F;margin-top:2px">物體位置快捷</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <div style="height:40px;padding:0 12px;border-radius:20px;background:#2A6FDB;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;white-space:nowrap">遠於 2F</div>
+          <div style="height:40px;padding:0 12px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;white-space:nowrap">在 2F</div>
+          <div style="height:40px;padding:0 12px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;white-space:nowrap">F 與 2F 之間</div>
+          <div style="height:40px;padding:0 12px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;white-space:nowrap">在 F</div>
+          <div style="height:40px;padding:0 12px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;white-space:nowrap">近於 F</div>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:#67717F;margin-top:2px">光線顯示</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;background:#2A6FDB;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none"><i class="fa-solid fa-check"></i></div>平行光軸的光線</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;background:#2A6FDB;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none"><i class="fa-solid fa-check"></i></div>通過 F 的光線</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;background:#2A6FDB;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none"><i class="fa-solid fa-check"></i></div>通過鏡心的光線</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;border:1.5px solid #8A93A1;background:#fff;flex:none"></div>完整光束</div>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:#67717F;margin-top:2px">教學輔助疊層</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;background:#2A6FDB;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none"><i class="fa-solid fa-check"></i></div>光屏</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;border:1.5px solid #8A93A1;background:#fff;flex:none"></div>觀察者眼睛</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;background:#2A6FDB;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none"><i class="fa-solid fa-check"></i></div>遮板（可下拉）</div>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:#67717F;margin-top:2px">物體</div>
+        <div style="display:flex;gap:6px">
+          <div style="height:40px;padding:0 13px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center">箭頭</div>
+          <div style="height:40px;padding:0 13px;border-radius:20px;background:#2A6FDB;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center">蠟燭</div>
+          <div style="height:40px;padding:0 13px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center">F 形</div>
+        </div>
+      </div>
+
+      <div style="grid-column:2;grid-row:1 / span 2;position:relative;background:#fff;border:1px solid #E2E5EA;border-radius:10px;overflow:hidden;min-width:0;min-height:0">
+        <svg viewBox="0 3 25 16" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
+          <defs>
+            <pattern id="mn3" width="1" height="1" patternUnits="userSpaceOnUse" patternTransform="translate(0.5,0)"><path d="M1 0V1M0 1H1" fill="none" stroke="#D5DAE1" stroke-width="0.026"></path></pattern>
+            <pattern id="mj3" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="translate(2.5,3)"><path d="M5 0V5M0 5H5" fill="none" stroke="{{ majorGrid }}" stroke-width="0.034"></path></pattern>
+            <marker id="ah3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.6" markerHeight="4.6" orient="auto-start-reverse"><path d="M0 1.6 L9 5 L0 8.4 z" fill="#D2700F"></path></marker>
+          </defs>
+          <rect y="3" width="25" height="19" fill="#fff"></rect>
+          <rect y="3" width="25" height="19" fill="url(#mn3)"></rect>
+          <rect y="3" width="25" height="19" fill="url(#mj3)"></rect>
+          <line x1="0" y1="8" x2="25" y2="8" stroke="#7A8496" stroke-width="0.05"></line>
+
+          <path d="M12.5 4.2 Q13.45 8 12.5 11.8 Q11.55 8 12.5 4.2 z" fill="#C5DDE8" fill-opacity="0.75" stroke="#5F6B7E" stroke-width="0.06"></path>
+
+          <g fill="none" stroke="#D2700F" stroke-width="0.075" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah3)">
+            <polyline points="4.5,6 12.5,6 20.5,11.33"></polyline>
+            <polyline points="4.5,6 12.5,8 20.5,10"></polyline>
+            <polyline points="4.5,6 12.5,9.2 20.5,9.2"></polyline>
+          </g>
+
+          <g fill="#445062">
+            <path d="M9.5 8 L9.28 8.44 L9.72 8.44 z"></path>
+            <path d="M15.5 8 L15.28 8.44 L15.72 8.44 z"></path>
+            <path d="M6.5 8 L6.28 8.44 L6.72 8.44 z"></path>
+            <path d="M18.5 8 L18.28 8.44 L18.72 8.44 z"></path>
+            <text x="9.5" y="9.28" font-size="0.52" font-weight="700" text-anchor="middle" fill="#1C2433" stroke="#fff" stroke-width="0.14" paint-order="stroke">F</text>
+            <text x="15.5" y="9.28" font-size="0.52" font-weight="700" text-anchor="middle" fill="#1C2433" stroke="#fff" stroke-width="0.14" paint-order="stroke">F</text>
+            <text x="6.5" y="9.28" font-size="0.52" font-weight="700" text-anchor="middle" fill="#1C2433" stroke="#fff" stroke-width="0.14" paint-order="stroke">2F</text>
+            <text x="18.5" y="9.28" font-size="0.52" font-weight="700" text-anchor="middle" fill="#1C2433" stroke="#fff" stroke-width="0.14" paint-order="stroke">2F</text>
+          </g>
+
+          <g>
+            <rect x="4.2" y="6.5" width="0.6" height="1.5" rx="0.16" fill="#D64545" stroke="#C62F2F" stroke-width="0.045"></rect>
+            <path d="M4.5 6.0 Q4.86 6.25 4.5 6.5 Q4.14 6.25 4.5 6.0 z" fill="#D2700F" stroke="#C7A82C" stroke-width="0.04"></path>
+            <line x1="3.7" y1="8" x2="5.3" y2="8" stroke="#5F6B7E" stroke-width="0.06"></line>
+          </g>
+          <g fill-opacity="0.5" stroke="#2F9E63" stroke-width="0.1" stroke-linejoin="round">
+            <rect x="17.12" y="8" width="0.36" height="0.9" rx="0.09" fill="#D64545"></rect>
+            <path d="M17.3,9.2 Q17.52,9.05 17.3,8.9 Q17.08,9.05 17.3,9.2 z" fill="#D2700F"></path>
+          </g>
+          
+
+          <g>
+            <rect x="12.02" y="3.1" width="0.96" height="1.1" rx="0.14" fill="#8A94A3" stroke="#5F6B7E" stroke-width="0.05"></rect>
+            <rect x="12.1" y="3.32" width="0.8" height="0.5" rx="0.25" fill="#2A6FDB"></rect>
+          </g>
+
+          <g>
+            <path d="M16.55,3.1 L18.05,3.9 L18.05,12.9 L16.55,12.1 z" fill="#FDFAF3" stroke="#5F6B7E" stroke-width="0.05" stroke-linejoin="round"></path>
+            <g transform="translate(17.3,8) scale(0.358)" opacity="0.9"><rect x="-0.3" y="0" width="0.6" height="2.5" rx="0.16" fill="#D64545"></rect><path d="M0,3.35 Q0.42,2.9 0,2.5 Q-0.42,2.9 0,3.35 z" fill="#D2700F"></path></g>
+            <rect x="16.9" y="11.45" width="0.8" height="0.5" rx="0.25" fill="#2A6FDB"></rect>
+          </g>
+        </svg>
+        <div style="position:absolute;left:14px;top:12px;display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.88);border:1px solid #E2E5EA;border-radius:8px;padding:6px 10px;font-size:12px;color:#445062;font-weight:700;white-space:nowrap">
+          <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:18px;height:3px;background:#D2700F;border-radius:2px"></span>光線</span>
+          <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:#D64545;border:1px solid #C62F2F"></span>物體</span>
+          <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:#2F9E63"></span>實像</span>
+          <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:#8A94A3;border:1px solid #5F6B7E"></span>遮板</span>
+        </div>
+        <div style="position:absolute;right:14px;bottom:14px;width:150px;background:#fff;border:1px solid #E2E5EA;border-radius:10px;padding:8px">
+          <div style="font-size:12px;color:#67717F;font-weight:700;margin-bottom:6px">屏面正視</div>
+          <svg viewBox="0 0 100 100" style="width:100%;display:block;border-radius:6px;background:#FDFAF3">
+            <g transform="translate(50,54) rotate(180)" fill="#D64545">
+              <rect x="-5" y="-2" width="10" height="26" rx="3"></rect>
+              <path d="M0 -12 Q7 -6 0 -2 Q-7 -6 0 -12 z"></path>
+            </g>
+          </svg>
+          <div style="font-size:12px;color:#445062;margin-top:6px;line-height:1.35">屏在像的位置 → 清晰、倒立</div>
+        </div>
+        <div style="position:absolute;left:50%;transform:translateX(-50%);bottom:10px;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.9);border:1px solid #E2E5EA;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:700;color:#445062"><i class="fa-solid fa-arrow-down" style="color:#2A6FDB"></i>遮板停在透鏡上方，向下拖可遮住透鏡的一部分</div>
+      </div>
+
+      <div style="grid-column:1;grid-row:2;background:#fff;border:1px solid #E2E5EA;border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px">
+        <div style="height:44px;border-radius:10px;background:#2A6FDB;color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px"><i class="fa-solid fa-rotate-left"></i>重置這一頁</div>
+      </div>
+    </div>
+    <div style="height:56px;flex:none;display:flex;align-items:center;padding:0 18px;background:#1E2836;gap:10px">
+      <div style="flex:none;height:38px;padding:0 18px;border-radius:8px;color:#9DAABB;font-size:13.5px;display:flex;align-items:center;white-space:nowrap">針孔成像</div>
+      <div style="flex:none;height:38px;padding:0 18px;border-radius:8px;color:#9DAABB;font-size:13.5px;display:flex;align-items:center;white-space:nowrap">面鏡成像</div>
+      <div style="flex:none;height:38px;padding:0 18px;border-radius:8px;background:#2A6FDB;color:#fff;font-size:13.5px;font-weight:700;display:flex;align-items:center;white-space:nowrap">透鏡成像</div>
+      <div style="flex:none;height:38px;padding:0 18px;border-radius:8px;color:#9DAABB;font-size:13.5px;display:flex;align-items:center;white-space:nowrap">眼睛</div>
+    </div>
+  </div>
+  <div style="font-size:13px;color:#67717F;line-height:1.6;max-width:1366px">物體換成蠟燭造型（三種造型頂端基準線相同，見 D 區）。透鏡兩側各標 F 與 2F，焦距切到「短」時透鏡變厚、四個記號一起向內移。遮板預設停在透鏡正上方一格處，帶藍色把手明示可下拉——把手是唯一的可拖暗示，不用滑鼠指標或 hover。這一頁的控制項最多（多了遮板一項），左欄下緣需捲動約 60px；捲動只發生在設定卡內，動作卡與畫布固定不動。</div>
+</section>
+
+<section style="padding:8px 48px 24px;display:flex;flex-direction:column;gap:10px">
+  <div style="font-size:15px;font-weight:700;color:#445062">A4　分頁 4「眼睛」— 近視眼、看遠、未戴眼鏡（光聚在視網膜之前）</div>
+  <div style="width:1366px;height:768px;display:flex;flex-direction:column;background:#F6F7F9;font-variant-numeric:tabular-nums;border:1px solid #D3D9E1;border-radius:6px;overflow:hidden;flex:none" data-screen-label="04">
+    <div style="height:50px;flex:none;display:flex;align-items:center;gap:12px;padding:0 18px;background:#fff;border-bottom:1px solid #E2E5EA">
+      <div style="width:28px;height:28px;border-radius:7px;background:#2A6FDB;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px">理</div>
+      <div style="font-size:17px;font-weight:700">光的成像</div>
+      <div style="margin-left:auto;display:flex;gap:8px">
+        <div style="width:34px;height:34px;border-radius:8px;border:1px solid #8A93A1;background:#fff;display:flex;align-items:center;justify-content:center;color:#445062;font-size:14px"><i class="fa-solid fa-circle-question"></i></div>
+        <div style="width:34px;height:34px;border-radius:8px;border:1px solid #8A93A1;background:#fff;display:flex;align-items:center;justify-content:center;color:#445062;font-size:14px"><i class="fa-solid fa-expand"></i></div>
+      </div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:1fr 3fr;grid-template-rows:1fr auto;gap:12px;padding:12px 14px;min-height:0">
+      <div style="background:#fff;border:1px solid #E2E5EA;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0;min-height:0;overflow-y:auto">
+        <div style="font-size:12px;font-weight:700;color:#67717F">器材　眼睛狀態</div>
+        <div style="display:inline-flex;flex:none;background:#F6F7F9;border:1px solid #8A93A1;border-radius:10px;padding:3px">
+          <div style="min-width:56px;height:36px;padding:0 10px;border-radius:8px;font-size:13px;font-weight:700;color:#67717F;display:flex;align-items:center;justify-content:center;white-space:nowrap">正常眼</div>
+          <div style="min-width:56px;height:36px;padding:0 10px;border-radius:8px;font-size:13px;font-weight:700;color:#1C2433;background:#fff;box-shadow:0 1px 3px rgba(28,36,51,.16);display:flex;align-items:center;justify-content:center;white-space:nowrap">近視眼</div>
+          <div style="min-width:56px;height:36px;padding:0 10px;border-radius:8px;font-size:13px;font-weight:700;color:#67717F;display:flex;align-items:center;justify-content:center;white-space:nowrap">遠視眼</div>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:#67717F;margin-top:2px">調節作用</div>
+        <div style="display:flex;gap:6px">
+          <div style="height:40px;padding:0 16px;border-radius:20px;background:#2A6FDB;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center">看遠</div>
+          <div style="height:40px;padding:0 16px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center">看近</div>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:#67717F;margin-top:2px">矯正</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+          <div style="font-size:13px;font-weight:700;color:#445062">戴上眼鏡</div>
+          <div style="width:52px;height:30px;border-radius:15px;background:#8A93A1;padding:3px;display:flex;align-items:center;flex:none"><div style="width:24px;height:24px;border-radius:12px;background:#fff"></div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;opacity:.55">
+          <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#445062;font-weight:700">矯正度數</span><span style="color:#67717F;font-weight:700">中</span></div>
+          <div style="height:7px;border-radius:4px;background:#D3D9E1;position:relative">
+            <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;background:#fff;border:2px solid #8A93A1"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:#67717F"><span>弱</span><span>強</span></div>
+        </div>
+        <div style="height:1px;background:#E2E5EA;flex:none;margin-top:2px"></div>
+        <div style="font-size:12px;font-weight:700;color:#67717F">光線顯示</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;background:#2A6FDB;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none"><i class="fa-solid fa-check"></i></div>完整光束</div>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:#67717F;margin-top:2px">教學輔助疊層</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;background:#2A6FDB;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none"><i class="fa-solid fa-check"></i></div>視覺模擬</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;border:1.5px solid #8A93A1;background:#fff;flex:none"></div>構造名稱標示</div>
+        </div>
+      </div>
+
+      <div style="grid-column:2;grid-row:1 / span 2;position:relative;background:#fff;border:1px solid #E2E5EA;border-radius:10px;overflow:hidden;min-width:0;min-height:0">
+        <svg viewBox="0 3 25 16" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
+          <defs>
+            <pattern id="mn4" width="1" height="1" patternUnits="userSpaceOnUse" patternTransform="translate(0.5,0)"><path d="M1 0V1M0 1H1" fill="none" stroke="#D5DAE1" stroke-width="0.026"></path></pattern>
+            <pattern id="mj4" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="translate(2.5,3)"><path d="M5 0V5M0 5H5" fill="none" stroke="{{ majorGrid }}" stroke-width="0.034"></path></pattern>
+            <marker id="ah4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.6" markerHeight="4.6" orient="auto-start-reverse"><path d="M0 1.6 L9 5 L0 8.4 z" fill="#D2700F"></path></marker>
+            <radialGradient id="vit4" cx="38%" cy="36%" r="80%"><stop offset="0" stop-color="#FDE6D8"></stop><stop offset="1" stop-color="#F2B79B"></stop></radialGradient>
+          </defs>
+          <rect y="3" width="25" height="19" fill="#fff"></rect>
+          <rect y="3" width="25" height="19" fill="url(#mn4)"></rect>
+          <rect y="3" width="25" height="19" fill="url(#mj4)"></rect>
+          <line x1="0" y1="8" x2="25" y2="8" stroke="#7A8496" stroke-width="0.05"></line>
+
+          <path d="M21.9 8.35 L27.2 11.35 L26.2 12.95 L20.88 9.92 z" fill="#F0CD9E" stroke="#A9DCF4" stroke-width="0.42" stroke-linejoin="round"></path>
+          <circle cx="18" cy="8" r="3.95" fill="#A9DCF4"></circle>
+          <path d="M20.21 4.84 A3.86 3.86 0 0 1 20.05 11.27 L19.84 10.95 A3.48 3.48 0 0 0 20.00 5.15 z" fill="#F0CD9E"></path>
+          <circle cx="18" cy="8" r="3.5" fill="#C0707C"></circle>
+          <circle cx="18" cy="8" r="3.2" fill="url(#vit4)"></circle>
+          <path d="M15.15 5.2 C13.15 5.75 12.55 6.6 12.55 8 C12.55 9.4 13.15 10.25 15.15 10.8 C15.45 9.7 15.32 8.9 15.32 8 C15.32 7.1 15.45 6.3 15.15 5.2 z" fill="#D9EEF9"></path>
+          <path d="M15.15 5.2 C13.15 5.75 12.55 6.6 12.55 8 C12.55 9.4 13.15 10.25 15.15 10.8" fill="none" stroke="#A9DCF4" stroke-width="0.42" stroke-linecap="round"></path>
+          <path d="M14.7 5.72 C15.2 6.62 15.2 9.38 14.7 10.28 C14.2 9.38 14.2 6.62 14.7 5.72 z" fill="#9BD4EE"></path>
+          <g stroke="#C0707C" stroke-width="0.075" stroke-linecap="round">
+            <line x1="14.45" y1="5.12" x2="14.5" y2="5.78"></line>
+            <line x1="14.7" y1="5.02" x2="14.7" y2="5.74"></line>
+            <line x1="14.95" y1="5.12" x2="14.9" y2="5.78"></line>
+            <line x1="14.45" y1="10.88" x2="14.5" y2="10.22"></line>
+            <line x1="14.7" y1="10.98" x2="14.7" y2="10.26"></line>
+            <line x1="14.95" y1="10.88" x2="14.9" y2="10.22"></line>
+          </g>
+
+          <g fill="none" stroke="#D2700F" stroke-width="0.075" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3.6,6.05 13.05,6.2 14.7,6.6 19.5,8.35 20.6,8.75" marker-end="url(#ah4)"></polyline>
+            <polyline points="3.6,6.05 13.05,9.5 14.7,9.35 19.5,8.35 20.55,8.0" marker-end="url(#ah4)"></polyline>
+          </g>
+          <circle cx="19.5" cy="8.35" r="0.13" fill="#D2700F"></circle>
+          <path d="M20.7 7.85 A 3.5 3.5 0 0 1 20.45 9.1" fill="none" stroke="#D2700F" stroke-width="0.26" opacity="0.5"></path>
+
+          <g>
+            <circle cx="3.2" cy="6.6" r="0.9" fill="#F3D34E" opacity="0.18"></circle>
+            <rect x="2.9" y="6.5" width="0.6" height="1.5" rx="0.16" fill="#D64545" stroke="#C62F2F" stroke-width="0.045"></rect>
+            <path d="M3.2 6.0 Q3.62 6.25 3.2 6.5 Q2.78 6.25 3.2 6.0 z" fill="#D2700F" stroke="#C7A82C" stroke-width="0.04"></path>
+            <line x1="2.4" y1="8" x2="4.0" y2="8" stroke="#5F6B7E" stroke-width="0.06"></line>
+          </g>
+
+          <g font-size="0.42" font-weight="700" fill="#1C2433" stroke="#fff" stroke-width="0.13" paint-order="stroke" text-anchor="middle">
+            <text x="12.0" y="11.6">角膜</text>
+            <text x="14.2" y="12.8">水晶體</text>
+            <text x="22.5" y="5.6">視網膜</text>
+            <text x="23.1" y="12.4">視神經</text>
+            <text x="19.5" y="7.4">聚焦點</text>
+            <text x="3.2" y="9.9">遠處的蠟燭</text>
+          </g>
+        </svg>
+        <div style="position:absolute;left:14px;top:12px;display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.88);border:1px solid #E2E5EA;border-radius:8px;padding:6px 10px;font-size:12px;color:#445062;font-weight:700;white-space:nowrap">
+          <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:18px;height:3px;background:#D2700F;border-radius:2px"></span>光線</span>
+          <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:#9BD4EE;border:1px solid #5F6B7E"></span>水晶體</span>
+          <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:#A9DCF4;border:1px solid #5F6B7E"></span>角膜</span>
+        </div>
+        <div style="position:absolute;left:14px;bottom:12px;width:216px;background:#fff;border:1px solid #E2E5EA;border-radius:10px;padding:9px">
+          <div style="font-size:12px;color:#67717F;font-weight:700;margin-bottom:6px">視覺模擬　看遠</div>
+          <svg viewBox="0 0 200 104" style="width:100%;display:block;border-radius:6px;background:#FDFAF3">
+            <defs><filter id="bl4"><feGaussianBlur stdDeviation="3.4"></feGaussianBlur></filter></defs>
+            <g filter="url(#bl4)">
+              <rect x="44" y="58" width="10" height="26" fill="#D9A05B"></rect>
+              <path d="M49 16 L70 60 L28 60 z" fill="#2F9E63"></path>
+            </g>
+            <g>
+              <rect x="118" y="52" width="58" height="34" rx="3" fill="#ECEFF3" stroke="#9DAABB" stroke-width="2"></rect>
+              <line x1="147" y1="52" x2="147" y2="86" stroke="#9DAABB" stroke-width="2"></line>
+              <line x1="126" y1="62" x2="140" y2="62" stroke="#67717F" stroke-width="2"></line>
+              <line x1="126" y1="70" x2="140" y2="70" stroke="#67717F" stroke-width="2"></line>
+              <line x1="154" y1="62" x2="168" y2="62" stroke="#67717F" stroke-width="2"></line>
+              <line x1="154" y1="70" x2="168" y2="70" stroke="#67717F" stroke-width="2"></line>
+            </g>
+          </svg>
+          <div style="font-size:12px;color:#445062;margin-top:6px;line-height:1.35">遠處的樹模糊、近處的書清楚</div>
+        </div>
+      </div>
+
+      <div style="grid-column:1;grid-row:2;background:#fff;border:1px solid #E2E5EA;border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px">
+        <div style="height:44px;border-radius:10px;background:#2A6FDB;color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px"><i class="fa-solid fa-rotate-left"></i>重置這一頁</div>
+      </div>
+    </div>
+    <div style="height:56px;flex:none;display:flex;align-items:center;padding:0 18px;background:#1E2836;gap:10px">
+      <div style="flex:none;height:38px;padding:0 18px;border-radius:8px;color:#9DAABB;font-size:13.5px;display:flex;align-items:center;white-space:nowrap">針孔成像</div>
+      <div style="flex:none;height:38px;padding:0 18px;border-radius:8px;color:#9DAABB;font-size:13.5px;display:flex;align-items:center;white-space:nowrap">面鏡成像</div>
+      <div style="flex:none;height:38px;padding:0 18px;border-radius:8px;color:#9DAABB;font-size:13.5px;display:flex;align-items:center;white-space:nowrap">透鏡成像</div>
+      <div style="flex:none;height:38px;padding:0 18px;border-radius:8px;background:#2A6FDB;color:#fff;font-size:13.5px;font-weight:700;display:flex;align-items:center;white-space:nowrap">眼睛</div>
+    </div>
+  </div>
+  <div style="font-size:13px;color:#67717F;line-height:1.6;max-width:1366px">這一頁的「物體」仍是統一的藍色箭頭（遠處物體），光束平行入射；四頁共用同一條光軸與同一組格線。眼球剖面<span style="font-weight:700">完全照課本圖重畫</span>：外壁淡藍 #A9DCF4、視網膜／血管層玫瑰 #C0707C（0.3 格環）、玻璃體是左上亮到右下深的桃色徑向漸層 #FDE6D8→#F2B79B、角膜是向左突出的淡藍弧帶（線寬 0.42 格）內含 #D9EEF9 前房、水晶體 #9BD4EE 雙凸體並在上下畫出玫瑰色睫狀纖維、視神經是 #F0CD9E 帶淡藍邊的斜帶自右下穿出，球壁內側右緣留同色延伸弧。聚焦點落在視網膜之前，視網膜上出現一段 #D2700F 半透明模糊弧——「像沒有落在該落的地方」是用位置而不是文字說的。矯正度數滑桿在未戴眼鏡時整組降透明度（disabled），檔位標「弱－強」不標度數，守住「畫面上不出現數值」。<br><span style="font-weight:700">小窗位置規則（四頁一致）</span>：小窗一律放在<span style="font-weight:700">下方 1/3 的留白帶</span>——光路收在上 2/3，下方 1/3 不畫任何光路，正視小窗就住在這條帶子裡：針孔頁與透鏡頁的「屏面正視」貼在紙屏正下方（右下），眼睛頁的「視覺模擬」在左下。距邊一律 12／14px、寬 140–216px。</div>
+</section>
+
+<section style="padding:24px 48px;display:flex;flex-direction:column;gap:12px">
+  <div style="font-size:20px;font-weight:700">B. 版面稿 · 1024×768（iPad 橫向）與 768×1024（iPad 直向）</div>
+  <div style="font-size:13.5px;color:#445062;line-height:1.6;max-width:1000px">1024 橫向：欄比例不變（1fr 3fr），左欄 246 ／ 畫布 738。左欄裝不下六個區塊 → <span style="font-weight:700">設定卡改為可縱向捲動</span>（`overflow-y:auto`、`touch-action:pan-y`），區塊順序完全不變，學生記得的位置仍然有效；快捷鈕改 2 欄網格。<br>768 直向（＜900px 斷點）：左欄摺成由下方浮出的面板，最下方那一列是<span style="font-weight:700">橫排動作列</span>，右端只有「設定」一顆 chip（沒有右欄，所以沒有第二顆）。</div>
+
+  <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap">
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="font-size:15px;font-weight:700;color:#445062">B1　1024×768 · 面鏡成像</div>
+      <div style="width:1024px;height:768px;display:flex;flex-direction:column;background:#F6F7F9;font-variant-numeric:tabular-nums;border:1px solid #D3D9E1;border-radius:6px;overflow:hidden;flex:none" data-screen-label="B1">
+        <div style="height:50px;flex:none;display:flex;align-items:center;gap:12px;padding:0 16px;background:#fff;border-bottom:1px solid #E2E5EA">
+          <div style="width:28px;height:28px;border-radius:7px;background:#2A6FDB;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px">理</div>
+          <div style="font-size:17px;font-weight:700">光的成像</div>
+          <div style="margin-left:auto;display:flex;gap:8px">
+            <div style="width:34px;height:34px;border-radius:8px;border:1px solid #8A93A1;background:#fff;display:flex;align-items:center;justify-content:center;color:#445062;font-size:14px"><i class="fa-solid fa-circle-question"></i></div>
+            <div style="width:34px;height:34px;border-radius:8px;border:1px solid #8A93A1;background:#fff;display:flex;align-items:center;justify-content:center;color:#445062;font-size:14px"><i class="fa-solid fa-expand"></i></div>
+          </div>
+        </div>
+        <div style="flex:1;display:grid;grid-template-columns:1fr 3fr;grid-template-rows:1fr auto;gap:12px;padding:12px 14px;min-height:0">
+          <div style="position:relative;background:#fff;border:1px solid #E2E5EA;border-radius:10px;padding:14px 12px;display:flex;flex-direction:column;gap:8px;min-width:0;min-height:0;overflow:hidden">
+            <div style="font-size:12px;font-weight:700;color:#67717F">器材</div>
+            <div style="display:inline-flex;flex:none;background:#F6F7F9;border:1px solid #8A93A1;border-radius:10px;padding:3px">
+              <div style="min-width:56px;height:36px;border-radius:8px;font-size:13px;font-weight:700;color:#67717F;display:flex;align-items:center;justify-content:center;white-space:nowrap">平面鏡</div>
+              <div style="min-width:56px;height:36px;border-radius:8px;font-size:13px;font-weight:700;color:#1C2433;background:#fff;box-shadow:0 1px 3px rgba(28,36,51,.16);display:flex;align-items:center;justify-content:center;white-space:nowrap">凹面鏡</div>
+              <div style="min-width:56px;height:36px;border-radius:8px;font-size:13px;font-weight:700;color:#67717F;display:flex;align-items:center;justify-content:center;white-space:nowrap">凸面鏡</div>
+            </div>
+            <div style="font-size:12px;font-weight:700;color:#67717F;margin-top:2px">焦距</div>
+            <div style="display:flex;gap:6px">
+              <div style="height:40px;flex:1;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center">短</div>
+              <div style="height:40px;flex:1;border-radius:20px;background:#2A6FDB;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center">中</div>
+              <div style="height:40px;flex:1;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center">長</div>
+            </div>
+            <div style="font-size:12px;font-weight:700;color:#67717F;margin-top:2px">物體位置快捷</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+              <div style="height:40px;border-radius:20px;background:#2A6FDB;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;white-space:nowrap">遠於 2F</div>
+              <div style="height:40px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;white-space:nowrap">在 2F</div>
+              <div style="grid-column:1 / span 2;height:40px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;white-space:nowrap">F 與 2F 之間</div>
+              <div style="height:40px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;white-space:nowrap">在 F</div>
+              <div style="height:40px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;white-space:nowrap">近於 F</div>
+            </div>
+            <div style="font-size:12px;font-weight:700;color:#67717F;margin-top:2px">光線顯示</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;background:#2A6FDB;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none"><i class="fa-solid fa-check"></i></div>平行光軸的光線</div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;background:#2A6FDB;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none"><i class="fa-solid fa-check"></i></div>通過 F 的光線</div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;background:#2A6FDB;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none"><i class="fa-solid fa-check"></i></div>射向鏡心的光線</div>
+            </div>
+            <div style="position:absolute;right:4px;top:80px;width:4px;height:170px;border-radius:2px;background:#D3D9E1"></div>
+          </div>
+          <div style="grid-column:2;grid-row:1 / span 2;position:relative;background:#fff;border:1px solid #E2E5EA;border-radius:10px;overflow:hidden;min-width:0;min-height:0">
+            <svg viewBox="0 3 25 16" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
+              <defs>
+                <pattern id="mn5" width="1" height="1" patternUnits="userSpaceOnUse" patternTransform="translate(0.5,0)"><path d="M1 0V1M0 1H1" fill="none" stroke="#D5DAE1" stroke-width="0.026"></path></pattern>
+                <pattern id="mj5" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="translate(2.5,3)"><path d="M5 0V5M0 5H5" fill="none" stroke="{{ majorGrid }}" stroke-width="0.034"></path></pattern>
+                <marker id="ah5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.6" markerHeight="4.6" orient="auto-start-reverse"><path d="M0 1.6 L9 5 L0 8.4 z" fill="#D2700F"></path></marker>
+              </defs>
+              <rect y="3" width="25" height="19" fill="#fff"></rect>
+              <rect y="3" width="25" height="19" fill="url(#mn5)"></rect>
+              <rect y="3" width="25" height="19" fill="url(#mj5)"></rect>
+              <line x1="0" y1="8" x2="25" y2="8" stroke="#7A8496" stroke-width="0.05"></line>
+              <path d="M16.9 4 Q18.1 8 16.9 12" fill="none" stroke="#8A94A3" stroke-width="0.34" stroke-linecap="round" transform="translate(0.16,0)"></path>
+              <path d="M16.9 4 Q18.1 8 16.9 12" fill="none" stroke="#5F6B7E" stroke-width="0.07" stroke-linecap="round"></path>
+              <g fill="none" stroke="#D2700F" stroke-width="0.075" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah5)">
+                <polyline points="8.5,6 17.5,6 11,10.33"></polyline>
+                <polyline points="8.5,6 17.5,9 11,9"></polyline>
+                <polyline points="8.5,6 17.5,8 11,9.44"></polyline>
+              </g>
+              <g fill="#445062">
+                <path d="M14.5 8 L14.28 8.44 L14.72 8.44 z"></path>
+                <path d="M11.5 8 L11.28 8.44 L11.72 8.44 z"></path>
+                <text x="14.5" y="9.28" font-size="0.52" font-weight="700" text-anchor="middle" fill="#1C2433" stroke="#fff" stroke-width="0.14" paint-order="stroke">F</text>
+                <text x="11.5" y="9.28" font-size="0.52" font-weight="700" text-anchor="middle" fill="#1C2433" stroke="#fff" stroke-width="0.14" paint-order="stroke">2F</text>
+              </g>
+              <g fill="#2A6FDB">
+                <path d="M8.293,8 L8.293,6.76 L8.06,6.76 L8.5,6 L8.94,6.76 L8.707,6.76 L8.707,8 z"></path>
+              </g>
+              <g fill="#2A6FDB" fill-opacity="0.5" stroke="#2F9E63" stroke-width="0.1" stroke-linejoin="round">
+                <path d="M12.897,8 L12.897,8.62 L12.78,8.62 L13,9 L13.22,8.62 L13.103,8.62 L13.103,8 z"></path>
+              </g>
+              
+            </svg>
+            <div style="position:absolute;left:12px;top:12px;display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.88);border:1px solid #E2E5EA;border-radius:8px;padding:6px 10px;font-size:12px;color:#445062;font-weight:700;white-space:nowrap">
+              <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:18px;height:3px;background:#D2700F;border-radius:2px"></span>光線</span>
+              <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:#2A6FDB"></span>物體</span>
+              <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:#2F9E63"></span>實像</span>
+            </div>
+          </div>
+          <div style="grid-column:1;grid-row:2;background:#fff;border:1px solid #E2E5EA;border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px">
+            <div style="height:44px;border-radius:10px;background:#2A6FDB;color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px"><i class="fa-solid fa-rotate-left"></i>重置這一頁</div>
+          </div>
+        </div>
+        <div style="height:56px;flex:none;display:flex;align-items:center;padding:0 16px;background:#1E2836;gap:10px">
+          <div style="flex:none;height:38px;padding:0 16px;border-radius:8px;color:#9DAABB;font-size:13.5px;display:flex;align-items:center;white-space:nowrap">針孔成像</div>
+          <div style="flex:none;height:38px;padding:0 16px;border-radius:8px;background:#2A6FDB;color:#fff;font-size:13.5px;font-weight:700;display:flex;align-items:center;white-space:nowrap">面鏡成像</div>
+          <div style="flex:none;height:38px;padding:0 16px;border-radius:8px;color:#9DAABB;font-size:13.5px;display:flex;align-items:center;white-space:nowrap">透鏡成像</div>
+          <div style="flex:none;height:38px;padding:0 16px;border-radius:8px;color:#9DAABB;font-size:13.5px;display:flex;align-items:center;white-space:nowrap">眼睛</div>
+        </div>
+      </div>
+      <div style="font-size:13px;color:#67717F;line-height:1.6;width:1024px">左欄底部被裁掉的是「教學輔助疊層」與「物體」兩區，捲動即到（右側 4px 捲軸指示）。畫布橫向可見約 18.5 格，光軸與器材位置與 1366 完全相同——換裝置時學生數的格子還是同一批。</div>
+    </div>
+  </div>
+</section>
+
+<section style="padding:8px 48px 24px;display:flex;flex-direction:column;gap:10px">
+  <div style="font-size:15px;font-weight:700;color:#445062">B2／B3　768×1024 · 透鏡成像（左：面板收起　右：設定面板浮出）</div>
+  <div style="display:flex;gap:28px;flex-wrap:wrap">
+
+    <div style="width:768px;height:1024px;display:flex;flex-direction:column;background:#F6F7F9;font-variant-numeric:tabular-nums;border:1px solid #D3D9E1;border-radius:6px;overflow:hidden;flex:none" data-screen-label="B2">
+      <div style="height:50px;flex:none;display:flex;align-items:center;gap:12px;padding:0 16px;background:#fff;border-bottom:1px solid #E2E5EA">
+        <div style="width:28px;height:28px;border-radius:7px;background:#2A6FDB;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px">理</div>
+        <div style="font-size:17px;font-weight:700">光的成像</div>
+        <div style="margin-left:auto;display:flex;gap:8px">
+          <div style="width:34px;height:34px;border-radius:8px;border:1px solid #8A93A1;background:#fff;display:flex;align-items:center;justify-content:center;color:#445062;font-size:14px"><i class="fa-solid fa-circle-question"></i></div>
+          <div style="width:34px;height:34px;border-radius:8px;border:1px solid #8A93A1;background:#fff;display:flex;align-items:center;justify-content:center;color:#445062;font-size:14px"><i class="fa-solid fa-expand"></i></div>
+        </div>
+      </div>
+      <div style="flex:1;display:grid;grid-template-rows:1fr auto;gap:12px;padding:12px 14px;min-height:0">
+        <div style="position:relative;background:#fff;border:1px solid #E2E5EA;border-radius:10px;overflow:hidden;min-height:0">
+          <svg viewBox="0 3 14.5 16" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
+            <defs>
+              <pattern id="mn6" width="1" height="1" patternUnits="userSpaceOnUse" patternTransform="translate(0.25,0)"><path d="M1 0V1M0 1H1" fill="none" stroke="#D5DAE1" stroke-width="0.026"></path></pattern>
+              <pattern id="mj6" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="translate(2.25,3)"><path d="M5 0V5M0 5H5" fill="none" stroke="{{ majorGrid }}" stroke-width="0.034"></path></pattern>
+              <marker id="ah6" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.6" markerHeight="4.6" orient="auto-start-reverse"><path d="M0 1.6 L9 5 L0 8.4 z" fill="#D2700F"></path></marker>
+            </defs>
+            <rect y="3" width="14.5" height="19" fill="#fff"></rect>
+            <rect y="3" width="14.5" height="19" fill="url(#mn6)"></rect>
+            <rect y="3" width="14.5" height="19" fill="url(#mj6)"></rect>
+            <line x1="0" y1="8" x2="14.5" y2="8" stroke="#7A8496" stroke-width="0.05"></line>
+            <path d="M7.25 4.6 Q8.2 8 7.25 11.4 Q6.3 8 7.25 4.6 z" fill="#C5DDE8" fill-opacity="0.75" stroke="#5F6B7E" stroke-width="0.06"></path>
+            <g fill="none" stroke="#D2700F" stroke-width="0.075" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ah6)">
+              <polyline points="1.25,6 7.25,6 11.5,10.25"></polyline>
+              <polyline points="1.25,6 7.25,8 11.5,9.42"></polyline>
+              <polyline points="1.25,6 7.25,9 11.5,9"></polyline>
+            </g>
+            <g fill="#445062">
+              <path d="M5.25 8 L5.03 8.44 L5.47 8.44 z"></path>
+              <path d="M9.25 8 L9.03 8.44 L9.47 8.44 z"></path>
+              <path d="M3.25 8 L3.03 8.44 L3.47 8.44 z"></path>
+              <path d="M11.25 8 L11.03 8.44 L11.47 8.44 z"></path>
+              <text x="5.25" y="9.3" font-size="0.55" font-weight="700" text-anchor="middle" fill="#1C2433" stroke="#fff" stroke-width="0.15" paint-order="stroke">F</text>
+              <text x="9.25" y="9.3" font-size="0.55" font-weight="700" text-anchor="middle" fill="#1C2433" stroke="#fff" stroke-width="0.15" paint-order="stroke">F</text>
+              <text x="3.25" y="9.3" font-size="0.55" font-weight="700" text-anchor="middle" fill="#1C2433" stroke="#fff" stroke-width="0.15" paint-order="stroke">2F</text>
+              <text x="11.25" y="9.3" font-size="0.55" font-weight="700" text-anchor="middle" fill="#1C2433" stroke="#fff" stroke-width="0.15" paint-order="stroke">2F</text>
+            </g>
+            <g>
+              <rect x="0.95" y="6.5" width="0.6" height="1.5" rx="0.16" fill="#D64545" stroke="#C62F2F" stroke-width="0.045"></rect>
+              <path d="M1.25 6.0 Q1.61 6.25 1.25 6.5 Q0.89 6.25 1.25 6.0 z" fill="#D2700F" stroke="#C7A82C" stroke-width="0.04"></path>
+              <line x1="0.45" y1="8" x2="2.05" y2="8" stroke="#5F6B7E" stroke-width="0.06"></line>
+            </g>
+            <g>
+              <path d="M9.5,3.1 L11.0,3.9 L11.0,12.9 L9.5,12.1 z" fill="#FDFAF3" stroke="#5F6B7E" stroke-width="0.05" stroke-linejoin="round"></path>
+              <g transform="translate(10.25,8) scale(0.3)" opacity="0.9"><rect x="-0.3" y="0" width="0.6" height="2.5" rx="0.16" fill="#D64545"></rect><path d="M0,3.35 Q0.42,2.9 0,2.5 Q-0.42,2.9 0,3.35 z" fill="#D2700F"></path></g>
+              <rect x="9.85" y="11.45" width="0.8" height="0.5" rx="0.25" fill="#2A6FDB"></rect>
+            </g>
+          </svg>
+          <div style="position:absolute;left:12px;top:12px;display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.88);border:1px solid #E2E5EA;border-radius:8px;padding:6px 10px;font-size:12px;color:#445062;font-weight:700;white-space:nowrap">
+            <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:18px;height:3px;background:#D2700F;border-radius:2px"></span>光線</span>
+            <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:#D64545;border:1px solid #C62F2F"></span>物體</span>
+            <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:#2F9E63"></span>實像</span>
+          </div>
+        </div>
+        <div style="background:#fff;border:1px solid #E2E5EA;border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px">
+          <div style="height:44px;padding:0 18px;border-radius:10px;background:#2A6FDB;color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px"><i class="fa-solid fa-rotate-left"></i>重置這一頁</div>
+          <div style="margin-left:auto;height:44px;padding:0 20px;border-radius:22px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px"><i class="fa-solid fa-sliders"></i>設定</div>
+        </div>
+      </div>
+      <div style="height:56px;flex:none;display:flex;align-items:center;padding:0 14px;background:#1E2836;gap:10px">
+        <div style="flex:none;height:38px;padding:0 14px;border-radius:8px;color:#9DAABB;font-size:13.5px;display:flex;align-items:center;white-space:nowrap">針孔成像</div>
+        <div style="flex:none;height:38px;padding:0 14px;border-radius:8px;color:#9DAABB;font-size:13.5px;display:flex;align-items:center;white-space:nowrap">面鏡成像</div>
+        <div style="flex:none;height:38px;padding:0 14px;border-radius:8px;background:#2A6FDB;color:#fff;font-size:13.5px;font-weight:700;display:flex;align-items:center;white-space:nowrap">透鏡成像</div>
+        <div style="flex:none;height:38px;padding:0 14px;border-radius:8px;color:#9DAABB;font-size:13.5px;display:flex;align-items:center;white-space:nowrap">眼睛</div>
+      </div>
+    </div>
+
+    <div style="width:768px;height:1024px;display:flex;flex-direction:column;background:#F6F7F9;font-variant-numeric:tabular-nums;border:1px solid #D3D9E1;border-radius:6px;overflow:hidden;flex:none" data-screen-label="B3">
+      <div style="height:50px;flex:none;display:flex;align-items:center;gap:12px;padding:0 16px;background:#fff;border-bottom:1px solid #E2E5EA">
+        <div style="width:28px;height:28px;border-radius:7px;background:#2A6FDB;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px">理</div>
+        <div style="font-size:17px;font-weight:700">光的成像</div>
+        <div style="margin-left:auto;display:flex;gap:8px">
+          <div style="width:34px;height:34px;border-radius:8px;border:1px solid #8A93A1;background:#fff;display:flex;align-items:center;justify-content:center;color:#445062;font-size:14px"><i class="fa-solid fa-circle-question"></i></div>
+          <div style="width:34px;height:34px;border-radius:8px;border:1px solid #8A93A1;background:#fff;display:flex;align-items:center;justify-content:center;color:#445062;font-size:14px"><i class="fa-solid fa-expand"></i></div>
+        </div>
+      </div>
+      <div style="flex:1;display:grid;grid-template-rows:1fr auto;gap:12px;padding:12px 14px;min-height:0">
+        <div style="position:relative;background:#fff;border:1px solid #E2E5EA;border-radius:10px;overflow:hidden;min-height:0">
+          <svg viewBox="0 3 14.5 16" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
+            <defs>
+              <pattern id="mn7" width="1" height="1" patternUnits="userSpaceOnUse" patternTransform="translate(0.25,0)"><path d="M1 0V1M0 1H1" fill="none" stroke="#D5DAE1" stroke-width="0.026"></path></pattern>
+              <pattern id="mj7" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="translate(2.25,3)"><path d="M5 0V5M0 5H5" fill="none" stroke="{{ majorGrid }}" stroke-width="0.034"></path></pattern>
+            </defs>
+            <rect y="3" width="14.5" height="19" fill="#fff"></rect>
+            <rect y="3" width="14.5" height="19" fill="url(#mn7)"></rect>
+            <rect y="3" width="14.5" height="19" fill="url(#mj7)"></rect>
+            <line x1="0" y1="8" x2="14.5" y2="8" stroke="#7A8496" stroke-width="0.05"></line>
+            <path d="M7.25 4.6 Q8.2 8 7.25 11.4 Q6.3 8 7.25 4.6 z" fill="#C5DDE8" fill-opacity="0.75" stroke="#5F6B7E" stroke-width="0.06"></path>
+            <g fill="none" stroke="#D2700F" stroke-width="0.075" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1.25,6 7.25,6 11.5,10.25"></polyline>
+              <polyline points="1.25,6 7.25,8 11.5,9.42"></polyline>
+              <polyline points="1.25,6 7.25,9 11.5,9"></polyline>
+            </g>
+            <g>
+              <rect x="0.95" y="6.5" width="0.6" height="1.5" rx="0.16" fill="#D64545" stroke="#C62F2F" stroke-width="0.045"></rect>
+              <path d="M1.25 6.0 Q1.61 6.25 1.25 6.5 Q0.89 6.25 1.25 6.0 z" fill="#D2700F" stroke="#C7A82C" stroke-width="0.04"></path>
+            </g>
+          </svg>
+          <div style="position:absolute;left:0;right:0;bottom:0;height:64%;background:#fff;border-top:1px solid #E2E5EA;border-radius:12px 12px 10px 10px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;overflow:hidden">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="font-size:15px;font-weight:700">設定</div>
+              <div style="margin-left:auto;width:34px;height:34px;border-radius:8px;border:1px solid #8A93A1;background:#fff;display:flex;align-items:center;justify-content:center;color:#445062;font-size:14px"><i class="fa-solid fa-xmark"></i></div>
+            </div>
+            <div style="font-size:12px;font-weight:700;color:#67717F">器材</div>
+            <div style="display:inline-flex;flex:none;background:#F6F7F9;border:1px solid #8A93A1;border-radius:10px;padding:3px;align-self:flex-start">
+              <div style="min-width:76px;height:36px;border-radius:8px;font-size:13px;font-weight:700;color:#1C2433;background:#fff;box-shadow:0 1px 3px rgba(28,36,51,.16);display:flex;align-items:center;justify-content:center">凸透鏡</div>
+              <div style="min-width:76px;height:36px;border-radius:8px;font-size:13px;font-weight:700;color:#67717F;display:flex;align-items:center;justify-content:center">凹透鏡</div>
+            </div>
+            <div style="font-size:12px;font-weight:700;color:#67717F;margin-top:2px">焦距</div>
+            <div style="display:flex;gap:8px">
+              <div style="height:40px;padding:0 22px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center">短</div>
+              <div style="height:40px;padding:0 22px;border-radius:20px;background:#2A6FDB;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center">中</div>
+              <div style="height:40px;padding:0 22px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center">長</div>
+            </div>
+            <div style="font-size:12px;font-weight:700;color:#67717F;margin-top:2px">物體位置快捷</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <div style="height:40px;padding:0 14px;border-radius:20px;background:#2A6FDB;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;white-space:nowrap">遠於 2F</div>
+              <div style="height:40px;padding:0 14px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;white-space:nowrap">在 2F</div>
+              <div style="height:40px;padding:0 14px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;white-space:nowrap">F 與 2F 之間</div>
+              <div style="height:40px;padding:0 14px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;white-space:nowrap">在 F</div>
+              <div style="height:40px;padding:0 14px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;white-space:nowrap">近於 F</div>
+            </div>
+            <div style="font-size:12px;font-weight:700;color:#67717F;margin-top:2px">光線顯示</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;background:#2A6FDB;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none"><i class="fa-solid fa-check"></i></div>平行光軸的光線</div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;background:#2A6FDB;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none"><i class="fa-solid fa-check"></i></div>通過 F 的光線</div>
+            </div>
+          </div>
+        </div>
+        <div style="background:#fff;border:1px solid #E2E5EA;border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px">
+          <div style="height:44px;padding:0 18px;border-radius:10px;background:#2A6FDB;color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px"><i class="fa-solid fa-rotate-left"></i>重置這一頁</div>
+          <div style="margin-left:auto;height:44px;padding:0 20px;border-radius:22px;background:#2A6FDB;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px"><i class="fa-solid fa-sliders"></i>設定</div>
+        </div>
+      </div>
+      <div style="height:56px;flex:none;display:flex;align-items:center;padding:0 14px;background:#1E2836;gap:10px">
+        <div style="flex:none;height:38px;padding:0 14px;border-radius:8px;color:#9DAABB;font-size:13.5px;display:flex;align-items:center;white-space:nowrap">針孔成像</div>
+        <div style="flex:none;height:38px;padding:0 14px;border-radius:8px;color:#9DAABB;font-size:13.5px;display:flex;align-items:center;white-space:nowrap">面鏡成像</div>
+        <div style="flex:none;height:38px;padding:0 14px;border-radius:8px;background:#2A6FDB;color:#fff;font-size:13.5px;font-weight:700;display:flex;align-items:center;white-space:nowrap">透鏡成像</div>
+        <div style="flex:none;height:38px;padding:0 14px;border-radius:8px;color:#9DAABB;font-size:13.5px;display:flex;align-items:center;white-space:nowrap">眼睛</div>
+      </div>
+    </div>
+  </div>
+  <div style="font-size:13px;color:#67717F;line-height:1.6;max-width:1560px">直向的繪圖區是 740×814，格邊長改為 814÷16＝50.9px，橫向只剩約 14.5 格 → <span style="font-weight:700">焦距的三檔以「格數」定義（短 1.5／中 2／長 3 格）</span>，桌機是 2／3／4 格。畫面上沒有任何數值，格子就是尺，所以縮短格數不會產生矛盾的讀數，只是光路整體變緊。<br>浮出面板<span style="font-weight:700">疊在畫布那一格上（grid 同格重疊 ＋ z-index）</span>，不用 `position:absolute; bottom:0`——否則會蓋掉下方動作列與叫出它的那顆 chip（DESIGN_SPEC 第 1 節實作提醒）。面板佔畫布高的 64%，上緣仍看得到光路與器材；面板本身只有 1px 上框線、不加陰影（陰影僅限抽屜／滑桿把手／seg 選中格）。</div>
+</section>
+
+<section style="padding:24px 48px;display:flex;flex-direction:column;gap:14px">
+  <div style="font-size:20px;font-weight:700">C. 共用元件規範 · 物體造型與像的畫法</div>
+  <div style="font-size:13.5px;color:#445062;line-height:1.65;max-width:1040px">四頁共用同一套物體與像的造型。<span style="font-weight:700">每個造型都是單一封閉路徑（實體剪影），不是「直線＋三角形」的組合</span>——拖動時只要對同一條路徑做位移、等比縮放、上下翻轉三個變換，就能即時畫出像；組合式圖形在每一幀都得重算兩個零件的接點，那正是像的正倒與大小跟不上手指的原因。</div>
+
+  <div style="background:#fff;border:1px solid #E2E5EA;border-radius:12px;padding:20px 22px;display:flex;flex-direction:column;gap:12px">
+    <div style="font-size:15px;font-weight:700">C1　三種造型與基準線（難題 6）</div>
+    <div style="font-size:13px;color:#445062;line-height:1.6;max-width:1040px">三者共用兩條基準線：<span style="font-weight:700">足端貼光軸</span>、<span style="font-weight:700">頂端在光軸上方 2.5 格</span>。三條特徵光線一律從「頂端基準線與造型中心線的交點」射出——換造型時光線的起點座標完全不變，畫面不會跳動。橫向寬度都收在 ±0.6 格內，換造型不改變可拖範圍。</div>
+    <svg viewBox="0 0 18 5.6" style="width:100%;max-width:1080px;display:block">
+      <defs>
+        <pattern id="cg1" width="1" height="1" patternUnits="userSpaceOnUse" patternTransform="translate(0,0.5)"><path d="M1 0V1M0 1H1" fill="none" stroke="#D5DAE1" stroke-width="0.022"></path></pattern>
+      </defs>
+      <rect width="18" height="5.6" fill="#fff"></rect>
+      <rect width="18" height="5.6" fill="url(#cg1)"></rect>
+      <line x1="0" y1="4" x2="18" y2="4" stroke="#7A8496" stroke-width="0.05"></line>
+      <line x1="0" y1="1.5" x2="18" y2="1.5" stroke="#8A93A1" stroke-width="0.035" stroke-dasharray="0.22 0.16"></line>
+      <text x="0.25" y="1.28" font-size="0.34" font-weight="700" fill="#67717F">頂端基準線（光軸上方 2.5 格）</text>
+      <text x="0.25" y="4.5" font-size="0.34" font-weight="700" fill="#67717F">光軸</text>
+
+      <g fill="#2A6FDB">
+        <path d="M3.74,4 L3.74,2.45 L3.45,2.45 L4,1.5 L4.55,2.45 L4.26,2.45 L4.26,4 z"></path>
+      </g>
+      <g>
+        <circle cx="9" cy="1.85" r="0.62" fill="#F3D34E" opacity="0.18"></circle>
+        <rect x="8.7" y="1.95" width="0.6" height="2.05" rx="0.16" fill="#D64545" stroke="#C62F2F" stroke-width="0.045"></rect>
+        <line x1="9" y1="2.0" x2="9" y2="1.82" stroke="#5F6B7E" stroke-width="0.05"></line>
+        <path d="M9,1.5 Q9.4,1.9 9,2.02 Q8.6,1.9 9,1.5 z" fill="#D2700F" stroke="#C7A82C" stroke-width="0.035"></path>
+      </g>
+      <g fill="#2A6FDB">
+        <path d="M13.5,4 L13.5,1.5 L14.62,1.5 L14.62,1.88 L13.88,1.88 L13.88,2.5 L14.45,2.5 L14.45,2.88 L13.88,2.88 L13.88,4 z"></path>
+      </g>
+      <g font-size="0.36" font-weight="700" fill="#1C2433" text-anchor="middle">
+        <text x="4" y="5.2">箭頭　作圖語言</text>
+        <text x="9" y="5.2">蠟燭　實驗情境</text>
+        <text x="14" y="5.2">F 形　判讀左右相反</text>
+      </g>
+    </svg>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:#67717F;line-height:1.5">
+      <div style="flex:1;min-width:260px"><span style="font-weight:700;color:#445062">箭頭</span>　寬 0.52 格、頭寬 1.1 格、頭高 0.95 格；純 #2A6FDB 實心，無描邊。課本作圖的語言，預設造型。</div>
+      <div style="flex:1;min-width:260px"><span style="font-weight:700;color:#445062">蠟燭</span>　燭身 0.6×2.05 格 #D64545／框 #C62F2F、焰 #D2700F、燭芯 #5F6B7E；焰尖就是頂端。光暈是 #F3D34E 18% 的單一圓形，<span style="font-weight:700">不是漸層</span>。</div>
+      <div style="flex:1;min-width:260px"><span style="font-weight:700;color:#445062">F 形</span>　外框 1.12×2.5 格、筆畫 0.38 格；唯一能看出左右相反的造型（面鏡頁必用）。</div>
+    </div>
+  </div>
+
+  <div style="background:#fff;border:1px solid #E2E5EA;border-radius:12px;padding:20px 22px;display:flex;flex-direction:column;gap:12px">
+    <div style="font-size:15px;font-weight:700">C2　物體 · 實像 · 虛像（難題 4，採用「同造型 ＋ 淡填色 ＋ 輪廓外框」）</div>
+    <div style="font-size:13px;color:#445062;line-height:1.65;max-width:1060px">像<span style="font-weight:700">與物體是同一條路徑</span>，只差三件事：①<span style="font-weight:700">填色變淡</span>——實像 <code>fill-opacity .5</code>、虛像 <code>fill-opacity .28</code>；②<span style="font-weight:700">外框線型</span>——實像沿造型自己的輪廓描實線、虛像描虛線（<code>dash 0.26 / 0.2</code> 格）；③<span style="font-weight:700">外框顏色</span>——實像 #2F9E63、虛像 #8B5CF6（線寬 0.1 格）。物體本身<span style="font-weight:700">永遠是純色實心、沒有外框</span>，所以「淡填色＋有外框＝這是像」是一條沒有例外的規則。<br>外框<span style="font-weight:700">貼著造型輪廓</span>畫，不是外接矩形——箭頭是箭頭的形、蠟燭是蠟燭的形，所以像與物體一眼看得出是同一個東西，只是「淡了、被線圈起來」。執行時兩者共用同一組 path，只切換 fill-opacity 與 stroke 三個屬性，拖物體時每幀都畫得出來。三個線索同時作用：教室大屏 6 公尺外先看到「淡」，走近看到「線型」，色盲以外的學生一眼看到「綠／紫」。</div>
+    <svg viewBox="0 0 21 18.9" style="width:100%;max-width:1120px;display:block">
+      <defs>
+        <pattern id="cg2" width="1" height="1" patternUnits="userSpaceOnUse" patternTransform="translate(0,0.5)"><path d="M1 0V1M0 1H1" fill="none" stroke="#D5DAE1" stroke-width="0.022"></path></pattern>
+      </defs>
+      <rect width="21" height="18.9" fill="#fff"></rect>
+      <rect width="21" height="18.9" fill="url(#cg2)"></rect>
+      <g font-size="0.4" font-weight="700" fill="#1C2433" text-anchor="middle">
+        <text x="4" y="0.9">物體</text>
+        <text x="10.5" y="0.9">實像（淡填色＋實線外框）</text>
+        <text x="17" y="0.9">虛像（淡填色＋虛線外框）</text>
+      </g>
+
+      <g stroke="#7A8496" stroke-width="0.05">
+        <line x1="0.6" y1="4.6" x2="20.4" y2="4.6"></line>
+        <line x1="0.6" y1="9.8" x2="20.4" y2="9.8"></line>
+        <line x1="0.6" y1="15" x2="20.4" y2="15"></line>
+      </g>
+
+      <g fill="#2A6FDB">
+        <path d="M3.74,4.6 L3.74,3.05 L3.45,3.05 L4,2.1 L4.55,3.05 L4.26,3.05 L4.26,4.6 z"></path>
+      </g>
+      <g fill="#2A6FDB" fill-opacity="0.5" stroke="#2F9E63" stroke-width="0.1" stroke-linejoin="round">
+        <path d="M10.24,4.6 L10.24,6.15 L9.95,6.15 L10.5,7.1 L11.05,6.15 L10.76,6.15 L10.76,4.6 z"></path>
+      </g>
+      
+      <g fill="#2A6FDB" fill-opacity="0.28" stroke="#8B5CF6" stroke-width="0.1" stroke-linejoin="round" stroke-dasharray="0.26 0.2">
+        <path d="M16.74,4.6 L16.74,3.05 L16.45,3.05 L17,2.1 L17.55,3.05 L17.26,3.05 L17.26,4.6 z"></path>
+      </g>
+      
+
+      <g>
+        <circle cx="4" cy="7.65" r="0.62" fill="#F3D34E" opacity="0.18"></circle>
+        <rect x="3.7" y="7.75" width="0.6" height="2.05" rx="0.16" fill="#D64545" stroke="#C62F2F" stroke-width="0.045"></rect>
+        <path d="M4,7.3 Q4.4,7.7 4,7.82 Q3.6,7.7 4,7.3 z" fill="#D2700F" stroke="#C7A82C" stroke-width="0.035"></path>
+      </g>
+      <g fill-opacity="0.5" stroke="#2F9E63" stroke-width="0.1" stroke-linejoin="round">
+        <rect x="10.2" y="9.8" width="0.6" height="2.05" rx="0.16" fill="#D64545"></rect>
+        <path d="M10.5,12.3 Q10.9,11.9 10.5,11.78 Q10.1,11.9 10.5,12.3 z" fill="#D2700F"></path>
+      </g>
+      
+      <g fill-opacity="0.28" stroke="#8B5CF6" stroke-width="0.1" stroke-linejoin="round" stroke-dasharray="0.26 0.2">
+        <rect x="16.7" y="7.75" width="0.6" height="2.05" rx="0.16" fill="#D64545"></rect>
+        <path d="M17,7.3 Q17.4,7.7 17,7.82 Q16.6,7.7 17,7.3 z" fill="#D2700F"></path>
+      </g>
+      
+
+      <g fill="#2A6FDB">
+        <path d="M3.5,15 L3.5,12.5 L4.62,12.5 L4.62,12.88 L3.88,12.88 L3.88,13.5 L4.45,13.5 L4.45,13.88 L3.88,13.88 L3.88,15 z"></path>
+      </g>
+      <g fill="#2A6FDB" fill-opacity="0.5" stroke="#2F9E63" stroke-width="0.1" stroke-linejoin="round">
+        <path d="M11.0,15 L11.0,17.5 L9.88,17.5 L9.88,17.12 L10.62,17.12 L10.62,16.5 L10.05,16.5 L10.05,16.12 L10.62,16.12 L10.62,15 z"></path>
+      </g>
+      
+      <g fill="#2A6FDB" fill-opacity="0.28" stroke="#8B5CF6" stroke-width="0.1" stroke-linejoin="round" stroke-dasharray="0.26 0.2" transform="translate(17,15) scale(-1,1) translate(-17,-15)">
+        <path d="M16.44,15 L16.44,12.5 L17.56,12.5 L17.56,12.88 L16.82,12.88 L16.82,13.5 L17.39,13.5 L17.39,13.88 L16.82,13.88 L16.82,15 z"></path>
+      </g>
+      
+
+      <g font-size="0.34" font-weight="700" fill="#67717F" text-anchor="middle">
+        <text x="10.5" y="13.5">倒立（由光路決定，不是由實／虛決定）</text>
+        <text x="17" y="1.6">正立</text>
+        <text x="17" y="18.4">左右相反看得出來</text>
+      </g>
+    </svg>
+    <div style="background:#E8F0FD;border:1px solid #C4D7F5;border-radius:10px;padding:12px 14px;font-size:12.5px;color:#1C2433;line-height:1.6">正倒與放大縮小<span style="font-weight:700">一律由光路算出來的縮放係數決定</span>（負值＝倒立，用 `scale(1,-1)`；面鏡的左右相反再乘 `scale(-1,1)`），不是由「實像／虛像」決定——凹面鏡的虛像正立、凸透鏡的實像倒立，兩件事互相獨立。外框跟著變換後的造型輪廓重畫，永遠貼合。</div>
+  </div>
+</section>
+
+<section style="padding:8px 48px 24px;display:flex;flex-direction:column;gap:14px">
+  <div style="background:#fff;border:1px solid #E2E5EA;border-radius:12px;padding:20px 22px;display:flex;flex-direction:column;gap:14px">
+    <div style="font-size:15px;font-weight:700">C3　紙屏的畫法與三種狀態（難題 3）</div>
+    <div style="font-size:13px;color:#445062;line-height:1.65;max-width:1060px">方案：<span style="font-weight:700">屏＝左高右低的平行四邊形</span>（左緣高、右緣低，落差 0.8 格；平面不畫厚度、不畫側面），屏上的像只做等比縮放（同一條物體路徑的 uniform scale ＋ 上下翻轉）、不隨斜面做梯形拉伸——斜的是屏，不是像；這樣「屏在光路上的哪裡」與「像放大了還是縮小了」兩件事都不必犧牲。同時在畫布下方 1/3 的留白帶（貼在紙屏正下方）常駐一個 <span style="font-weight:700">150px 的「屏面正視」小窗</span>（白卡 r10、1px 框、標題 12px），畫屏的正面二維影像——所以「屏上現在長什麼樣」也不必犧牲。兩者共用同一份計算結果，小窗只是換一個視角。<br>模糊<span style="font-weight:700">不用 `filter`／`shadowBlur`</span>（DEV_SPEC 6.4 禁止每幀）：改用 3 層同心、半徑遞增、透明度遞減的同形狀疊加（.45／.28／.16），糊的程度＝最外層半徑。孔的形狀決定這個形狀本身（圓孔＝圓斑、方孔＝方斑），所以「孔形不影響像的形狀、只影響糊開的斑形」在畫法上就是真的。</div>
+    <div style="display:flex;gap:14px;flex-wrap:wrap">
+
+      <div style="flex:1;min-width:300px;border:1px solid #E2E5EA;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:13px;font-weight:700;color:#1C2433">① 對焦　屏在像的位置</div>
+        <svg viewBox="0 0 8 8" style="width:100%;display:block;background:#fff;border-radius:8px">
+          <defs><pattern id="sg1" width="1" height="1" patternUnits="userSpaceOnUse"><path d="M1 0V1M0 1H1" fill="none" stroke="#D5DAE1" stroke-width="0.03"></path></pattern></defs>
+          <rect width="8" height="8" fill="url(#sg1)"></rect>
+          <line x1="0" y1="4" x2="8" y2="4" stroke="#7A8496" stroke-width="0.06"></line>
+          <g fill="none" stroke="#D2700F" stroke-width="0.09" stroke-linecap="round">
+            <polyline points="0.3,1.6 1.6,2.2 4,5.1"></polyline>
+            <polyline points="0.3,4 1.6,4 4,5.1"></polyline>
+            <polyline points="0.3,6.4 1.6,5.8 4,5.1"></polyline>
+          </g>
+          <path d="M3.6,1.0 L4.4,1.5 L4.4,7.1 L3.6,6.6 z" fill="#FDFAF3" stroke="#5F6B7E" stroke-width="0.07" stroke-linejoin="round"></path>
+          <g transform="translate(4.0,4.0) scale(0.42)" opacity="0.9">
+            <rect x="-0.3" y="0" width="0.6" height="2.5" rx="0.16" fill="#D64545"></rect>
+            <path d="M0,3.35 Q0.42,2.9 0,2.5 Q-0.42,2.9 0,3.35 z" fill="#D2700F"></path>
+          </g>
+        </svg>
+        <svg viewBox="0 0 100 100" style="width:96px;display:block;border-radius:6px;background:#FDFAF3;border:1px solid #E2E5EA">
+          <g transform="translate(50,58) rotate(180)">
+            <rect x="-7" y="-4" width="14" height="42" rx="3" fill="#D64545"></rect>
+            <path d="M0 -18 Q9 -8 0 -4 Q-9 -8 0 -18 z" fill="#D2700F"></path>
+          </g>
+        </svg>
+        <div style="font-size:12.5px;color:#67717F;line-height:1.5">屏上的像清晰、倒立、邊緣一層不糊；正視窗看得出燭焰在下。</div>
+      </div>
+
+      <div style="flex:1;min-width:300px;border:1px solid #E2E5EA;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:13px;font-weight:700;color:#1C2433">② 離焦　屏被拖離像的位置</div>
+        <svg viewBox="0 0 8 8" style="width:100%;display:block;background:#fff;border-radius:8px">
+          <rect width="8" height="8" fill="url(#sg1)"></rect>
+          <line x1="0" y1="4" x2="8" y2="4" stroke="#7A8496" stroke-width="0.06"></line>
+          <g fill="none" stroke="#D2700F" stroke-width="0.09" stroke-linecap="round">
+            <polyline points="0.3,1.6 1.6,2.2 3.2,4.5 5.6,6.6"></polyline>
+            <polyline points="0.3,4 1.6,4 3.2,4.5 5.6,5.3"></polyline>
+            <polyline points="0.3,6.4 1.6,5.8 3.2,4.5 5.6,4.0"></polyline>
+          </g>
+          <path d="M5.2,1.0 L6.0,1.5 L6.0,7.1 L5.2,6.6 z" fill="#FDFAF3" stroke="#5F6B7E" stroke-width="0.07" stroke-linejoin="round"></path>
+          <g>
+            <rect x="5.25" y="3.65" width="0.7" height="2.9" rx="0.14" fill="#D2700F" opacity="0.16"></rect>
+            <rect x="5.33" y="3.9" width="0.54" height="2.4" rx="0.12" fill="#D2700F" opacity="0.28"></rect>
+            <rect x="5.41" y="4.15" width="0.38" height="1.9" rx="0.1" fill="#D2700F" opacity="0.45"></rect>
+          </g>
+        </svg>
+        <svg viewBox="0 0 100 100" style="width:96px;display:block;border-radius:6px;background:#FDFAF3;border:1px solid #E2E5EA">
+          <g transform="translate(50,58) rotate(180)">
+            <rect x="-19" y="-30" width="38" height="74" rx="16" fill="#D2700F" opacity="0.16"></rect>
+            <rect x="-14" y="-24" width="28" height="62" rx="12" fill="#D2700F" opacity="0.28"></rect>
+            <rect x="-9" y="-16" width="18" height="48" rx="7" fill="#D2700F" opacity="0.45"></rect>
+          </g>
+        </svg>
+        <div style="font-size:12.5px;color:#67717F;line-height:1.5">同一個形狀糊開成三層；亮度總量不變，所以看起來同時「變大、變淡」。</div>
+      </div>
+
+      <div style="flex:1;min-width:300px;border:1px solid #E2E5EA;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:13px;font-weight:700;color:#1C2433">③ 虛像情境　屏上永遠沒有像</div>
+        <svg viewBox="0 0 8 8" style="width:100%;display:block;background:#fff;border-radius:8px">
+          <rect width="8" height="8" fill="url(#sg1)"></rect>
+          <line x1="0" y1="4" x2="8" y2="4" stroke="#7A8496" stroke-width="0.06"></line>
+          <path d="M3.0 1.6 Q3.45 4 3.0 6.4 Q3.55 4 3.0 1.6 z" fill="#C5DDE8" fill-opacity="0.75" stroke="#5F6B7E" stroke-width="0.07"></path>
+          <g fill="none" stroke="#D2700F" stroke-width="0.09" stroke-linecap="round">
+            <polyline points="0.3,2.2 3.0,2.2 5.9,1.2"></polyline>
+            <polyline points="0.3,4.6 3.0,4.6 5.9,5.5"></polyline>
+          </g>
+          <g fill="none" stroke="#D2700F" stroke-width="0.07" stroke-dasharray="0.24 0.18" opacity="0.5">
+            <line x1="3.0" y1="2.2" x2="1.3" y2="2.8"></line>
+            <line x1="3.0" y1="4.6" x2="1.3" y2="4.0"></line>
+          </g>
+          <g fill="#2A6FDB" fill-opacity="0.28" stroke="#8B5CF6" stroke-width="0.1" stroke-linejoin="round" stroke-dasharray="0.26 0.2">
+            <path d="M1.16,4 L1.16,3.2 L1.02,3.2 L1.3,2.72 L1.58,3.2 L1.44,3.2 L1.44,4 z"></path>
+          </g>
+          
+          <path d="M5.2,1.0 L6.0,1.5 L6.0,7.1 L5.2,6.6 z" fill="#FDFAF3" stroke="#5F6B7E" stroke-width="0.07" stroke-linejoin="round"></path>
+        </svg>
+        <svg viewBox="0 0 100 100" style="width:96px;display:block;border-radius:6px;background:#FDFAF3;border:1px solid #E2E5EA">
+          <text x="50" y="55" font-size="13" font-weight="700" fill="#67717F" text-anchor="middle">屏上沒有像</text>
+        </svg>
+        <div style="font-size:12.5px;color:#67717F;line-height:1.5">屏一片空白（不畫任何斑），像在鏡／鏡片的另一側、由反向延長虛線交出來——這正是「虛像照不到屏上」的意思。</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#fff;border:1px solid #E2E5EA;border-radius:12px;padding:20px 22px;display:flex;flex-direction:column;gap:14px">
+    <div style="font-size:15px;font-weight:700">C3b　針孔擋板：平行四邊形板 ＋ 三段孔徑</div>
+    <div style="font-size:13px;color:#445062;line-height:1.65;max-width:1060px">擋板與紙屏用<span style="font-weight:700">同一套立體語言</span>：面是平行四邊形（左高右低，落差 0.8 格），右側加一道 0.22 格的側面把厚度畫出來。針孔<span style="font-weight:700">直接挖在板面上</span>（同一條路徑用 `fill-rule="evenodd"` 挖空，不再用上下兩塊板夾出一條縫），所以孔一定在板上、一定在光軸高度，孔的大小也就是板上那個洞的大小。<span style="font-weight:700">孔徑只有三段：小／中／大</span>（0.12／0.22／0.36 格），三段各自對應「暗而清晰 → 亮而糊」的一格；右邊的屏面正視顯示<span style="font-weight:700">同一個像的等比縮放</span>，只有糊開的層數與亮度在變，形狀與大小不變。</div>
+    <div style="display:flex;gap:14px;flex-wrap:wrap">
+
+      <div style="flex:1;min-width:280px;border:1px solid #E2E5EA;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:13px;font-weight:700;color:#1C2433">小　0.12 格</div>
+        <svg viewBox="0 0 10 6.6" style="width:100%;display:block;background:#fff;border-radius:8px">
+          <defs>
+            <pattern id="pg1" width="1" height="1" patternUnits="userSpaceOnUse"><path d="M1 0V1M0 1H1" fill="none" stroke="#D5DAE1" stroke-width="0.03"></path></pattern>
+            <path id="oaC1" d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path>
+          </defs>
+          <rect width="10" height="6.6" fill="url(#pg1)"></rect>
+          <line x1="0" y1="3.2" x2="10" y2="3.2" stroke="#7A8496" stroke-width="0.05"></line>
+          <path d="M1.5,0.5 L2.9,1.2 L2.9,5.9 L1.5,5.2 z M2.08,3.2 A0.12,0.12 0 1,0 2.32,3.2 A0.12,0.12 0 1,0 2.08,3.2 z" fill-rule="evenodd" fill="#8A94A3" stroke="#5F6B7E" stroke-width="0.05" stroke-linejoin="round"></path>
+          <rect x="5.2" y="0.9" width="3.6" height="4.6" rx="0.1" fill="#FDFAF3" stroke="#5F6B7E" stroke-width="0.05"></rect>
+          <g transform="translate(7,1.9) scale(2.6,-2.6)" fill="#D2700F" opacity="0.32"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+        </svg>
+        <div style="font-size:12.5px;color:#67717F;line-height:1.5">通過的光線只剩 1 道：邊緣一層都不糊，但整體最暗。</div>
+      </div>
+
+      <div style="flex:1;min-width:280px;border:1px solid #E2E5EA;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:13px;font-weight:700;color:#1C2433">中　0.22 格（預設）</div>
+        <svg viewBox="0 0 10 6.6" style="width:100%;display:block;background:#fff;border-radius:8px">
+          <defs><path id="oaC2" d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></defs>
+          <rect width="10" height="6.6" fill="url(#pg1)"></rect>
+          <line x1="0" y1="3.2" x2="10" y2="3.2" stroke="#7A8496" stroke-width="0.05"></line>
+          <path d="M1.5,0.5 L2.9,1.2 L2.9,5.9 L1.5,5.2 z M1.98,3.2 A0.22,0.22 0 1,0 2.42,3.2 A0.22,0.22 0 1,0 1.98,3.2 z" fill-rule="evenodd" fill="#8A94A3" stroke="#5F6B7E" stroke-width="0.05" stroke-linejoin="round"></path>
+          <rect x="5.2" y="0.9" width="3.6" height="4.6" rx="0.1" fill="#FDFAF3" stroke="#5F6B7E" stroke-width="0.05"></rect>
+          <g transform="translate(7,1.9) scale(2.8,-2.8)" fill="#D2700F" opacity="0.28"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+          <g transform="translate(7,1.9) scale(2.6,-2.6)" fill="#D2700F" opacity="0.45"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+        </svg>
+        <div style="font-size:12.5px;color:#67717F;line-height:1.5">3 道光線通過：像的大小沒變，邊緣多了一層糊、整體變亮。</div>
+      </div>
+
+      <div style="flex:1;min-width:280px;border:1px solid #E2E5EA;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:13px;font-weight:700;color:#1C2433">大　0.36 格</div>
+        <svg viewBox="0 0 10 6.6" style="width:100%;display:block;background:#fff;border-radius:8px">
+          <defs><path id="oaC3" d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></defs>
+          <rect width="10" height="6.6" fill="url(#pg1)"></rect>
+          <line x1="0" y1="3.2" x2="10" y2="3.2" stroke="#7A8496" stroke-width="0.05"></line>
+          <path d="M1.5,0.5 L2.9,1.2 L2.9,5.9 L1.5,5.2 z M1.84,3.2 A0.36,0.36 0 1,0 2.56,3.2 A0.36,0.36 0 1,0 1.84,3.2 z" fill-rule="evenodd" fill="#8A94A3" stroke="#5F6B7E" stroke-width="0.05" stroke-linejoin="round"></path>
+          <rect x="5.2" y="0.9" width="3.6" height="4.6" rx="0.1" fill="#FDFAF3" stroke="#5F6B7E" stroke-width="0.05"></rect>
+          <g transform="translate(7,1.9) scale(3.25,-3.25)" fill="#D2700F" opacity="0.16"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+          <g transform="translate(7,1.9) scale(2.95,-2.95)" fill="#D2700F" opacity="0.28"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+          <g transform="translate(7,1.9) scale(2.6,-2.6)" fill="#D2700F" opacity="0.6"><path d="M-0.1033,0 L-0.1033,-0.62 L-0.22,-0.62 L0,-1 L0.22,-0.62 L0.1033,-0.62 L0.1033,0 z"></path></g>
+        </svg>
+        <div style="font-size:12.5px;color:#67717F;line-height:1.5">光線最多：最亮，也糊到三層——亮與糊是同一件事的兩個後果。</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#fff;border:1px solid #E2E5EA;border-radius:12px;padding:20px 22px;display:flex;flex-direction:column;gap:12px">
+    <div style="font-size:15px;font-weight:700">C4　其餘共用元件（難題 1：一套器材繪製語言）</div>
+    <div style="font-size:13px;color:#445062;line-height:1.65;max-width:1060px">通則三條：<span style="font-weight:700">① 器材＝扁平填色 ＋ 深一階描邊 0.05 格（≈2px）＋ 圓角 0.15 格</span>；<span style="font-weight:700">② 不透光的東西用金屬灰 #8A94A3／框 #5F6B7E，透光的東西用玻璃 #C5DDE8 75%／框 #5F6B7E，紙用 #FDFAF3／框 #5F6B7E</span>；<span style="font-weight:700">③ 可拖的東西一律掛一枚 0.8×0.5 格的 #2A6FDB 圓角把手</span>——把手是畫面上唯一的「這裡可以拉」暗示，不靠 hover、不靠游標。</div>
+    <svg viewBox="0 0 24 7.2" style="width:100%;max-width:1180px;display:block">
+      <defs><pattern id="cg4" width="1" height="1" patternUnits="userSpaceOnUse"><path d="M1 0V1M0 1H1" fill="none" stroke="#D5DAE1" stroke-width="0.025"></path></pattern></defs>
+      <rect width="24" height="7.2" fill="#fff"></rect>
+      <rect width="24" height="7.2" fill="url(#cg4)"></rect>
+
+      <path d="M1.35,0.45 L2.65,1.1 L2.65,5.55 L1.35,4.9 z M1.78,3.0 A0.22,0.22 0 1,0 2.22,3.0 A0.22,0.22 0 1,0 1.78,3.0 z" fill-rule="evenodd" fill="#8A94A3" stroke="#5F6B7E" stroke-width="0.05" stroke-linejoin="round"></path>
+      <rect x="1.6" y="4.55" width="0.8" height="0.5" rx="0.25" fill="#2A6FDB"></rect>
+      <g fill="#8A94A3" stroke="#5F6B7E" stroke-width="0.05"><rect x="5.3" y="0.7" width="0.96" height="1.9" rx="0.14"></rect></g>
+      <rect x="5.38" y="2.2" width="0.8" height="0.5" rx="0.25" fill="#2A6FDB"></rect>
+      <path d="M5.78 2.9 L5.78 3.9" stroke="#2A6FDB" stroke-width="0.06" stroke-dasharray="0.2 0.16"></path>
+      <path d="M5.78 4.35 L5.55 3.85 L6.01 3.85 z" fill="#2A6FDB"></path>
+
+      <g>
+        <path d="M9.2 3.1 Q10.4 2.05 11.6 3.1 Q10.4 4.15 9.2 3.1 z" fill="#ECEFF3" stroke="#5F6B7E" stroke-width="0.06"></path>
+        <circle cx="10.4" cy="3.1" r="0.34" fill="#5F6B7E"></circle>
+      </g>
+
+      <g stroke="#D2700F" stroke-width="0.09" fill="none" stroke-linecap="round">
+        <line x1="13.4" y1="1.3" x2="16.4" y2="1.3"></line>
+        <path d="M16.9 1.3 L16.25 1.02 L16.25 1.58 z" fill="#D2700F" stroke="none"></path>
+      </g>
+      <g stroke="#D2700F" stroke-width="0.075" fill="none" stroke-linecap="round" stroke-dasharray="0.26 0.2" opacity="0.5">
+        <line x1="13.4" y1="2.3" x2="16.9" y2="2.3"></line>
+      </g>
+      <g stroke="#D2700F" stroke-width="0.045" fill="none" stroke-linecap="round" opacity="0.4">
+        <line x1="13.4" y1="3.3" x2="16.9" y2="3.55"></line>
+        <line x1="13.4" y1="3.3" x2="16.9" y2="3.85"></line>
+        <line x1="13.4" y1="3.3" x2="16.9" y2="4.15"></line>
+        <line x1="13.4" y1="3.3" x2="16.9" y2="4.45"></line>
+        <line x1="13.4" y1="3.3" x2="16.9" y2="4.75"></line>
+      </g>
+      <g stroke="#7A8496" stroke-width="0.05"><line x1="13.4" y1="5.5" x2="16.9" y2="5.5"></line></g>
+      <g fill="#445062">
+        <path d="M20 5.5 L19.78 5.94 L20.22 5.94 z"></path>
+        <text x="20" y="6.8" font-size="0.5" font-weight="700" text-anchor="middle" fill="#1C2433" stroke="#fff" stroke-width="0.14" paint-order="stroke">F</text>
+      </g>
+
+      <g font-size="0.36" font-weight="700" fill="#1C2433" text-anchor="middle">
+        <text x="2.0" y="6.4">擋板（左右拖）</text>
+        <text x="5.78" y="6.4">遮板（下拉）</text>
+        <text x="10.4" y="6.4">觀察者眼睛</text>
+      </g>
+      <g font-size="0.34" font-weight="700" fill="#445062" text-anchor="start">
+        <text x="17.3" y="1.45">實際光線　3px 實線＋箭頭</text>
+        <text x="17.3" y="2.45">反向延長線　虛線、50%</text>
+        <text x="17.3" y="4.1">完整光束　1.8px、40%</text>
+        <text x="17.3" y="5.65">光軸　2px #7A8496</text>
+      </g>
+    </svg>
+    <div style="font-size:12.5px;color:#67717F;line-height:1.55;max-width:1060px">四頁一眼分得出在第幾頁，靠的是<span style="font-weight:700">主角器材的材質</span>：針孔頁只有金屬灰（不透光的擋板）、面鏡頁是厚背板＋細前緣的鏡、透鏡頁是玻璃藍的鏡片、眼睛頁是唯一的有機曲線。四頁一眼認得出是同一支模擬，靠的是<span style="font-weight:700">同一條光軸位置、同一組格線、同一套光線語彙、同一枚藍把手</span>。</div>
+  </div>
+</section>
+
+<section style="padding:24px 48px;display:flex;flex-direction:column;gap:14px">
+  <div style="font-size:20px;font-weight:700">D. 光路圖的圖層優先序（難題 2）</div>
+  <div style="font-size:13.5px;color:#445062;line-height:1.65;max-width:1060px">同一張圖上有 12 種圖層。原則：<span style="font-weight:700">越像「答案」的畫得越上面、越粗；越像「尺」的畫得越下面、越細</span>。可被壓淡的只有兩種——完整光束與反向延長線；<span style="font-weight:700">格線與三條特徵光線在任何組合下都不得被壓到看不見</span>，因為前者是量測工具、後者是推理依據。</div>
+
+  <div style="background:#fff;border:1px solid #E2E5EA;border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:0">
+    <div style="display:grid;grid-template-columns:44px 1.5fr 1.1fr 1fr 1.4fr;gap:10px;padding:8px 6px;font-size:12px;font-weight:700;color:#67717F;border-bottom:1px solid #E2E5EA">
+      <div>層</div><div>圖層</div><div>顏色</div><div>線寬（@格 40px）</div><div>擁擠時的處置</div>
+    </div>
+    <div style="display:grid;grid-template-columns:44px 1.5fr 1.1fr 1fr 1.4fr;gap:10px;padding:9px 6px;font-size:12.5px;color:#1C2433;border-bottom:1px solid #F0F2F5"><div style="font-weight:700;color:#67717F">1</div><div>次格線（每 1 格）</div><div>#D5DAE1</div><div>1px</div><div>不變</div></div>
+    <div style="display:grid;grid-template-columns:44px 1.5fr 1.1fr 1fr 1.4fr;gap:10px;padding:9px 6px;font-size:12.5px;color:#1C2433;border-bottom:1px solid #F0F2F5"><div style="font-weight:700;color:#67717F">2</div><div>主格線（每 5 格）</div><div>#A6AEBA</div><div>1.4px</div><div>不變（唯一的判讀依據）</div></div>
+    <div style="display:grid;grid-template-columns:44px 1.5fr 1.1fr 1fr 1.4fr;gap:10px;padding:9px 6px;font-size:12.5px;color:#1C2433;border-bottom:1px solid #F0F2F5"><div style="font-weight:700;color:#67717F">3</div><div>光軸</div><div>#7A8496</div><div>2px</div><div>不變</div></div>
+    <div style="display:grid;grid-template-columns:44px 1.5fr 1.1fr 1fr 1.4fr;gap:10px;padding:9px 6px;font-size:12.5px;color:#1C2433;border-bottom:1px solid #F0F2F5"><div style="font-weight:700;color:#67717F">4</div><div>器材（擋板／鏡／透鏡／眼球）</div><div>灰・玻璃・紙</div><div>描邊 2px</div><div>不變</div></div>
+    <div style="display:grid;grid-template-columns:44px 1.5fr 1.1fr 1fr 1.4fr;gap:10px;padding:9px 6px;font-size:12.5px;color:#1C2433;border-bottom:1px solid #F0F2F5"><div style="font-weight:700;color:#67717F">5</div><div>光屏（含屏上的像）</div><div>#FDFAF3／框 #5F6B7E</div><div>2px</div><div>不變</div></div>
+    <div style="display:grid;grid-template-columns:44px 1.5fr 1.1fr 1fr 1.4fr;gap:10px;padding:9px 6px;font-size:12.5px;color:#1C2433;border-bottom:1px solid #F0F2F5"><div style="font-weight:700;color:#67717F">6</div><div><span style="font-weight:700">完整光束</span>（十幾條）</div><div>#D2700F　40%</div><div>1.8px</div><div><span style="font-weight:700">可壓淡</span>：開啟時降到 28%</div></div>
+    <div style="display:grid;grid-template-columns:44px 1.5fr 1.1fr 1fr 1.4fr;gap:10px;padding:9px 6px;font-size:12.5px;color:#1C2433;border-bottom:1px solid #F0F2F5"><div style="font-weight:700;color:#67717F">7</div><div><span style="font-weight:700">反向延長線</span></div><div>#D2700F　50% 虛線</div><div>3px</div><div><span style="font-weight:700">可壓淡</span>：降到 35%</div></div>
+    <div style="display:grid;grid-template-columns:44px 1.5fr 1.1fr 1fr 1.4fr;gap:10px;padding:9px 6px;font-size:12.5px;color:#1C2433;border-bottom:1px solid #F0F2F5"><div style="font-weight:700;color:#67717F">8</div><div>三條特徵光線</div><div>#D2700F　100%</div><div>3px ＋ 箭頭</div><div>不變（開啟時光束先讓路）</div></div>
+    <div style="display:grid;grid-template-columns:44px 1.5fr 1.1fr 1fr 1.4fr;gap:10px;padding:9px 6px;font-size:12.5px;color:#1C2433;border-bottom:1px solid #F0F2F5"><div style="font-weight:700;color:#67717F">9</div><div>物體</div><div>造型固有色</div><div>實心剪影</div><div>不變</div></div>
+    <div style="display:grid;grid-template-columns:44px 1.5fr 1.1fr 1fr 1.4fr;gap:10px;padding:9px 6px;font-size:12.5px;color:#1C2433;border-bottom:1px solid #F0F2F5"><div style="font-weight:700;color:#67717F">10</div><div>像 ＝ 淡填色 ＋ 輪廓外框</div><div>同物體 ＋ #2F9E63／#8B5CF6</div><div>框線 2.8px</div><div>不變</div></div>
+    <div style="display:grid;grid-template-columns:44px 1.5fr 1.1fr 1fr 1.4fr;gap:10px;padding:9px 6px;font-size:12.5px;color:#1C2433;border-bottom:1px solid #F0F2F5"><div style="font-weight:700;color:#67717F">11</div><div>觀察者眼睛</div><div>#ECEFF3／框 #5F6B7E</div><div>2.4px</div><div>不變</div></div>
+    <div style="display:grid;grid-template-columns:44px 1.5fr 1.1fr 1fr 1.4fr;gap:10px;padding:9px 6px;font-size:12.5px;color:#1C2433"><div style="font-weight:700;color:#67717F">12</div><div>F／2F 記號與文字</div><div>#1C2433 ＋ 白色外描邊</div><div>字 20px/700</div><div>永遠最上層（白邊保證可讀）</div></div>
+  </div>
+
+  <div style="background:#fff;border:1px solid #E2E5EA;border-radius:12px;padding:20px 22px;display:flex;flex-direction:column;gap:12px">
+    <div style="font-size:15px;font-weight:700">D2　最擁擠的情形：12 個圖層全開</div>
+    <div style="font-size:13px;color:#445062;line-height:1.6;max-width:1060px">完整光束開啟時，<span style="font-weight:700">三條特徵光線不改變任何屬性，改變的是光束</span>（1.8px／28%）——差距是「粗細 1.7 倍 ＋ 濃度 3.6 倍」，遠看仍分得出哪三條是主角。格線讀得出來，是因為光束<span style="font-weight:700">全部朝同一點收斂</span>、不會平行鋪滿畫面，兩條主格線之間永遠留有空隙。</div>
+    <div style="width:1000px;height:640px;position:relative;background:#fff;border:1px solid #E2E5EA;border-radius:10px;overflow:hidden;flex:none">
+      <svg viewBox="0 3 25 16" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
+        <defs>
+          <pattern id="mnD" width="1" height="1" patternUnits="userSpaceOnUse" patternTransform="translate(0.5,0)"><path d="M1 0V1M0 1H1" fill="none" stroke="#D5DAE1" stroke-width="0.026"></path></pattern>
+          <pattern id="mjD" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="translate(2.5,3)"><path d="M5 0V5M0 5H5" fill="none" stroke="{{ majorGrid }}" stroke-width="0.034"></path></pattern>
+          <marker id="ahD" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.6" markerHeight="4.6" orient="auto-start-reverse"><path d="M0 1.6 L9 5 L0 8.4 z" fill="#D2700F"></path></marker>
+        </defs>
+        <rect y="3" width="25" height="19" fill="#fff"></rect>
+        <rect y="3" width="25" height="19" fill="url(#mnD)"></rect>
+        <rect y="3" width="25" height="19" fill="url(#mjD)"></rect>
+        <line x1="0" y1="8" x2="25" y2="8" stroke="#7A8496" stroke-width="0.05"></line>
+        <path d="M12.5 4.2 Q13.45 8 12.5 11.8 Q11.55 8 12.5 4.2 z" fill="#C5DDE8" fill-opacity="0.75" stroke="#5F6B7E" stroke-width="0.06"></path>
+
+        <sc-if value="{{ showBeam }}" hint-placeholder-val="{{ true }}">
+          <g fill="none" stroke="#D2700F" stroke-width="0.045" opacity="0.28" stroke-linejoin="round">
+            <polyline points="4.5,6 12.5,4.7 17.3,9.2"></polyline>
+            <polyline points="4.5,6 12.5,5.3 17.3,9.2"></polyline>
+            <polyline points="4.5,6 12.5,5.9 17.3,9.2"></polyline>
+            <polyline points="4.5,6 12.5,6.5 17.3,9.2"></polyline>
+            <polyline points="4.5,6 12.5,7.1 17.3,9.2"></polyline>
+            <polyline points="4.5,6 12.5,7.7 17.3,9.2"></polyline>
+            <polyline points="4.5,6 12.5,8.3 17.3,9.2"></polyline>
+            <polyline points="4.5,6 12.5,8.9 17.3,9.2"></polyline>
+            <polyline points="4.5,6 12.5,9.5 17.3,9.2"></polyline>
+            <polyline points="4.5,6 12.5,10.1 17.3,9.2"></polyline>
+            <polyline points="4.5,6 12.5,10.7 17.3,9.2"></polyline>
+            <polyline points="4.5,6 12.5,11.3 17.3,9.2"></polyline>
+          </g>
+        </sc-if>
+
+        <g fill="none" stroke="#D2700F" stroke-width="0.075" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ahD)">
+          <polyline points="4.5,6 12.5,6 20.5,11.33"></polyline>
+          <polyline points="4.5,6 12.5,8 20.5,10"></polyline>
+          <polyline points="4.5,6 12.5,9.2 20.5,9.2"></polyline>
+        </g>
+
+        <g fill="#445062">
+          <path d="M9.5 8 L9.28 8.44 L9.72 8.44 z"></path>
+          <path d="M15.5 8 L15.28 8.44 L15.72 8.44 z"></path>
+          <path d="M6.5 8 L6.28 8.44 L6.72 8.44 z"></path>
+          <path d="M18.5 8 L18.28 8.44 L18.72 8.44 z"></path>
+          <text x="9.5" y="9.28" font-size="0.52" font-weight="700" text-anchor="middle" fill="#1C2433" stroke="#fff" stroke-width="0.14" paint-order="stroke">F</text>
+          <text x="15.5" y="9.28" font-size="0.52" font-weight="700" text-anchor="middle" fill="#1C2433" stroke="#fff" stroke-width="0.14" paint-order="stroke">F</text>
+          <text x="6.5" y="9.28" font-size="0.52" font-weight="700" text-anchor="middle" fill="#1C2433" stroke="#fff" stroke-width="0.14" paint-order="stroke">2F</text>
+          <text x="18.5" y="9.28" font-size="0.52" font-weight="700" text-anchor="middle" fill="#1C2433" stroke="#fff" stroke-width="0.14" paint-order="stroke">2F</text>
+        </g>
+
+        <g>
+          <path d="M16.55,3.1 L18.05,3.9 L18.05,12.9 L16.55,12.1 z" fill="#FDFAF3" stroke="#5F6B7E" stroke-width="0.05" stroke-linejoin="round"></path>
+          <g transform="translate(17.3,8) scale(0.358)" opacity="0.9"><rect x="-0.3" y="0" width="0.6" height="2.5" rx="0.16" fill="#D64545"></rect><path d="M0,3.35 Q0.42,2.9 0,2.5 Q-0.42,2.9 0,3.35 z" fill="#D2700F"></path></g>
+          <rect x="16.9" y="11.45" width="0.8" height="0.5" rx="0.25" fill="#2A6FDB"></rect>
+        </g>
+        <g>
+          <circle cx="4.5" cy="6.6" r="0.9" fill="#F3D34E" opacity="0.18"></circle>
+          <rect x="4.2" y="6.5" width="0.6" height="1.5" rx="0.16" fill="#D64545" stroke="#C62F2F" stroke-width="0.045"></rect>
+          <path d="M4.5 6.0 Q4.86 6.25 4.5 6.5 Q4.14 6.25 4.5 6.0 z" fill="#D2700F" stroke="#C7A82C" stroke-width="0.04"></path>
+        </g>
+        <g fill-opacity="0.5" stroke="#2F9E63" stroke-width="0.1" stroke-linejoin="round">
+          <rect x="17.12" y="8" width="0.36" height="0.9" rx="0.09" fill="#D64545"></rect>
+          <path d="M17.3,9.2 Q17.52,9.05 17.3,8.9 Q17.08,9.05 17.3,9.2 z" fill="#D2700F"></path>
+        </g>
+        
+        <g>
+          <path d="M20.6 11.2 Q21.8 10.15 23 11.2 Q21.8 12.25 20.6 11.2 z" fill="#ECEFF3" stroke="#5F6B7E" stroke-width="0.06"></path>
+          <circle cx="21.8" cy="11.2" r="0.34" fill="#5F6B7E"></circle>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div style="background:#fff;border:1px solid #E2E5EA;border-radius:12px;padding:20px 22px;display:flex;flex-direction:column;gap:12px">
+    <div style="font-size:15px;font-weight:700">D3　關掉一條特徵光線時（難題 5）：消失，但圖例留著</div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start">
+      <div style="flex:1;min-width:340px;border:1px solid #E2E5EA;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:13px;font-weight:700;color:#24794C">採用：直接消失 ＋ 圖例卡標示已關閉</div>
+        <svg viewBox="0 0 13 8.6" style="width:100%;display:block">
+          <defs><pattern id="dg1" width="1" height="1" patternUnits="userSpaceOnUse" patternTransform="translate(0.5,0)"><path d="M1 0V1M0 1H1" fill="none" stroke="#D5DAE1" stroke-width="0.03"></path></pattern></defs>
+          <rect width="13" height="8.6" fill="#fff"></rect>
+          <rect width="13" height="8.6" fill="url(#dg1)"></rect>
+          <line x1="0" y1="4" x2="13" y2="4" stroke="#7A8496" stroke-width="0.06"></line>
+          <path d="M6.5 1.4 Q7.25 4 6.5 6.6 Q5.75 4 6.5 1.4 z" fill="#C5DDE8" fill-opacity="0.75" stroke="#5F6B7E" stroke-width="0.06"></path>
+          <g fill="none" stroke="#D2700F" stroke-width="0.09" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1.6,2.5 6.5,4 10.6,5.25"></polyline>
+            <polyline points="1.6,2.5 6.5,5.25 10.6,5.25"></polyline>
+          </g>
+          <g fill="#2A6FDB"><path d="M1.34,4 L1.34,3.05 L1.16,3.05 L1.6,2.5 L2.04,3.05 L1.86,3.05 L1.86,4 z"></path></g>
+          <g fill="#2A6FDB" fill-opacity="0.5" stroke="#2F9E63" stroke-width="0.1" stroke-linejoin="round"><path d="M10.44,4 L10.44,4.72 L10.32,4.72 L10.6,5.25 L10.88,4.72 L10.76,4.72 L10.76,4 z"></path></g>
+          
+        </svg>
+        <div style="display:flex;flex-direction:column;gap:6px;border:1px solid #E2E5EA;border-radius:8px;padding:8px 10px;background:#fff;align-self:flex-start">
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:#445062"><span style="width:20px;height:3px;background:#D2700F;border-radius:2px"></span>通過鏡心</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:#445062"><span style="width:20px;height:3px;background:#D2700F;border-radius:2px"></span>通過 F</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:400;color:#67717F"><span style="width:20px;height:3px;border-top:2px dashed #A6AEBA"></span>平行光軸（已關閉）</div>
+        </div>
+      </div>
+      <div style="flex:1;min-width:300px;font-size:13px;color:#445062;line-height:1.7">
+        <div style="font-weight:700;color:#1C2433;margin-bottom:6px">理由</div>
+        留一條灰線在畫面上，等於在光路圖裡多出一種「顏色不一樣的光線」——學生會問「那條灰的是什麼光？」，而它其實什麼都不是。畫面上的每一條線都必須有物理意義，這條規則不能為了不讓畫面變空而破例。<br><br>
+        怕失去參照，就把參照放在<span style="font-weight:700">不是光路的地方</span>：畫布左下角常駐一張圖例卡（12px、白底 1px 框），關掉的那條在卡上變成 <span style="font-weight:700">#A6AEBA 虛線 ＋「已關閉」</span>、字重降回 400。老師關掉兩條講一條時，畫面乾淨，而「本來有三條」這件事仍然看得到。<br><br>
+        <span style="font-weight:700">像不會跟著消失。</span>像的位置由光路計算決定，不是由畫了幾條線決定——只留一條線時，像仍在原處、輪廓外框仍在原處。這正好打掉「像是那幾條線交出來的」這個誤解。
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding:24px 48px;display:flex;flex-direction:column;gap:14px">
+  <div style="font-size:20px;font-weight:700">E. 元件狀態稿・色票・間距</div>
+  <div style="display:flex;gap:14px;flex-wrap:wrap">
+
+    <div style="flex:1;min-width:420px;background:#fff;border:1px solid #E2E5EA;border-radius:12px;padding:20px 22px;display:flex;flex-direction:column;gap:14px">
+      <div style="font-size:15px;font-weight:700">E1　控制元件</div>
+      <div style="font-size:12px;font-weight:700;color:#67717F">分段切換器 .seg　三檔／兩檔（容器總高 44 ＝ 1＋3＋36＋3＋1）</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <div style="display:inline-flex;flex:none;background:#F6F7F9;border:1px solid #8A93A1;border-radius:10px;padding:3px">
+          <div style="min-width:56px;height:36px;padding:0 10px;border-radius:8px;font-size:13px;font-weight:700;color:#67717F;display:flex;align-items:center;justify-content:center;white-space:nowrap">平面鏡</div>
+          <div style="min-width:56px;height:36px;padding:0 10px;border-radius:8px;font-size:13px;font-weight:700;color:#1C2433;background:#fff;box-shadow:0 1px 3px rgba(28,36,51,.16);display:flex;align-items:center;justify-content:center;white-space:nowrap">凹面鏡</div>
+          <div style="min-width:56px;height:36px;padding:0 10px;border-radius:8px;font-size:13px;font-weight:700;color:#67717F;display:flex;align-items:center;justify-content:center;white-space:nowrap">凸面鏡</div>
+        </div>
+        <div style="display:inline-flex;flex:none;background:#F6F7F9;border:1px solid #8A93A1;border-radius:10px;padding:3px">
+          <div style="min-width:56px;height:36px;padding:0 14px;border-radius:8px;font-size:13px;font-weight:700;color:#1C2433;background:#fff;box-shadow:0 1px 3px rgba(28,36,51,.16);display:flex;align-items:center;justify-content:center;white-space:nowrap">凸透鏡</div>
+          <div style="min-width:56px;height:36px;padding:0 14px;border-radius:8px;font-size:13px;font-weight:700;color:#67717F;display:flex;align-items:center;justify-content:center;white-space:nowrap">凹透鏡</div>
+        </div>
+      </div>
+      <div style="font-size:12px;font-weight:700;color:#67717F">選項膠囊 .chip　h40／r20／13px·700（未選／選中／五顆快捷）</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <div style="height:40px;padding:0 15px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center">短</div>
+        <div style="height:40px;padding:0 15px;border-radius:20px;background:#2A6FDB;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center">中</div>
+        <div style="height:40px;padding:0 15px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center">長</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <div style="height:40px;padding:0 12px;border-radius:20px;background:#2A6FDB;color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;white-space:nowrap">遠於 2F</div>
+        <div style="height:40px;padding:0 12px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;white-space:nowrap">在 2F</div>
+        <div style="height:40px;padding:0 12px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;white-space:nowrap">F 與 2F 之間</div>
+        <div style="height:40px;padding:0 12px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;white-space:nowrap">在 F</div>
+        <div style="height:40px;padding:0 12px;border-radius:20px;background:#fff;border:1px solid #8A93A1;color:#445062;font-size:13px;font-weight:700;display:flex;align-items:center;white-space:nowrap">近於 F</div>
+      </div>
+      <div style="font-size:12px;font-weight:700;color:#67717F">核取方塊　22px／r6（勾選／未勾）・Toggle 52×30・矯正度數滑桿（軌 7／把手 24）</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;background:#2A6FDB;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none"><i class="fa-solid fa-check"></i></div>完整光束</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#445062"><div style="width:22px;height:22px;border-radius:6px;border:1.5px solid #8A93A1;background:#fff;flex:none"></div>觀察者眼睛</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="width:52px;height:30px;border-radius:15px;background:#2A6FDB;padding:3px;display:flex;align-items:center;justify-content:flex-end;flex:none"><div style="width:24px;height:24px;border-radius:12px;background:#fff"></div></div>
+        <div style="width:52px;height:30px;border-radius:15px;background:#8A93A1;padding:3px;display:flex;align-items:center;flex:none"><div style="width:24px;height:24px;border-radius:12px;background:#fff"></div></div>
+        <div style="font-size:13px;font-weight:700;color:#445062">戴上眼鏡　開／關</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;max-width:280px">
+        <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#445062;font-weight:700">矯正度數</span><span style="color:#1C2433;font-weight:700">中</span></div>
+        <div style="height:7px;border-radius:4px;background:#D3D9E1;position:relative">
+          <div style="position:absolute;left:0;top:0;height:7px;width:50%;border-radius:4px;background:#2A6FDB"></div>
+          <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;background:#fff;border:2px solid #2A6FDB;box-shadow:0 1px 3px rgba(0,0,0,.2)"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:#67717F"><span>弱</span><span>強</span></div>
+      </div>
+      <div style="font-size:12px;font-weight:700;color:#67717F">左欄下方動作卡（白卡 r10／padding 12／不加陰影）與底部導覽四分頁（h38／gap 10）</div>
+      <div style="background:#fff;border:1px solid #E2E5EA;border-radius:10px;padding:12px;max-width:300px">
+        <div style="height:44px;border-radius:10px;background:#2A6FDB;color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px"><i class="fa-solid fa-rotate-left"></i>重置這一頁</div>
+      </div>
+      <div style="height:56px;display:flex;align-items:center;padding:0 14px;background:#1E2836;gap:10px;border-radius:8px">
+        <div style="height:38px;padding:0 14px;border-radius:8px;background:#2A6FDB;color:#fff;font-size:13.5px;font-weight:700;display:flex;align-items:center;white-space:nowrap">針孔成像</div>
+        <div style="height:38px;padding:0 14px;border-radius:8px;color:#9DAABB;font-size:13.5px;display:flex;align-items:center;white-space:nowrap">面鏡成像</div>
+        <div style="height:38px;padding:0 14px;border-radius:8px;color:#9DAABB;font-size:13.5px;display:flex;align-items:center;white-space:nowrap">透鏡成像</div>
+        <div style="height:38px;padding:0 14px;border-radius:8px;color:#9DAABB;font-size:13.5px;display:flex;align-items:center;white-space:nowrap">眼睛</div>
+      </div>
+      <div style="font-size:12.5px;color:#67717F;line-height:1.55">所有視覺尺寸 &lt; 44 的元件（膠囊 40、圖示鈕 34、分頁 38、把手 24）一律用透明 <span style="font-weight:700">::after ＋ min-width/min-height:44px</span> 撐命中區，視覺不變（DEV_SPEC 鐵律 6 的固定寫法）。</div>
+    </div>
+
+    <div style="flex:1;min-width:360px;display:flex;flex-direction:column;gap:14px">
+      <div style="background:#fff;border:1px solid #E2E5EA;border-radius:12px;padding:20px 22px;display:flex;flex-direction:column;gap:12px">
+        <div style="font-size:15px;font-weight:700">E2　色票（全部取自 DESIGN_SPEC 第 2、3 節，無新增）</div>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">
+          <div style="display:flex;align-items:center;gap:8px;font-size:12.5px"><span style="width:26px;height:26px;border-radius:6px;background:#2A6FDB;flex:none"></span><span><span style="font-weight:700">#2A6FDB</span><br><span style="color:#67717F">主色／物體／把手</span></span></div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12.5px"><span style="width:26px;height:26px;border-radius:6px;background:#D2700F;flex:none"></span><span><span style="font-weight:700">#D2700F</span><br><span style="color:#67717F">光線・延長線・模糊斑</span></span></div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12.5px"><span style="width:26px;height:26px;border-radius:6px;background:#2F9E63;flex:none"></span><span><span style="font-weight:700">#2F9E63</span><br><span style="color:#67717F">實像輪廓外框（實線）</span></span></div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12.5px"><span style="width:26px;height:26px;border-radius:6px;background:#8B5CF6;flex:none"></span><span><span style="font-weight:700">#8B5CF6</span><br><span style="color:#67717F">虛像輪廓外框（虛線）</span></span></div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12.5px"><span style="width:26px;height:26px;border-radius:6px;background:#D64545;flex:none"></span><span><span style="font-weight:700">#D64545</span><br><span style="color:#67717F">燭身・視網膜環（42%）</span></span></div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12.5px"><span style="width:26px;height:26px;border-radius:6px;background:#C5DDE8;flex:none"></span><span><span style="font-weight:700">#C5DDE8</span><br><span style="color:#67717F">玻璃・鞏膜外殼</span></span></div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12.5px"><span style="width:26px;height:26px;border-radius:6px;background:#93C5FD;flex:none"></span><span><span style="font-weight:700">#93C5FD</span><br><span style="color:#67717F">角膜・水晶體</span></span></div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12.5px"><span style="width:26px;height:26px;border-radius:6px;background:#8A94A3;flex:none"></span><span><span style="font-weight:700">#8A94A3</span><br><span style="color:#67717F">擋板・遮板・鏡背板</span></span></div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12.5px"><span style="width:26px;height:26px;border-radius:6px;background:#5F6B7E;flex:none"></span><span><span style="font-weight:700">#5F6B7E</span><br><span style="color:#67717F">器材描邊</span></span></div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12.5px"><span style="width:26px;height:26px;border-radius:6px;background:#FDFAF3;border:1px solid #E2E5EA;flex:none"></span><span><span style="font-weight:700">#FDFAF3</span><br><span style="color:#67717F">紙屏面</span></span></div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12.5px"><span style="width:26px;height:26px;border-radius:6px;background:#F3D34E;flex:none"></span><span><span style="font-weight:700">#F3D34E</span><br><span style="color:#67717F">燭光暈（18%）</span></span></div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12.5px"><span style="width:26px;height:26px;border-radius:6px;background:#D9A05B;flex:none"></span><span><span style="font-weight:700">#D9A05B</span><br><span style="color:#67717F">視神經・玻璃體（20%）</span></span></div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12.5px"><span style="width:26px;height:26px;border-radius:6px;background:#A6AEBA;flex:none"></span><span><span style="font-weight:700">#A6AEBA</span><br><span style="color:#67717F">主格線（2.24:1）</span></span></div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12.5px"><span style="width:26px;height:26px;border-radius:6px;background:#D5DAE1;flex:none"></span><span><span style="font-weight:700">#D5DAE1</span><br><span style="color:#67717F">次格線（1.41:1）</span></span></div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12.5px"><span style="width:26px;height:26px;border-radius:6px;background:#7A8496;flex:none"></span><span><span style="font-weight:700">#7A8496</span><br><span style="color:#67717F">光軸（3.77:1）</span></span></div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12.5px"><span style="width:26px;height:26px;border-radius:6px;background:#8A93A1;flex:none"></span><span><span style="font-weight:700">#8A93A1</span><br><span style="color:#67717F">控制邊框（3.10:1）</span></span></div>
+        </div>
+        <div style="font-size:12.5px;color:#67717F;line-height:1.55">介面文字三階 #1C2433／#445062／#67717F；頁面底 #F6F7F9、卡片框 #E2E5EA、Nav #1E2836（未選字 #9DAABB）、主色淡底 #E8F0FD／框 #C4D7F5。<span style="font-weight:700">虛像用的 #8B5CF6 是 DESIGN_SPEC 第 3 節既有的序列紫</span>（原用於摩擦力向量），不是新增色。</div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #E2E5EA;border-radius:12px;padding:20px 22px;display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:15px;font-weight:700">E3　間距與字級</div>
+        <div style="font-size:12.5px;color:#445062;line-height:1.8">
+          <span style="font-weight:700">版面</span>　main padding 12/14、欄 gap 12、卡片 r10、動作卡 padding 12・內 gap 8<br>
+          <span style="font-weight:700">左欄</span>　卡 padding 14、區塊間 gap 8（1024 以下同值）、區塊標題→內容 gap 8、核取列 gap 6、膠囊 gap 6<br>
+          <span style="font-weight:700">畫布</span>　小窗距邊 12／14、圖例卡 padding 6·10、小窗寬 140–216<br>
+          <span style="font-weight:700">字級</span>　標題列 17/700・區塊標題 12/700・控制標籤 13/700・輔助 12/400・畫布內 F 記號 20/700・構造標籤 17/700（皆 ≥12px）<br>
+          <span style="font-weight:700">間距節奏</span>　6／8／12／14 為主，符合規範的 8/12/16/26 節奏（6 只用於同組元件之間）
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding:24px 48px 60px;display:flex;flex-direction:column;gap:14px">
+  <div style="font-size:20px;font-weight:700">F. 八個難題的方案與理由</div>
+  <div style="display:flex;flex-direction:column;gap:12px;max-width:1180px">
+    <div style="background:#fff;border:1px solid #E2E5EA;border-radius:12px;padding:16px 18px;font-size:13px;color:#445062;line-height:1.7">
+      <div style="font-weight:700;color:#1C2433;margin-bottom:4px">難題 1｜四頁器材完全不同，卻要像同一個系統（見 C4）</div>
+      共通的是<span style="font-weight:700">畫法</span>不是造型：扁平填色 ＋ 深一階描邊 2px ＋ 圓角 6px；不透光＝金屬灰、透光＝玻璃藍、紙＝暖白；<span style="font-weight:700">所有器材都以光軸為對稱軸、貼齊格線</span>；可拖的東西一律掛同一枚藍把手。一眼分辨在第幾頁，靠主角器材的材質差異（純灰／厚背板鏡／玻璃藍鏡片／唯一的有機曲線眼球）。
+    </div>
+    <div style="background:#fff;border:1px solid #E2E5EA;border-radius:12px;padding:16px 18px;font-size:13px;color:#445062;line-height:1.7">
+      <div style="font-weight:700;color:#1C2433;margin-bottom:4px">難題 2｜格線是量測工具，又不能蓋過光線（見 D1、D2）</div>
+      12 層的優先序已定案。關鍵三條：①<span style="font-weight:700">只有完整光束與反向延長線可以被壓淡</span>，格線與三條特徵光線永不壓淡；②光束開啟時<span style="font-weight:700">改的是光束（1.8px／28%）而不是特徵光線</span>，兩者差「粗 1.7 倍、濃 3.6 倍」；③光束全部收斂到同一點、不平行鋪滿畫面，主格線之間永遠留白，所以格子仍數得出來。F／2F 記號永遠最上層並加白色外描邊。
+    </div>
+    <div style="background:#fff;border:1px solid #E2E5EA;border-radius:12px;padding:16px 18px;font-size:13px;color:#445062;line-height:1.7">
+      <div style="font-weight:700;color:#1C2433;margin-bottom:4px">難題 3｜屏是一條線，屏上的像是二維的（見 C3）</div>
+      兩者都保留：屏畫成<span style="font-weight:700">左高右低的平行四邊形</span>（左緣高、右緣低，落差 0.8 格），像只做等比縮放、不跟著斜切；同時右上角常駐「屏面正視」小窗畫二維影像。模糊用三層同心疊加、不用 filter（每幀 filter 在 iPad 會掉幀）。孔形決定斑形，所以圓孔糊成圓斑、方孔糊成方斑在畫法上就是真的；虛像情境下屏一片空白，不畫任何斑。
+    </div>
+    <div style="background:#fff;border:1px solid #E2E5EA;border-radius:12px;padding:16px 18px;font-size:13px;color:#445062;line-height:1.7">
+      <div style="font-weight:700;color:#1C2433;margin-bottom:4px">難題 4｜實像與虛像的差異要多大（見 C2）</div>
+      像與物體是同一條路徑，差三件事：<span style="font-weight:700">填色濃淡（fill-opacity .5／.28）、輪廓外框線型（實線／虛線 0.26-0.2 格）、外框顏色（#2F9E63／#8B5CF6）</span>。物體永遠沒有框，所以「有框＝這是像」沒有例外。虛像用 45% 而不是更低，是因為 30% 以下在教室大屏遠看會像「還沒載入完」；而虛線框是<span style="font-weight:700">實心的線</span>，明確表示這是刻意畫上去的標記，不是壞掉的圖層。
+    </div>
+    <div style="background:#fff;border:1px solid #E2E5EA;border-radius:12px;padding:16px 18px;font-size:13px;color:#445062;line-height:1.7">
+      <div style="font-weight:700;color:#1C2433;margin-bottom:4px">難題 5｜關掉的特徵光線消失還是變灰（見 D3）</div>
+      <span style="font-weight:700">消失</span>。畫面上每一條線都必須有物理意義，灰線會變成「第四種光線」。參照改放在圖例卡上：關掉的那條在卡上變成 #A6AEBA 虛線＋「已關閉」。像不隨線消失——這順便打掉「像是幾條線交出來的」誤解。
+    </div>
+    <div style="background:#fff;border:1px solid #E2E5EA;border-radius:12px;padding:16px 18px;font-size:13px;color:#445062;line-height:1.7">
+      <div style="font-weight:700;color:#1C2433;margin-bottom:4px">難題 6｜三種造型是三種不同的東西（見 C1）</div>
+      共用兩條基準線（足端貼光軸、頂端在上方 2.5 格），寬度都收在 ±0.6 格內；三條特徵光線的起點固定在「頂端基準線 × 中心線」，換造型時光線起點不動。每個造型都是<span style="font-weight:700">單一封閉路徑</span>，所以像只要對同一條路徑做位移＋縮放＋翻轉，拖動時能即時重畫——這也是不用「直線＋三角形」的原因。F 形是唯一能看出左右相反的造型，面鏡頁預設用它。
+    </div>
+    <div style="background:#fff;border:1px solid #E2E5EA;border-radius:12px;padding:16px 18px;font-size:13px;color:#445062;line-height:1.7">
+      <div style="font-weight:700;color:#1C2433;margin-bottom:4px">難題 7｜眼球剖面怎麼畫成扁平教學插圖（見 A4）</div>
+      依課本圖的層次，用<span style="font-weight:700">三層同心圓 ＋ 兩片凸透鏡形</span>組成，全部是可以用參數畫出來的基本形，沒有擬真漸層：外殼 #C5DDE8 描邊 0.5 格寬（＝鞏膜／角膜層的厚度感）、內圈 #D64545 42%（視網膜與血管層）、內部 #D9A05B 20%（玻璃體）、角膜與水晶體 #93C5FD、睫狀肌是 6 條 #D64545 50% 短線、視神經是右下一片 #D9A05B 斜多邊形。<span style="font-weight:700">水晶體是唯一會變形的部件</span>：只改「半寬」一個參數（薄 0.85 → 厚 1.4 格），描邊粗細與顏色都不變，所以厚薄變化在遠處也看得出來，而且看起來還是同一個器官。眼睛狀態、調節作用、矯正鏡三層疊加後只影響這一個參數與聚焦點位置。
+    </div>
+    <div style="background:#fff;border:1px solid #E2E5EA;border-radius:12px;padding:16px 18px;font-size:13px;color:#445062;line-height:1.7">
+      <div style="font-weight:700;color:#1C2433;margin-bottom:4px">難題 8｜四頁左欄項目差很多，切分頁時不迷路</div>
+      左欄固定<span style="font-weight:700">六個區塊、順序永不改變</span>：<span style="font-weight:700">① 器材</span>（該頁專屬，除針孔頁外都是 .seg）→<span style="font-weight:700">② 參數</span>（焦距／孔徑／調節作用）→<span style="font-weight:700">③ 物體位置快捷</span>→<span style="font-weight:700">④ 光線顯示</span>（四頁固定）→<span style="font-weight:700">⑤ 教學輔助疊層</span>（四頁固定）→<span style="font-weight:700">⑥ 物體造型</span>。<span style="font-weight:700">該頁沒有的區塊整塊不畫，不留空殼、不放 disabled 控制項</span>——④⑤兩塊四頁都在，所以「光屏在哪」「完整光束在哪」永遠在同一個相對位置（由下往上數第二、三塊）。針孔頁沒有 ③，眼睛頁沒有 ③⑥，因此那兩頁的 ④⑤ 會往上移，但<span style="font-weight:700">相對順序不變</span>；動作卡永遠貼在左欄下方，重置永遠在同一個像素位置。
+    </div>
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;majorGrid&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#A6AEBA&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#A6AEBA&quot;,&quot;#B7BEC8&quot;,&quot;#98A1AE&quot;],&quot;section&quot;:&quot;格線&quot;},&quot;virtualAlpha&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:0.18,&quot;min&quot;:0.1,&quot;max&quot;:0.35,&quot;step&quot;:0.02,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;虛像&quot;},&quot;showBeam&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;光線&quot;}}">
+class Component extends DCLogic {
+  renderVals(){
+    return {
+      majorGrid: this.props.majorGrid ?? '#A6AEBA',
+      virtualAlpha: this.props.virtualAlpha ?? 0.18,
+      showBeam: this.props.showBeam ?? true
+    };
+  }
+}
+</script>
+</body>
+</html>
