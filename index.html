@@ -4,21 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1E2836">
-<title>密度與浮沉（起始模板）｜國中理化模擬</title>
+<title>光的成像｜國中理化模擬</title>
 <!-- Font Awesome 6：唯一允許的外部資源（DEV_SPEC 鐵律 10） -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 /* ═══ 1. CSS 變數（對照 ../_shared/design/DESIGN_SPEC.md 第 2 節） ═══ */
 :root{
   /* UI 等比放大係數（DEV_SPEC 5.4）：由 JS 的 uiScale() 依裝置實體像素設定，不是斷點。
-     只有「字級」乘 --u，元件尺寸（按鈕 44、圖示鈕 34、膠囊／分頁 40、滑桿把手 24）維持固定 px——
-     兩者都放大會讓版面比例跑掉，且與既有模擬長得不一樣。canvas 內的字級則乘 JS 的 U。
-     **固定尺寸容器內的圖示字級（.logo / .icon-btn / 核取勾）也不乘**，否則大屏會撐破容器。 */
+     只有「字級」乘 --u，元件尺寸（按鈕 44、圖示鈕 34、膠囊 40、分頁 38、滑桿把手 24）維持固定 px。
+     **固定尺寸容器內的圖示字級（.logo / .icon-btn）也不乘**，否則大屏會撐破容器。 */
   --u:1;
-  /* 版面放大係數：只有教室大屏 ≠ 1。**寫成固定 px 的欄寬乘的是 --ul，不是 --u**——
-     平板放大字級是為了近距離可讀，版面跟著放大只會從畫布挖走空間；大屏是 6 公尺外看，
-     整個版面必須等比放大，否則固定寬的欄裝不下放大後的字。本模板用比例欄（1fr 2fr 1fr）
-     所以沒用到它，改用固定 px 欄寬時務必乘 --ul。 */
+  /* 版面放大係數：只有教室大屏 ≠ 1。本模擬用比例欄 minmax(302px,1fr) 3fr，
+     沒有固定 px 的欄寬，所以沒用到它；改用固定 px 欄寬時務必乘 --ul（DEV_SPEC 5.4-2a）。 */
   --ul:1;
   --c-primary:#2A6FDB;
   --c-primary-dark:#1E57B0;
@@ -29,15 +26,11 @@
   --c-bg:#F6F7F9;
   --c-surface:#FFFFFF;
   --c-bd:#E2E5EA;
-  /* 以下四個值取自 DESIGN_SPEC 第 2 節的「合格色定案表」，不是該節開頭那張表的舊值。
-     舊值（#CFD5DD / #7A8496 / #2F9E63 / #D64545）都沒過對比度門檻，三個既有模擬曾各自
-     加深成不同的值——直接照抄這裡，不要再自己調一版。 */
+  /* 以下四個值取自 DESIGN_SPEC 第 2 節的「合格色定案表」，不是該節開頭那張表的舊值 */
   --c-bd-ctl:#8A93A1;      /* 控制邊框，非文字門檻 3：白卡 3.10 */
   --c-text:#1C2433;
   --c-text-2:#445062;
   --c-text-3:#67717F;      /* 輔助文字，文字門檻 4.5：白卡 4.95 */
-  --c-ok:#24794C;          /* 介面文字用的成功色；畫布圖形的綠仍是 #2F9E63 */
-  --c-warn:#C62F2F;        /* 介面文字用的警示色；畫布圖形的紅仍是 #D64545 */
   --c-slider-bg:#D3D9E1;   /* 滑桿未填軌底。唯一定義處，不得在 CSS 裡再寫一次字面量 */
 }
 
@@ -50,81 +43,84 @@ body{
   line-height:1.5;
   -webkit-text-size-adjust:100%;
 }
-/* 上下標標準做法：line-height:0 不撐高行盒，跨 Windows/iPadOS 不跑版 */
+/* 上下標標準做法：line-height:0 不撐高行盒，跨 Windows/iPadOS 不跑版（DEV_SPEC 4.2） */
 sub,sup{font-size:.62em;line-height:0;position:relative;vertical-align:baseline}
 sup{top:-.55em}
 sub{bottom:-.22em}
-/* 視覺分數（需要強調分數結構時才用；一般寫斜線式） */
-.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.15;font-size:.9em}
-.frac>.num{border-bottom:1.5px solid currentColor;padding:0 .25em}
-.frac>.den{padding:0 .25em}
-.num-val{font-variant-numeric:tabular-nums}
 button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:pointer}
 /* 互動區禁選字、去 iOS 點擊灰底與長按選單 */
 .app{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
-button,.chip,input[type="range"],label.check,label.switch{touch-action:manipulation}
-canvas{touch-action:none;display:block}
-/* 捲動容器（.panel/.datacol）內的滑桿只鎖水平：寫成 none 會讓手指落在滑桿上時捲不動列表，
-   而且學生想捲動就會直接改掉參數值（DEV_SPEC 5.2） */
-.panel input[type="range"],.datacol input[type="range"]{touch-action:pan-y}
+button,.chip,label.check{touch-action:manipulation}
+/* 畫布上要拖物體與紙屏，拖曳時不能讓整頁跟著捲動或縮放 */
+.board{touch-action:none;display:block}
+/* 捲動容器內的滑桿只鎖水平：寫成 none 會讓手指落在滑桿上時捲不動左欄，
+   而且學生想捲動就會直接改掉物距（DEV_SPEC 5.2） */
+.panel input[type="range"]{touch-action:pan-y}
 /* 上面關掉了 iOS 的系統點擊閃現，就必須自己補回按下回饋，否則觸控時按任何鈕都沒有立即反應 */
-button:active,.chip:active,label.check:active,label.switch:active{transform:scale(.96);filter:brightness(.94)}
-/* 視覺尺寸 vs 感應範圍（鐵律 6）：DESIGN_SPEC 的圖示鈕 34、膠囊與分頁 38 是刻意的視覺規格，
-   但命中區一律要撐到 44px。用透明 ::after 擴大，不佔版面空間、視覺完全不變。
-   直接把視覺高度改成 44 會撐壞版面；命中區留在 34/38 則違反鐵律 6，兩者都不對。 */
+button:active,.chip:active,label.check:active{transform:scale(.96);filter:brightness(.94)}
+/* 視覺尺寸 vs 感應範圍（鐵律 6）：膠囊 40、圖示鈕 34、分頁 38 是刻意的視覺規格，
+   命中區一律用透明 ::after 撐到 44px。寫法固定成這一種，不要換成 width:max(100%,44px)——
+   第 8 節的檢核斷言讀的是 ::after 的 min-width，改寫會讓斷言靜默失效。 */
 .icon-btn,.chip,.navtab{position:relative}
 .icon-btn::after,.chip::after,.navtab::after{
   content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
   width:100%;height:100%;min-width:44px;min-height:44px;
 }
 
-/* ═══ 3. 版面：Header / 三欄 / 抽屜 / 導覽列（../_shared/design/layout.html） ═══
-   本模板預設有抽屜。要做的模擬沒有隨時間推進的動畫（沒有播放/暫停）→ 把 .drawer 整層刪掉，
-   動作鈕改掛左欄下方的動作卡，作法見 DESIGN_SPEC 第 1 節「抽屜的存廢」，
-   現行實作見 Density_experiment。刪抽屜時 main 的 padding 下緣要由 0 改回 12px */
+/* ═══ 3. 版面：Header / 兩欄＋動作卡 / 導覽列 ═══
+   兩欄配置（DESIGN_SPEC 第 1 節）：物距、像距這類讀數本來就長在主軸上，搬進右欄卡片反而
+   違反「即時讀數貼在它描述的圖形旁」，所以不設右欄，把空間全給畫布。
+   **無抽屜**（同節「抽屜的存廢」）：本模擬沒有隨時間推進的動畫、沒有播放控制，
+   那一層整個拿掉，動作鈕改掛左欄下方的動作卡，main 的 padding 下緣維持 12px。 */
 .app{
   height:100vh;   /* fallback */
   height:100dvh;  /* iPad Safari 工具列收合時的正確高度 */
   display:flex;flex-direction:column;background:var(--c-bg);
 }
 .topbar{height:50px;flex:none;display:flex;align-items:center;gap:12px;padding:0 18px;background:var(--c-surface);border-bottom:1px solid var(--c-bd)}
-/* 固定尺寸容器內的字級不乘 --u：28px 的方塊配 calc(14px * 2.3)＝32.2px 的字，實測溢出 10px */
+/* 固定尺寸容器內的字級不乘 --u：28px 的方塊配放大後的字會溢出 */
 .logo{width:28px;height:28px;border-radius:7px;background:var(--c-primary);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex:none}
 .title{font-size:calc(17px * var(--u));font-weight:700}
-/* gap 需 ≥10：兩顆 34px 圖示鈕的 44px 命中盒各向外溢出 5px，gap:8 會讓它們互相重疊（回流自 Density_experiment） */
+/* gap 需 ≥10：兩顆 34px 圖示鈕的 44px 命中盒各向外溢出 5px，gap:8 會讓它們互相重疊 */
 .topbar .actions{margin-left:auto;display:flex;gap:12px}
-/* 同上：34px 容器配 calc(15px * 2.3)＝34.5px 的圖示會撐破，字級一律固定 */
 .icon-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--c-bd-ctl);background:var(--c-surface);display:flex;align-items:center;justify-content:center;color:var(--c-text-2);font-size:14px}
 
-main{flex:1;position:relative;display:grid;grid-template-columns:1fr 2fr 1fr;gap:12px;padding:12px 14px 0;min-height:0}
-.panel{background:var(--c-surface);border:1px solid var(--c-bd);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:16px;min-width:0;overflow-y:auto}
+/* 欄寬用比例欄不用固定 px：設計意圖是「設定:畫布 = 1:3」，固定 px 給不出固定比例
+   （DEV_SPEC 5.4-2a）。minmax 的下限只是破版保底，不是版面寬度。
+   多一列 auto 給動作卡，畫布欄跨兩列。 */
+main{flex:1;position:relative;display:grid;
+  grid-template-columns:minmax(302px,1fr) 3fr;grid-template-rows:1fr auto;
+  gap:12px;padding:12px 14px;min-height:0}
+/* 控制項多於一屏時左欄自己捲動（PROJECT_PLAN §2.5 第 15 點「由模型調整」）：
+   min-height:0 不可省——它是 grid item 又是 flex container，預設 min-height:auto
+   會依內容高度撐開整列，把動作卡擠出畫面而且不會出現捲軸。 */
+.panel{grid-column:1;grid-row:1;background:var(--c-surface);border:1px solid var(--c-bd);border-radius:10px;
+  padding:12px;display:flex;flex-direction:column;gap:6px;min-width:0;min-height:0;overflow-y:auto}
 .panel h2{font-size:calc(13px * var(--u));font-weight:700;margin:0}
-.stage{position:relative;border-radius:10px;border:1px solid #C4D3E8;overflow:hidden;min-width:0;min-height:0}
-.stage canvas{position:absolute;inset:0;width:100%;height:100%}
-/* 固定位置的說明標籤放 HTML 圖層，不畫進 canvas（DEV_SPEC 4.4） */
-.stage-label{position:absolute;left:12px;bottom:12px;font-size:calc(12px * var(--u));color:#3B5578;background:rgba(255,255,255,.78);padding:3px 9px;border-radius:5px;pointer-events:none}
-.datacol{display:flex;flex-direction:column;gap:10px;min-width:0;overflow-y:auto}
-.datacard{background:var(--c-surface);border:1px solid var(--c-bd);border-radius:10px;padding:13px 15px;flex:1;display:flex;flex-direction:column;justify-content:center}
-.datacard .lbl{font-size:calc(12px * var(--u));color:var(--c-text-3)}
-.datacard .val{font-size:calc(23px * var(--u));font-weight:700;font-variant-numeric:tabular-nums;min-width:5ch}
-.datacard .unit{font-size:calc(12px * var(--u));font-weight:400;color:var(--c-text-3)}
-.datacard.state{background:var(--c-primary-soft);border-color:var(--c-primary-soft-bd)}
-.datacard.state .lbl{color:#3B5AA0}
-.datacard.state .val{font-size:calc(20px * var(--u));color:var(--c-primary)}
-
-.drawer{flex:none;margin:12px 14px;background:var(--c-surface);border:1px solid var(--c-bd);border-radius:12px;padding:10px 20px 12px;box-shadow:0 -4px 12px rgba(28,36,51,.05)}
-/* 抽屜不設把手（DESIGN_SPEC 第 1 節，2026-09-02）：抽屜是固定的、不能拖曳收合，
-   一條不能拉的把手等於騙學生去拉它。要能拖曳收合再談把手。 */
-.drawer .row{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-.playbtns{display:flex;gap:8px;flex:none}
-.round-btn{width:44px;height:44px;border-radius:50%;background:var(--c-bg);border:1px solid var(--c-bd-ctl);color:var(--c-text-2);display:flex;align-items:center;justify-content:center;font-size:calc(15px * var(--u))}
-.round-btn.primary{background:var(--c-primary);border-color:var(--c-primary);color:#fff;font-size:calc(17px * var(--u))}
-/* 速度改用分段切換器後不必再撐寬（原本的寬度是留給滑桿軌道的），也不需要數值欄——倍率寫在區段上 */
-.speed{display:flex;align-items:center;gap:10px;flex:none}
-.speed .name{font-size:calc(13px * var(--u));color:var(--c-text-2);font-weight:700;flex:none}
+.group{display:flex;flex-direction:column;gap:6px}
+/* 平行光模式下「物距」與「特徵光線」都不適用：用**停用**而不是整組藏起來——
+   藏起來會讓左欄高度跳動，學生也不知道那些東西去哪了。
+   disabled 樣式可不套對比門檻（DESIGN_SPEC 第 2 節末）。 */
+.group.off{opacity:.42}
+.group.off input,.group.off label{pointer-events:none}
+.grouplabel{font-size:calc(12px * var(--u));font-weight:700;color:var(--c-text-3)}
+/* 核取排兩欄（PROJECT_PLAN §2.5 第 15 點「左欄要捲動的問題由模型調整」）：
+   七個核取單欄排要 308px，1366×768 的左欄只有 554px 可視高度，一定捲動。
+   核取列高 44 是命中區下限不能減，改排兩欄才是不違規的解。
+   欄距 10px：每格寬約 145px 遠大於 44，水平方向命中區不會互相重疊。 */
+.checkgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+/* 動作卡（DESIGN_SPEC 第 1 節）：與左欄同寬、緊貼其下方。**不得加陰影**——
+   陰影只有抽屜、滑桿把手、.seg 選中格三個例外，動作卡不是抽屜。 */
+.actioncard{grid-column:1;grid-row:2;background:var(--c-surface);border:1px solid var(--c-bd);
+  border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.btn{width:100%;height:44px;border-radius:10px;background:var(--c-primary);color:#fff;
+  font-size:calc(14px * var(--u));font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px}
+.stage{grid-column:2;grid-row:1 / span 2;position:relative;background:var(--c-surface);
+  border:1px solid var(--c-bd);border-radius:10px;overflow:hidden;min-width:0;min-height:0}
+.board{position:absolute;inset:0;width:100%;height:100%}
 .mobile-tabs{display:none;gap:8px;flex:none}
 
-/* gap 6 讓分頁的 44px 命中區只隔 6px，觸控易誤按隔壁頁（回流自 dissolution-sim 審查 C3） */
+/* gap 6 在觸控時很容易按到隔壁頁，規範定值是 10 */
 .bottomnav{height:56px;flex:none;display:flex;align-items:center;padding:0 18px;background:var(--c-nav);gap:10px}
 .navtab{white-space:nowrap;flex:none;height:38px;padding:0 18px;border-radius:8px;color:var(--c-nav-idle);font-size:calc(13.5px * var(--u));display:flex;align-items:center}
 .navtab[aria-selected="true"]{background:var(--c-primary);color:#fff;font-weight:700}
@@ -132,67 +128,47 @@ main{flex:1;position:relative;display:grid;grid-template-columns:1fr 2fr 1fr;gap
 /* 分頁切換：同一檔案內用 display 切換，不做多頁 html */
 .screen{display:none;position:absolute;inset:0}
 .screen.active{display:block}
-.placeholder{height:100%;display:flex;align-items:center;justify-content:center;color:var(--c-text-3);font-size:calc(14px * var(--u));background:var(--c-surface);border-radius:10px;border:1px solid var(--c-bd)}
+.placeholder{height:100%;display:flex;align-items:center;justify-content:center;color:var(--c-text-3);font-size:calc(14px * var(--u))}
 
 /* ═══ 4. 元件（../_shared/design/components-spec.html） ═══ */
-.chips{display:flex;flex-direction:column;gap:6px}
-/* 膠囊：h40 全圓角（DESIGN_SPEC 第 4 節）。舊值 h38/r8 與規範正文不符，2026-09-02 對齊 */
+/* 膠囊：h40 全圓角、13px/700。挑一個參數值、旁邊控制項不動 → 用膠囊；
+   選了會連動改到其他控制項才用 .seg。焦距與物體造型都只改一個參數，所以是膠囊。 */
+.chips{display:flex;flex-wrap:wrap;gap:6px}
 .chip{white-space:nowrap;height:40px;padding:0 14px;border-radius:20px;background:var(--c-surface);border:1px solid var(--c-bd-ctl);color:var(--c-text-2);font-size:calc(13px * var(--u));display:flex;align-items:center}
 .chip[aria-pressed="true"]{background:var(--c-primary);border-color:var(--c-primary);color:#fff;font-weight:700}
 
-/* 分段切換器（DESIGN_SPEC 第 4 節）：容器內多檔擇一，選中那格白底浮起。
-   判準只有一條——**選了它，畫面上其他的控制項或整組內容會跟著改變**；
-   膠囊選完，旁邊的控制項原封不動。已知場合：切換左右欄的內容頁面、動畫速度倍率、
-   切換操作模式（例：自動／手動拉紙，切過去之後設定區的選單會換一組）。
-   **挑參數值不要用它**（顆粒大小、溶質種類、打點頻率那種用上面的膠囊）。
-   容器總高 1+3+36+3+1 ＝ 44，與圓鈕、按鈕、下拉觸發鈕齊高。
-   底色用本規範既有的分層慣例（--c-bg 底 ＋ --c-bd-ctl 邊框），不是 iOS 那種深灰容器。 */
-/* flex:none 不可省：放在縱向 flex 容器內會被 flex-shrink 壓掉零點幾 px，總高就不再是 44 */
-.seg{display:inline-flex;flex:none;background:var(--c-bg);border:1px solid var(--c-bd-ctl);border-radius:10px;padding:3px}
-/* 兩態字重都是 700：字重一變字寬就變，相鄰區段會左右跳動（DEV_SPEC 3.2 版面不得依賴精確字寬） */
-.seg button{position:relative;flex:1 0 auto;min-width:56px;height:36px;padding:0 14px;border-radius:8px;
-  font-size:calc(13px * var(--u));font-weight:700;color:var(--c-text-3);
-  display:flex;align-items:center;justify-content:center;white-space:nowrap;transition:background .15s,color .15s}
-/* 這個陰影是 DESIGN_SPEC 第 6 節的三個例外之一（抽屜、滑桿把手、分段切換器選中格） */
-.seg button[aria-pressed="true"]{background:var(--c-surface);color:var(--c-text);box-shadow:0 1px 3px rgba(28,36,51,.16)}
-/* 視覺 36、命中區 44（鐵律 6） */
+/* 分段切換器（DESIGN_SPEC 第 4 節）：判準是「選了它，畫面上其他控制項或整組內容會跟著改變」。
+   凸／凹透鏡切換會換掉整組成像行為，連第三條特徵光線的定義都換（通過焦點 → 射向焦點），
+   所以是 .seg 不是膠囊。容器總高 ＝ 1+3+36+3+1 ＝ 44，與按鈕齊高。
+   flex:none 不可省——放進縱向 flex 容器會被 flex-shrink 壓掉零點幾 px。
+   選中格用陰影浮起，這是「陰影只有三個例外」中的一個（第 6 節）。 */
+.seg{display:inline-flex;flex:none;align-self:flex-start;background:var(--c-bg);
+  border:1px solid var(--c-bd-ctl);border-radius:10px;padding:3px}
+.seg button{position:relative;height:36px;padding:0 14px;min-width:56px;border-radius:8px;
+  font-size:calc(13px * var(--u));font-weight:700;color:var(--c-text-3);white-space:nowrap}
 .seg button::after{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-  width:100%;height:44px;min-width:44px}
+  width:100%;height:100%;min-width:44px;min-height:44px}
+.seg button[aria-pressed="true"]{background:var(--c-surface);color:var(--c-text);box-shadow:0 1px 3px rgba(28,36,51,.16)}
 
-/* 下拉選單（DESIGN_SPEC 第 4 節）：一律用這組自訂元件，禁止用原生 <select>——
-   原生的展開清單由作業系統繪製，列高、選中底色、圓角、陰影全都套不上，Windows 與 iPadOS 也長得不一樣。
-   三個刻意偏離舊規範的地方，不要改回去：
-     1. 選項列高 44（規範舊值 42）——列本身就是命中區，42 違反 DEV_SPEC 鐵律 6。
-     2. 清單浮出式（top:calc(100%+4px)、四角圓、四邊框），不是與觸發鈕相連的連體式——
-        連體式在 56px 高的卡片內會被裁切。
-     3. 字級 13px（不是 16px）——自訂元件不受 DEV_SPEC 3.2「select ≥16px」的 iOS 限制，
-        才能與膠囊、按鈕的控制標籤級距對齊。 */
-/* .dd 是 flex:1，必須放在橫向容器內才會撐滿；直接丟進直排的 .panel 會吃掉整欄高度 */
-.ddrow{display:flex;align-items:center;gap:10px}
-.ddrow .name{flex:none;font-size:calc(13px * var(--u));font-weight:700;color:var(--c-text-2)}
-.dd{position:relative;flex:1;min-width:0}
-.dd-btn{width:100%;height:44px;border-radius:10px;border:1px solid var(--c-bd-ctl);background:var(--c-surface);
-  color:var(--c-text);font-size:calc(13px * var(--u));font-weight:700;display:flex;align-items:center;gap:6px;padding:0 10px}
-.dd-btn .v{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dd-btn i{flex:none;font-size:calc(11px * var(--u));color:var(--c-text-3);transition:transform .15s}
-.dd-btn:disabled{background:var(--c-bg);border-color:var(--c-bd);color:var(--c-text-3);cursor:default}
-.dd.open .dd-btn{border-color:var(--c-primary);box-shadow:0 0 0 3px rgba(42,111,219,.15)}
-.dd.open .dd-btn i{transform:rotate(180deg)}
-.dd-list{display:none;position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:30;padding:4px;
-  background:var(--c-surface);border:1px solid var(--c-bd-ctl);border-radius:10px;box-shadow:0 6px 18px rgba(28,36,51,.14)}
-.dd.open .dd-list{display:block}
-.dd-list button{width:100%;height:44px;border-radius:8px;padding:0 10px;display:flex;align-items:center;
-  font-size:calc(13px * var(--u));color:var(--c-text-2)}
-.dd-list button[aria-selected="true"]{background:var(--c-primary-soft);color:var(--c-primary);font-weight:700}
-
+/* 滑桿：軌 7px、把手 24px、感應高度 44px。兩個尺寸是 DESIGN_SPEC 第 4 節的定值不是範圍。
+   thumb 的 margin-top 必須等於 (軌高 − 把手) ÷ 2 ＝ (7 − 24) ÷ 2 ＝ −8.5px。
+   物距是**離散 5 段**（PROJECT_PLAN §2.6 第 8 點），不是連續滑桿。 */
 .sliderbox .head{display:flex;justify-content:space-between;font-size:calc(13px * var(--u));margin-bottom:2px}
 .sliderbox .head .name{color:var(--c-text-2);font-weight:700}
-.sliderbox .head .val{font-weight:700;font-variant-numeric:tabular-nums}
-.sliderbox .minmax{display:flex;justify-content:space-between;font-size:calc(11.5px * var(--u));color:var(--c-text-3)}
-/* 滑桿：軌 7px、把手 24px、感應高度 44px（透明區）。兩個尺寸是 DESIGN_SPEC 第 4 節的定值，不是範圍。
-   thumb 的 margin-top 必須等於 (軌高 − 把手) ÷ 2 ＝ (7 − 24) ÷ 2 ＝ −8.5px，
-   改尺寸時三處（track / thumb / margin-top）要一起重算，只改一處會讓把手離開軌道中線 */
-input[type="range"]{-webkit-appearance:none;appearance:none;width:100%;height:44px;margin:0;background:transparent}
+.sliderbox .head .val{font-weight:700}
+/* 五個檔位的刻度，其中「2f 上」「f 上」兩格標 2F／F（其餘三格是區間，只畫刻度線）。
+   刻度絕對定位疊在滑桿自己的 44px 命中區內（軌道中心在 22px，刻度 26–30、字 30–42），
+   所以**不佔額外高度**——左欄在大屏只剩 13.7px 餘裕，多一列就會又開始捲動。
+   left 要對齊 thumb 中心：軌道兩端各被 thumb 半徑 12px 內縮，不是等分 0–100%。 */
+.slidewrap{position:relative}
+.ticks{position:absolute;left:0;right:0;top:26px;pointer-events:none}
+.ticks span{position:absolute;transform:translateX(-50%);padding-top:5px;line-height:1;
+  font-size:calc(11px * var(--u));font-weight:700;color:var(--c-text-3);white-space:nowrap}
+.ticks span::before{content:'';position:absolute;left:50%;top:0;width:1.5px;height:4px;
+  background:var(--c-bd-ctl);transform:translateX(-50%)}
+/* display:block 不可省：range 預設 inline-block，包進 .slidewrap 後會多出一段 baseline 間隙，
+   在左欄白白吃掉 6px（那裡在大屏只剩個位數餘裕） */
+input[type="range"]{-webkit-appearance:none;appearance:none;display:block;width:100%;height:44px;margin:0;background:transparent}
 input[type="range"]::-webkit-slider-runnable-track{height:7px;border-radius:4px;background:linear-gradient(to right,var(--c-primary) var(--fill,50%),var(--c-slider-bg) var(--fill,50%))}
 input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#fff;border:2px solid var(--c-primary);margin-top:-8.5px;box-shadow:0 1px 3px rgba(0,0,0,.2)}
 input[type="range"]::-moz-range-track{height:7px;border-radius:4px;background:var(--c-slider-bg)}
@@ -201,17 +177,40 @@ input[type="range"]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;b
 
 label.check{display:flex;align-items:center;gap:8px;font-size:calc(13px * var(--u));color:var(--c-text-2);min-height:44px}
 label.check input{position:absolute;opacity:0;width:0;height:0}
-label.check .box{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--c-bd-ctl);background:var(--c-surface);display:flex;align-items:center;justify-content:center;color:#fff;font-size:calc(12px * var(--u));flex:none}
+label.check .box{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--c-bd-ctl);background:var(--c-surface);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;flex:none}
 label.check input:checked+.box{background:var(--c-primary);border-color:var(--c-primary)}
 label.check .box i{visibility:hidden}
 label.check input:checked+.box i{visibility:visible}
 
-label.switch{display:flex;align-items:center;gap:8px;font-size:calc(13px * var(--u));color:var(--c-text-2);min-height:44px}
-label.switch input{position:absolute;opacity:0;width:0;height:0}
-label.switch .track{width:52px;height:30px;border-radius:15px;background:var(--c-bd-ctl);position:relative;flex:none;transition:background .15s}
-label.switch .track::after{content:"";position:absolute;left:3px;top:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .15s}
-label.switch input:checked+.track{background:var(--c-primary)}
-label.switch input:checked+.track::after{left:25px}
+/* ═══ 4b. 畫布上的疊層（能放 HTML 就放 HTML，DEV_SPEC 4.4） ═══
+   圖例卡與紙屏小窗都放**下方留白帶**（光路收上 2/3，PROJECT_PLAN §2.5 第 6、16 點）。 */
+.legend{position:absolute;left:14px;bottom:12px;background:rgba(255,255,255,.94);
+  border:1px solid var(--c-bd);border-radius:8px;padding:6px 10px;
+  display:flex;flex-direction:column;gap:6px;pointer-events:none}
+.legend .row{display:flex;align-items:center;gap:8px;font-size:calc(12px * var(--u));font-weight:700;color:var(--c-text-2);white-space:nowrap}
+/* 關掉的那條不從卡上消失，改成灰虛線＋「已關閉」、字重降回 400——
+   「本來有三條」這件事仍要看得到，但畫面上不留一條沒有物理意義的灰線 */
+.legend .row.off{color:var(--c-text-3);font-weight:400}
+.legend .ln{width:22px;height:0;border-top:3px solid #D2700F;flex:none}
+.legend .row.off .ln{border-top:2px dashed #A6AEBA}
+.legend .ln.grey{border-top:3px solid #67717F}
+.legend .ln.greydash{border-top:3px dashed #67717F}
+
+/* 紙屏小窗：屏是一條線，屏上的像卻是二維的——側視圖表現不出來，另開一個正視小窗。
+   模糊用真高斯 filter:blur()，只套在這個小窗上（PROJECT_PLAN §2.5 第 3 點）。
+   小窗**佔滿整條留白帶**：top 由 JS 設成光路區下緣，高度靠 bottom 撐開。
+   這個 top 不寫成 CSS 的 66.667%——OPTICS_FRAC 只能有一個定義處，寫進 CSS 就是
+   同一個常數的第二個字面量（DEV_SPEC 第 1 節「單一真相來源」）。 */
+.screenwin{position:absolute;right:14px;bottom:12px;width:150px;
+  background:var(--c-surface);border:1px solid var(--c-bd);border-radius:8px;overflow:hidden;
+  display:flex;flex-direction:column}
+.screenwin .cap{flex:none;font-size:calc(12px * var(--u));font-weight:700;color:var(--c-text-3);padding:4px 8px 0;text-align:center}
+.screenwin svg{display:block;flex:1;width:100%;background:#FDFAF3}
+
+/* 可拖動的視覺暗示：雙向箭頭圖示，灰色，貼器材足端（PROJECT_PLAN §2.8 定案）。
+   用 HTML 的 Font Awesome 而不是畫進 SVG——圖示一律走 icon 庫（鐵律 10）。 */
+.draghint{position:absolute;transform:translate(-50%,0);color:var(--c-text-3);
+  font-size:calc(13px * var(--u));pointer-events:none}
 
 /* 說明彈窗 */
 .modal{position:fixed;inset:0;background:rgba(28,36,51,.45);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
@@ -222,21 +221,29 @@ label.switch input:checked+.track::after{left:25px}
 
 /* hover 一律包在 (hover:hover)，iPad 點擊才不會殘留 hover 狀態 */
 @media (hover:hover){
-  .icon-btn:hover,.round-btn:hover{border-color:var(--c-primary);color:var(--c-primary)}
-  .round-btn.primary:hover{background:var(--c-primary-dark);color:#fff}
+  .icon-btn:hover{border-color:var(--c-primary);color:var(--c-primary)}
+  .btn:hover{background:var(--c-primary-dark)}
   .chip[aria-pressed="false"]:hover{border-color:var(--c-primary)}
   .seg button[aria-pressed="false"]:hover{color:var(--c-text-2)}
   .navtab[aria-selected="false"]:hover{color:#fff}
 }
 
-/* ═══ 5. 響應式：<900px（涵蓋所有 iPad 直向 768/820/834）左右欄摺入底部分頁 ═══ */
+/* ═══ 5. 響應式：<900px（涵蓋所有 iPad 直向 768/820/834）左欄摺成浮出面板 ═══
+   兩欄配置只有「設定」一顆 chip——沒有第二欄可切（DESIGN_SPEC 第 1 節）。
+   浮出面板**不用 position:absolute;bottom:0**：動作卡進了 main 之後，那樣會蓋住動作卡，
+   連叫出面板的那顆 chip 都被蓋掉、打開就關不掉。改用 grid 疊在畫布那一格（align-self:end）。
+   選擇器要寫 #panelSettings（ID）而不是 main>.panel，否則壓不過桌面版的 ID 規則。 */
 @media (max-width:899px){
   main{grid-template-columns:1fr}
-  .panel,.datacol{display:none}
-  .mobile-tabs{display:flex}
-  body.show-settings .panel{display:flex;position:absolute;left:14px;right:14px;bottom:0;max-height:62%;z-index:5;box-shadow:0 8px 28px rgba(28,36,51,.25)}
-  body.show-data .datacol{display:flex;position:absolute;left:14px;right:14px;bottom:0;max-height:62%;z-index:5}
-  body.show-data .datacard{flex:none;box-shadow:0 8px 28px rgba(28,36,51,.18)}
+  #panelSettings{display:none}
+  body.show-settings #panelSettings{
+    display:flex;grid-column:1;grid-row:1;align-self:end;max-height:62%;z-index:5;
+    box-shadow:0 8px 28px rgba(28,36,51,.25)}
+  .stage{grid-column:1;grid-row:1}
+  /* 動作卡不跟著左欄摺：動作鈕是主要操作路徑，收進面板會讓一步變三步 */
+  .actioncard{grid-column:1;grid-row:2;flex-direction:row;align-items:center;gap:10px}
+  .btn{width:auto;flex:1}
+  .mobile-tabs{display:flex;margin-left:auto}
 }
 </style>
 </head>
@@ -246,511 +253,996 @@ label.switch input:checked+.track::after{left:25px}
   <!-- Header -->
   <header class="topbar">
     <div class="logo">理</div>
-    <div class="title">密度與浮沉（起始模板）</div>
+    <div class="title">光的成像</div>
     <div class="actions">
       <button class="icon-btn" id="btnHelp" aria-label="操作說明"><i class="fa-solid fa-question"></i></button>
       <button class="icon-btn" id="btnFull" aria-label="全螢幕"><i class="fa-solid fa-expand"></i></button>
     </div>
   </header>
 
-  <!-- 三欄：設定｜畫布｜數據 -->
+  <!-- 兩欄：設定｜畫布（無右欄、無抽屜） -->
   <main>
-    <!-- 左欄：設定 -->
     <section class="panel" id="panelSettings">
       <h2>設定</h2>
-      <div class="chips" id="matChips">
-        <button class="chip" data-mat="wood" aria-pressed="true">木塊</button>
-        <button class="chip" data-mat="iron" aria-pressed="false">鐵塊</button>
-        <button class="chip" data-mat="custom" aria-pressed="false">自訂</button>
+
+      <!-- 透鏡種類：切過去之後成像行為整組換（凹透鏡永遠是正立縮小虛像），
+           第三條特徵光線的定義也跟著換，符合 .seg 的連動判準 -->
+      <div class="group">
+        <div class="grouplabel">透鏡種類</div>
+        <div class="seg" id="lensSeg">
+          <button data-lens="convex" aria-pressed="true">凸透鏡</button>
+          <button data-lens="concave" aria-pressed="false">凹透鏡</button>
+        </div>
       </div>
-      <!-- 下拉選單：選項多或含數值時用它（2–4 個短選項用上面的膠囊）。
-           禁止用原生 <select>，理由見上面 .dd 的註解與 DESIGN_SPEC 第 4 節。
-           結構固定：.dd > .dd-btn(.v + i) ＋ .dd-list > button[role="option"] -->
-      <div class="ddrow">
-        <span class="name">液體</span>
-        <div class="dd" id="ddLiquid">
-          <button class="dd-btn" aria-expanded="false">
-            <span class="v">水（1.00 g/cm³）</span><i class="fa-solid fa-chevron-down"></i>
-          </button>
-          <div class="dd-list" role="listbox">
-            <button role="option" data-v="water" aria-selected="true">水（1.00 g/cm³）</button>
-            <button role="option" data-v="oil" aria-selected="false">沙拉油（0.92 g/cm³）</button>
-            <button role="option" data-v="brine" aria-selected="false">鹽水（1.20 g/cm³）</button>
+
+      <div class="group">
+        <div class="grouplabel">焦距</div>
+        <div class="chips" id="fChips">
+          <button class="chip" data-f="2" aria-pressed="false">2 格</button>
+          <button class="chip" data-f="3" aria-pressed="true">3 格</button>
+          <button class="chip" data-f="4" aria-pressed="false">4 格</button>
+        </div>
+      </div>
+
+      <!-- 物距：離散 5 段。拖蠟燭時這裡顯示「落在哪一段」；拖這裡則蠟燭跳到該段的代表位置 -->
+      <div class="group sliderbox" id="uGroup">
+        <div class="head"><span class="name">物距</span><span class="val" id="uSegName">f ~ 2f 間</span></div>
+        <div class="slidewrap">
+          <input type="range" id="uSlider" min="0" max="4" step="1" value="2" aria-label="物距">
+          <div class="ticks">
+            <span style="left:calc(12px + (100% - 24px) * 0)"></span>
+            <span style="left:calc(12px + (100% - 24px) * .25)">2F</span>
+            <span style="left:calc(12px + (100% - 24px) * .5)"></span>
+            <span style="left:calc(12px + (100% - 24px) * .75)">F</span>
+            <span style="left:calc(12px + (100% - 24px) * 1)"></span>
           </div>
         </div>
       </div>
 
-      <div class="sliderbox">
-        <div class="head"><span class="name">質量</span><span class="val"><span id="massVal">6.5</span> kg</span></div>
-        <input type="range" id="massSlider" min="0.5" max="12" step="0.1" value="6.5" aria-label="質量">
-        <div class="minmax"><span>0.5</span><span>12.0</span></div>
-      </div>
-      <div class="sliderbox">
-        <div class="head"><span class="name">體積</span><span class="val"><span id="volVal">10.0</span> L</span></div>
-        <input type="range" id="volSlider" min="0.5" max="12" step="0.1" value="10" aria-label="體積">
-        <div class="minmax"><span>0.5</span><span>12.0</span></div>
-      </div>
-      <label class="check">
-        <input type="checkbox" id="chkForces" checked>
-        <span class="box"><i class="fa-solid fa-check"></i></span>顯示力的箭頭
-      </label>
-    </section>
-
-    <!-- 中欄：模擬畫布（分頁 1）＋其他分頁 -->
-    <div class="stage" id="stageWrap">
-      <div class="screen active" id="screen0">
-        <canvas id="bgCanvas"></canvas>
-        <canvas id="fgCanvas"></canvas>
-        <div class="stage-label num-val">水 ρ = 1.00 g/cm³　（可左右拖曳方塊）</div>
-      </div>
-      <div class="screen" id="screen1"><div class="placeholder">「密度比較」分頁——實作時在此放本分頁內容</div></div>
-      <div class="screen" id="screen2"><div class="placeholder">「挑戰任務」分頁——實作時在此放本分頁內容</div></div>
-    </div>
-
-    <!-- 右欄：數據 -->
-    <section class="datacol" id="panelData">
-      <div class="datacard"><div class="lbl">物體密度</div><div class="val"><span id="outRho">0.65</span> <span class="unit">g/cm³</span></div></div>
-      <div class="datacard"><div class="lbl">浮力</div><div class="val"><span id="outBuoy">63.7</span> <span class="unit">N</span></div></div>
-      <div class="datacard"><div class="lbl">排開水體積</div><div class="val"><span id="outDisp">6.5</span> <span class="unit">L</span></div></div>
-      <div class="datacard state"><div class="lbl">狀態</div><div class="val" id="outState">漂浮</div></div>
-    </section>
-  </main>
-
-  <!-- 底部抽屜：播放控制（沒有動畫可播就把這一層刪掉，見上方版面章節的註解） -->
-  <div class="drawer">
-    <div class="row">
-      <div class="playbtns">
-        <button class="round-btn primary" id="btnPlay" aria-label="播放"><i class="fa-solid fa-play"></i></button>
-        <button class="round-btn" id="btnStep" aria-label="單步"><i class="fa-solid fa-forward-step"></i></button>
-        <button class="round-btn" id="btnReset" aria-label="重置"><i class="fa-solid fa-rotate-left"></i></button>
-      </div>
-      <!-- 動畫速度：分段切換器三檔（DESIGN_SPEC 第 6 節）。原本是滑桿 0.25–2×，
-           三個模擬各做各的（膠囊三檔／滑桿三檔／沒有），2026-09-02 統一成這個。
-           標籤不可寫成裸的「速度」——那個詞留給物理量（DEV_SPEC 第 9 節第 3 條） -->
-      <div class="speed">
-        <span class="name">動畫速度</span>
-        <div class="seg" id="segSpeed" role="group" aria-label="動畫速度">
-          <button data-speed="0.5" aria-pressed="false">0.5×</button>
-          <button data-speed="1" aria-pressed="true">1×</button>
-          <button data-speed="2" aria-pressed="false">2×</button>
+      <div class="group">
+        <div class="grouplabel">物體</div>
+        <div class="chips" id="shapeChips">
+          <button class="chip" data-shape="candle" aria-pressed="true">蠟燭</button>
+          <button class="chip" data-shape="arrow" aria-pressed="false">箭頭</button>
+          <button class="chip" data-shape="f" aria-pressed="false">F</button>
+          <button class="chip" data-shape="parallel" aria-pressed="false">平行光</button>
         </div>
       </div>
-      <label class="switch"><input type="checkbox" id="chkSlow"><span class="track"></span>慢動作</label>
+
+      <!-- 特徵光線：三條各自一個核取，①② 預設開、③ 預設關。圈圈數字配合課本（§2.6 C6）。
+           第三條的名稱隨透鏡種類換（凸＝通過焦點、凹＝射向焦點），所以文字包在 span 裡由 JS 寫。 -->
+      <div class="group" id="rayGroup">
+        <div class="grouplabel">特徵光線</div>
+        <div class="checkgrid">
+          <label class="check"><input type="checkbox" id="chkR1" checked><span class="box"><i class="fa-solid fa-check"></i></span><span id="rn0">① 平行主軸</span></label>
+          <label class="check"><input type="checkbox" id="chkR2" checked><span class="box"><i class="fa-solid fa-check"></i></span><span id="rn1">② 通過鏡心</span></label>
+          <label class="check"><input type="checkbox" id="chkR3"><span class="box"><i class="fa-solid fa-check"></i></span><span id="rn2">③ 通過焦點</span></label>
+        </div>
+      </div>
+
+      <!-- 教學輔助疊層一律預設關（DESIGN_SPEC 第 4 節） -->
+      <div class="group">
+        <div class="grouplabel">顯示</div>
+        <div class="checkgrid">
+          <label class="check"><input type="checkbox" id="chkBeam"><span class="box"><i class="fa-solid fa-check"></i></span>完整光束</label>
+          <label class="check"><input type="checkbox" id="chkPaper"><span class="box"><i class="fa-solid fa-check"></i></span>紙屏</label>
+          <label class="check"><input type="checkbox" id="chkEye"><span class="box"><i class="fa-solid fa-check"></i></span>觀察者眼睛</label>
+          <label class="check"><input type="checkbox" id="chkLegend" checked><span class="box"><i class="fa-solid fa-check"></i></span>圖例卡</label>
+        </div>
+      </div>
+    </section>
+
+    <div class="stage" id="stageWrap">
+      <div class="screen" id="screen0"><div class="placeholder">針孔成像——開發中（階段 4）</div></div>
+      <div class="screen" id="screen1"><div class="placeholder">面鏡成像——開發中（階段 3）</div></div>
+      <div class="screen active" id="screen2">
+        <svg class="board" id="board">
+          <defs>
+            <!-- 蠟燭：使用者提供的 svg，五條 path 逐字內嵌（鐵律 8 禁止 fetch 本地檔）。
+                 原檔外層有兩層 g，累積 translate(-276.0339,-37.31195) 才落回 viewBox 內。
+                 path1094 是整體外輪廓，像的灰色外框沿它畫。 -->
+            <g id="cdSrc" transform="translate(-276.03390,-37.31195)" fill="#fcd267">
+              <path id="cdOutline" d="m 280.12713,337.71552 c -1.46614,-0.44599 -2.72728,-1.54648 -3.42577,-2.98936 l -0.66746,-1.3788 10e-4,-83.17896 0.001,-83.17897 0.63588,-1.04292 c 0.34973,-0.57361 1.1052,-1.32907 1.6788,-1.67881 l 1.04293,-0.63588 19.93004,-0.001 19.93005,-0.001 0.22995,-0.56 c 0.12648,-0.308 0.21447,-2.22314 0.19554,-4.25586 l -0.0344,-3.69586 -0.36039,-0.6734 -0.36039,-0.67339 -1.6852,-0.20958 c -16.63182,-2.06834 -28.7977,-13.41581 -32.60531,-30.41191 l -0.43013,-1.92 0.004,-5.44 0.004,-5.44 0.7198,-2.86098 c 1.55068,-6.16351 4.24835,-11.243197 11.9061,-22.419018 8.97546,-13.098922 11.83705,-18.485688 13.7694,-25.919999 l 0.6654,-2.56 0.18556,-4.395672 0.18557,-4.395671 -0.39143,-2.484328 c -0.21529,-1.366381 -0.6863,-3.67738 -1.04671,-5.135555 -0.94596,-3.827341 -0.79909,-3.826328 4.04796,0.02791 13.51593,10.747495 21.83022,22.973115 24.90459,36.620593 l 0.70345,3.122723 0.006,8.063763 0.006,8.063762 0.36601,0.366247 0.36601,0.366248 1.47668,-0.653207 c 3.42098,-1.513263 5.5578,-5.520201 6.13233,-11.499287 l 0.22412,-2.332475 0.35743,0.109445 c 2.28627,0.70007 9.38712,16.225845 11.14103,24.359511 l 0.6978,3.23599 0.0152,5.44 0.0153,5.44 -0.58003,2.65474 c -3.35789,15.36865 -13.94238,25.93198 -29.32909,29.27046 l -3.35721,0.72842 0.10925,4.79319 c 0.0601,2.63626 0.17533,4.90119 0.2561,5.03319 0.0808,0.132 8.52859,0.24 18.77295,0.24 h 18.6261 l 1.10704,0.59371 1.10703,0.59371 0.72977,1.38002 0.72978,1.38003 -0.0818,83.24973 -0.0818,83.24972 -0.77114,1.12539 c -0.42413,0.61897 -1.27755,1.47241 -1.89648,1.89654 l -1.12534,0.77115 -41.94352,0.0549 -41.94352,0.0549 z"/>
+              <path fill="#fcc01a" d="m 279.68224,336.77969 c -0.72141,-0.32763 -1.65741,-1.08047 -2.08,-1.67297 l -0.76834,-1.07729 -0.0818,-83.28 -0.0818,-83.28 h 0.31443 c 0.17293,0 0.54409,0.35051 0.82478,0.7789 3.81207,5.81795 21.20941,11.06379 39.8244,12.00829 l 5.92,0.30037 1.5784,0.5462 1.57839,0.5462 1.62703,1.63002 c 0.89487,0.89651 2.3056,2.59895 3.13495,3.78319 1.78323,2.54629 3.54961,3.91441 5.95781,4.61449 l 1.75741,0.51089 1.88109,-0.17057 1.88108,-0.17057 1.73368,-0.84821 1.73368,-0.84821 1.09376,-1.27781 c 0.60156,-0.70279 2.04264,-3.19607 3.20239,-5.54062 l 2.10864,-4.2628 1.86811,-1.72954 1.8681,-1.72953 4.24462,-2.21675 4.24462,-2.21675 1.47501,-1.3736 c 0.81126,-0.75547 1.51916,-1.37359 1.57312,-1.37359 0.054,0 0.0957,37.116 0.0928,82.48 l -0.005,82.48 -0.71605,1.28 -0.71606,1.28 -1.42648,0.72 -1.42649,0.72 -41.4522,-0.007 -41.45219,-0.007 z m 40.49829,-173.21943 c -0.007,-0.05 -0.0576,-1.96283 -0.11164,-4.25083 -0.054,-2.288 -0.20795,-4.55725 -0.34202,-5.04278 l -0.24375,-0.88279 -0.68461,-0.11973 c -18.78322,-3.28503 -29.258,-12.41793 -33.20822,-28.95407 l -0.65947,-2.76063 -0.1649,-4.32 -0.16489,-4.32 0.51995,-2.98055 c 0.68991,-3.95473 1.45149,-6.17719 3.69387,-10.779448 l 1.87098,-3.84 4.09956,-6.08 c 7.89085,-11.702822 9.03882,-13.465189 10.94317,-16.799999 2.51171,-4.398395 4.30433,-8.6513 5.39528,-12.8 l 0.88354,-3.36 0.0112,-5.6 0.0112,-5.6 -0.59254,-2.56 c -0.3259,-1.408 -0.66574,-2.884 -0.75521,-3.28 l -0.16266,-0.72 h 0.3188 c 1.08727,0 10.76426,8.735171 14.50529,13.093553 8.04723,9.375201 12.29748,18.335122 13.75007,28.986446 l 0.39276,2.88 -0.20935,6.316807 -0.20935,6.316806 0.64807,0.648067 0.64807,0.648067 0.87512,-0.20598 c 3.24285,-0.763273 6.2644,-4.753733 7.12047,-9.403767 0.21061,-1.144 0.48142,-2.584 0.60181,-3.2 l 0.21888,-1.12 1.69058,2.72 c 3.7212,5.987093 7.00794,14.023168 8.427,20.604008 l 0.6978,3.23599 0.0152,5.44 0.0152,5.44 -0.59255,2.72 c -3.27755,15.04497 -14.50449,26.01746 -29.47936,28.81123 -1.232,0.22984 -2.38227,0.54281 -2.55614,0.69548 l -0.31615,0.27758 -0.004,5.02785 -0.004,5.02786 -3.44,0.0908 c -1.892,0.0499 -3.44602,0.0499 -3.45337,0 z"/>
+              <path fill="#fcb31c" d="m 320.18053,163.56026 c -0.007,-0.05 -0.0576,-1.96283 -0.11164,-4.25083 -0.054,-2.288 -0.20795,-4.55725 -0.34202,-5.04278 l -0.24375,-0.88279 -0.68461,-0.11973 c -18.78322,-3.28503 -29.258,-12.41793 -33.20822,-28.95407 l -0.65947,-2.76063 -0.1649,-4.32 -0.16489,-4.32 0.51995,-2.98055 c 0.68991,-3.95473 1.45149,-6.17719 3.69387,-10.779448 l 1.87098,-3.84 4.09956,-6.08 c 7.89085,-11.702822 9.03882,-13.465189 10.94317,-16.799999 2.51171,-4.398395 4.30433,-8.6513 5.39528,-12.8 l 0.88354,-3.36 0.0112,-5.6 0.0112,-5.6 -0.59254,-2.56 c -0.3259,-1.408 -0.66574,-2.884 -0.75521,-3.28 l -0.16266,-0.72 h 0.3188 c 1.08727,0 10.76426,8.735171 14.50529,13.093553 8.04723,9.375201 12.29748,18.335122 13.75007,28.986446 l 0.39276,2.88 -0.20935,6.316807 -0.20935,6.316806 0.64807,0.648067 0.64807,0.648067 0.87512,-0.20598 c 3.24285,-0.763273 6.2644,-4.753733 7.12047,-9.403767 0.21061,-1.144 0.48142,-2.584 0.60181,-3.2 l 0.21888,-1.12 1.69058,2.72 c 3.7212,5.987093 7.00794,14.023168 8.427,20.604008 l 0.6978,3.23599 0.0152,5.44 0.0152,5.44 -0.59255,2.72 c -3.27755,15.04497 -14.50449,26.01746 -29.47936,28.81123 -1.232,0.22984 -2.38227,0.54281 -2.55614,0.69548 l -0.31615,0.27758 -0.004,5.02785 -0.004,5.02786 -3.44,0.0908 c -1.892,0.0499 -3.44602,0.0499 -3.45337,0 z"/>
+              <path fill="#fa7014" d="m 320.15235,163.40026 c -0.0229,-0.13796 -0.014,-1.40283 0.0196,-2.81083 0.14991,-6.27659 -0.30146,-7.26823 -3.55273,-7.80516 -4.59517,-0.75888 -8.37657,-2.96574 -12.3236,-7.19218 l -2.23726,-2.39564 -1.338,-2.66351 c -0.73591,-1.46493 -1.63996,-3.87644 -2.00902,-5.35891 l -0.67101,-2.6954 0.15911,-3.8646 0.15911,-3.8646 0.69155,-2.56 c 1.47198,-5.44903 4.90652,-11.28779 11.39818,-19.37704 3.80217,-4.737884 5.97424,-8.13306 7.25668,-11.342958 l 1.02278,-2.56 0.0581,-3.36 c 0.0319,-1.848 0.0738,-3.493101 0.0931,-3.65578 0.0562,-0.474319 1.56595,1.087211 3.22521,3.33578 2.76891,3.752314 4.75985,8.474543 5.45534,12.93931 l 0.34571,2.219308 -0.20677,1.78069 c -0.11373,0.97938 -0.57179,3.22069 -1.01791,4.98069 -0.44612,1.76 -0.82733,4.064 -0.84713,5.12 l -0.036,1.92 0.57907,1.50509 0.57906,1.50509 1.09503,0.96144 c 0.60226,0.5288 1.64146,1.10859 2.30932,1.28843 l 1.21429,0.32697 1.17997,-0.32581 c 2.22402,-0.61408 4.39985,-3.33562 4.39985,-5.50335 0,-3.76042 4.72993,4.5626 6.59344,11.60214 l 0.55062,2.08 0.028,3.84 0.028,3.84 -0.44269,1.76 c -1.84351,7.32929 -7.68261,13.69814 -13.95731,15.22358 -1.232,0.29952 -2.38227,0.6742 -2.55614,0.83264 l -0.31615,0.28807 -0.004,5.02785 -0.004,5.02786 -3.44,0.0908 c -1.892,0.0499 -3.4587,-0.0221 -3.48155,-0.16 z"/>
+              <path fill="#5f3624" d="m 320.3539,163.39179 -0.32,-0.24236 -0.0139,-3.84 -0.0139,-3.84 -0.57925,-2.24 c -0.31859,-1.232 -1.37533,-3.85985 -2.34832,-5.83967 l -1.76907,-3.59966 0.18242,-1.36034 0.18242,-1.36033 0.98481,-0.88 0.98481,-0.88 h 1.42381 1.42382 l 1.08054,0.94873 c 2.17423,1.909 4.70285,8.142 5.32372,13.12288 0.38816,3.11394 0.45519,9.91854 0.098,9.94857 -2.50122,0.21027 -6.39632,0.24675 -6.64,0.0622 z"/>
+            </g>
+            <!-- 像的灰色外框沿整體外輪廓（path1094）畫。這裡要另外包一層帶 transform 的 g：
+                 <use> 只取被引用的那個元素本身，**不會套用它父層 g 的 transform**，
+                 直接引用 #cdOutline 會讓描邊整個偏移 (276,37)。fill 由這一層給 none，
+                 所以 path1094 自己不能寫死 fill（已移到 #cdSrc 上當繼承值）。 -->
+            <g id="cdOut" transform="translate(-276.03390,-37.31195)" fill="none"><use href="#cdOutline"/></g>
+            <!-- 光線方向箭頭。markerUnits 預設 strokeWidth，所以尺寸跟著線寬走 -->
+            <marker id="ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="4.4" markerHeight="4.4" orient="auto-start-reverse">
+              <path d="M0 1.6 L9 5 L0 8.4 z" fill="#D2700F"/>
+            </marker>
+          </defs>
+          <g id="scene"></g>
+        </svg>
+        <div class="legend" id="legend"></div>
+        <div class="screenwin" id="screenwin" hidden>
+          <div class="cap">紙屏正面</div>
+          <svg id="winsvg"><g id="winScene"></g></svg>
+        </div>
+        <div class="draghint" id="hintObj"><i class="fa-solid fa-arrows-left-right"></i></div>
+        <div class="draghint" id="hintPaper" hidden><i class="fa-solid fa-arrows-left-right"></i></div>
+        <!-- 遮板是上下拖，圖示用 fa-arrow-up-down（§2.8 定案，與左右拖的物體／紙屏區分） -->
+        <div class="draghint" id="hintMask"><i class="fa-solid fa-arrow-up-down"></i></div>
+      </div>
+      <div class="screen" id="screen3"><div class="placeholder">眼睛——開發中（階段 5）</div></div>
+    </div>
+
+    <div class="actioncard">
+      <button class="btn" id="btnReset"><i class="fa-solid fa-rotate-left"></i>重置這一頁</button>
       <div class="mobile-tabs">
         <button class="chip" id="tabSettings" aria-pressed="false"><i class="fa-solid fa-gear" style="margin-right:6px"></i>設定</button>
-        <button class="chip" id="tabData" aria-pressed="false"><i class="fa-solid fa-chart-simple" style="margin-right:6px"></i>數據</button>
       </div>
     </div>
-  </div>
+  </main>
 
-  <!-- 底部導覽列：單元內分頁（PhET screens） -->
+  <!-- 底部導覽列：單元內分頁。
+       **未完成的分頁在部署前要隱藏**（DESIGN_SPEC 第 1 節／DEV_SPEC 9.5：學生點進去是死路）。
+       目前四頁全露是開發期的暫時安排，尚未建 remote 與 Pages。 -->
   <nav class="bottomnav" id="nav">
-    <button class="navtab" data-screen="0" aria-selected="true">浮沉實驗</button>
-    <button class="navtab" data-screen="1" aria-selected="false">密度比較</button>
-    <button class="navtab" data-screen="2" aria-selected="false">挑戰任務</button>
+    <button class="navtab" data-screen="0" aria-selected="false">針孔成像</button>
+    <button class="navtab" data-screen="1" aria-selected="false">面鏡成像</button>
+    <button class="navtab" data-screen="2" aria-selected="true">透鏡成像</button>
+    <button class="navtab" data-screen="3" aria-selected="false">眼睛</button>
   </nav>
 </div>
 
-<!-- 說明彈窗（同時示範 HTML 上下標與分數的標準寫法） -->
 <div class="modal" id="helpModal">
   <div class="box">
     <h3>操作說明</h3>
-    <p>拖曳左欄滑桿調整質量與體積，按 <i class="fa-solid fa-play"></i> 播放觀察浮沉；方塊可直接左右拖曳。</p>
-    <p>密度公式：ρ = <span class="frac"><span class="num">M</span><span class="den">V</span></span>，
-       物體密度小於水（1.00 g/cm³）時漂浮。</p>
-    <p>化學式寫法示範（CSS 上下標，不影響行高）：H<sub>2</sub>O、CO<sub>2</sub>、Na<sup>+</sup>、SO<sub>4</sub><sup>2−</sup>、Ca<sup>2+</sup>。</p>
+    <p>畫面上不標任何數值，長度一律靠背景格線判讀：每一小格是一格，每 5 格有一條較深的主格線。
+       主軸是中央那條水平線，透鏡的鏡心在畫面正中央。</p>
+    <p><b>物體可以直接在畫布上左右拖曳</b>，左欄的物距拖桿會跟著顯示它落在哪一段；
+       反過來拉拖桿，物體會跳到該段的代表位置。打開紙屏後，紙屏也可以左右拖。</p>
+    <p><b>凸透鏡</b>的三條特徵光線：① 平行主軸射入、經透鏡後通過焦點；② 通過鏡心、方向不變；
+       ③ 通過焦點射入、經透鏡後平行主軸。三條都關掉時像仍在原處——像的位置由光路決定，
+       不是由畫了幾條線決定。</p>
+    <p><b>凹透鏡</b>只有第三條換個講法：射向另一側焦點的光，出射後平行主軸。第一條的出射光
+       不是通過焦點，而是「看起來像從焦點射出來」，所以往回的那一段畫成虛線。
+       不論物體放在哪裡，凹透鏡都只成正立縮小的虛像。</p>
+    <p><b>透鏡正上方那片遮板可以往下拉</b>，把透鏡遮掉一部分。被擋住的光線就不畫了，
+       但剩下的光仍然聚在同一點——像只會變暗，形狀不會少掉一半。整片遮住時才完全沒有像。</p>
     <button class="chip" id="btnCloseHelp" style="margin-left:auto">關閉</button>
   </div>
 </div>
 
 <script>
 'use strict';
-/* ═══ 1. 常數 ═══ */
-const FONT_STACK = 'system-ui, -apple-system, "Segoe UI", "PingFang TC", "Microsoft JhengHei", sans-serif';
-const G = 9.8;                 // m/s²
-const WATER_RHO = 1.0;         // g/cm³（= kg/L，方便換算）
-const WATER_LINE = 0.45;       // 水面在畫布高度的比例
-// 畫布繪圖色一律取自 DESIGN_SPEC 第 3 節，同一物理量跨單元同色
+/* ═══ 1. 常數 ═══
+   本模擬沒有隨時間推進的動畫（PROJECT_PLAN §2.1「一律不做動畫」），所以沒有 rAF 迴圈、
+   沒有 update(dt)。畫面只在「參數變更」「拖曳」與「尺寸變更」時重畫一次。
+   畫布用 inline SVG 而非 canvas：光線的白色外描邊與紙屏小窗的真高斯模糊都是 SVG／CSS
+   才有的能力，用 canvas 得另做離屏快取（DEV_SPEC 6.4 禁止每幀 filter）。 */
+const SVGNS = 'http://www.w3.org/2000/svg';
+
+const GRID_X = 22;          // 橫向固定 22 格（＝課本，PROJECT_PLAN §2.9 定案）。必須是偶數：
+                            // 透鏡壓在正中的格線上，奇數格會讓學生從半格起算
+const OPTICS_FRAC = 2 / 3;  // 光路收上 2/3，下 1/3 留給紙屏小窗與圖例卡（§2.5 第 8 點）
+const F_STEPS = [2, 3, 4];  // 焦距三檔（格），中檔 3 格 ＝ 課本那張圖
+const OBJ_H = 2;            // 物體高一律 2 格（§2.5 第 5 點）
+const LENS_H = 6;           // 透鏡高 6 格（＝課本），同時是模糊公式的透鏡口徑 A
+// 透鏡最厚 0.85 格（§2.11 定案）：確保 f=2 搭 f內（u=0.75 格、蠟燭右緣 0.44 格）時不重疊。
+// 焦距越短鏡面越彎，三檔對應三個厚度。
+const LENS_T = { 2:0.85, 3:0.65, 4:0.45 };
+// 凹透鏡的中央最薄處固定 0.18 格，鏡緣厚度 ＝ 0.18 ＋ 上面同一張表。
+// 兩種透鏡共用 LENS_T 當「單面相對中線的凹陷／凸出深度」，
+// 「焦距越短鏡面越彎」這條規則才不會出現第二份定義（DEV_SPEC 第 1 節「單一真相來源」）。
+const LENS_TC = 0.18;
+// 五檔物距的 k 值（u = k·f）與段名。代表值全部是使用者定的課本比例（§2.9）：
+// 1.75f 與 0.375f 直接取自課本量測，2.5f 是暫定值（數學上限 2.6f）。
+const U_SEGS = [
+  { k:2.5,   name:'2f 外' },
+  { k:2,     name:'2f 上' },
+  { k:1.75,  name:'f ~ 2f 間' },
+  { k:1,     name:'f 上' },
+  { k:0.375, name:'f 內' },
+];
+const U_DEFAULT_SEG = 2;    // 預設 f~2f 間：放大倒立實像，一開機就看得到核心命題（DEV_SPEC 9.4）
+// 各造型半寬（格）。上限不只是 §2.11 的 0.4：f=2 搭「f 內」時物距只有 0.75 格，
+// 半寬必須 < 0.75 − 0.425（半個最厚透鏡）＝ 0.325 格，物體才不會插進透鏡。
+const OBJ_HALF_W = { candle:0.312, arrow:0.28, f:0.3, parallel:0 };
+
+// 畫布繪圖色一律取自 DESIGN_SPEC 第 2、3 節的合格色定案表
 const C = {
-  buoy:'#2F9E63', gravity:'#D64545',
-  air:'#FDFAF3', water1:'#DBEAFE', water2:'#93C5FD', waterLine:'rgba(42,111,219,.45)',
-  wood:'#D9A05B', woodBd:'#A8763D', iron:'#8A94A3', ironBd:'#5F6B7E',
-  custom:'#F3D34E', customBd:'#C7A82C', tick:'#5F6B7E',
+  gridMinor:'#D5DAE1',  // 次格線 1.41:1
+  gridMajor:'#A6AEBA',  // 主格線 2.24:1
+  axis:'#7A8496',       // 主軸 3.77:1
+  mark:'#1C2433',       // F／2F 記號
+  ray:'#D2700F',        // 光線・延長線 3.46:1
+  glass:'#C5DDE8',      // 透鏡玻璃
+  gear:'#5F6B7E',       // 器材描邊
+  paper:'#FDFAF3',      // 紙屏面
+  eye:'#ECEFF3',        // 眼睛
+  img:'#67717F',        // 像的外框（灰）。實像實線、虛像虛線，不用顏色區分（§2.5 第 2 點）
+  objStroke:'#1C2433',  // 物體的黑色實線框
+  objFill:'#2A6FDB',    // 箭頭與 F 形的填色（蠟燭用自己的 svg 用色）
 };
-const PRESETS = { wood:{mass:6.5, vol:10}, iron:{mass:11.9, vol:1.5} };
+const IMG_OPACITY = 0.45;   // 實像與虛像的濃淡統一（§2.8 定案）
+
+// 蠟燭 svg 的座標換算：viewBox 高 300.66766、寬 92.802659，套 defs 內的 translate 後
+// 左上角在原點。把足端移到 (0,0)、水平置中，之後再乘「格→px」的縮放。
+const CANDLE = { h:300.66766, base:'translate(-46.40133,-300.66766)' };
 
 /* ═══ 2. state：單一物件，重置時整個換新 ═══ */
 function initState(){
   return {
-    screen:0, material:'wood', mass:6.5, vol:10, showForces:true,
-    speedBase:1, slow:false,
-    blockX:0.42,          // 方塊中心 x（畫布寬度比例）
-    blockTop:null,        // 方塊頂 y（px），null = 下一次 render 時放到平衡位置
-    fish:{x:0.7, dir:1},  // 魚的 x 比例與方向
-    bubbles:[{x:.2,y:.9},{x:.55,y:.72},{x:.85,y:.6}],
+    screen:2,
+    lens:'convex',                    // convex｜concave。凹透鏡只是焦距取負號，成像引擎完全共用
+    f:3,                              // 焦距的**絕對值**（格）。正負號一律由 signedF() 決定，
+                                      // state 不存負數——五檔物距、F／2F 記號、透鏡厚度都用絕對值
+    mask:0,                           // 遮板從透鏡上緣往下遮住的深度（格）。0 ＝ 停在上方沒遮到
+    u:U_SEGS[U_DEFAULT_SEG].k * 3,   // 物距（格）
+    shape:'candle',                   // 課本那張圖就是蠟燭
+    // ①② 預設開、③「通過焦點」預設關（使用者 2026-09-06 裁示，取代 §2.2 的「預設全開」）。
+    // 這三處（HTML 的 checked、這裡、重置的還原值）必須一致，DESIGN_SPEC 第 4 節。
+    rays:[true, true, false],
+    beam:false, paper:false, eye:false, legend:true,
+    paperV:null,                      // 紙屏的像距（格）；null = 打開時自動放到對焦處
   };
 }
 let state = initState();
 
-/* ═══ 3. 物理模型：純計算，不碰 DOM / canvas ═══ */
-function physics(){
-  const rho = state.mass / state.vol;                 // kg/L = g/cm³
-  const floats = rho < WATER_RHO;
-  const subFrac = Math.min(1, rho / WATER_RHO);       // 沒入比例
-  const buoyN = floats ? state.mass * G : WATER_RHO * state.vol * G;
-  const dispL = state.vol * subFrac;
-  const status = rho < 0.995 ? '漂浮' : rho > 1.005 ? '沉底' : '懸浮';
-  return { rho, floats, subFrac, buoyN, weightN: state.mass * G, dispL, status };
+/* ═══ 3. 幾何與成像：純計算，不碰 DOM ═══ */
+let stageW = 0, stageH = 0, G = null;
+function geom(){
+  const g = stageW / GRID_X;          // 格邊長：橫向格數固定，格子正方
+  const optH = stageH * OPTICS_FRAC;  // 光路區高度（其下為留白帶）
+  return {
+    W:stageW, H:stageH, g, optH,
+    cx:stageW / 2,       // 鏡心（透鏡固定在橫向正中）
+    axisY:optH / 2,      // 主軸在光路區的縱向中間
+    sc:g / 40,           // 格縮放係數：設計稿 D 表的線寬以「格 40px」為基準
+  };
 }
-function update(dt){
-  // 方塊朝平衡位置緩動（阻尼趨近，避免真實流體方程的複雜度）
-  const target = equilibriumTop(physics());
-  if (state.blockTop === null) state.blockTop = target;
-  state.blockTop += (target - state.blockTop) * Math.min(1, 4 * dt);
-  // 魚游動與轉向
-  state.fish.x += 0.06 * dt * state.fish.dir;
-  if (state.fish.x > 0.92) state.fish.dir = -1;
-  if (state.fish.x < 0.08) state.fish.dir = 1;
-  // 氣泡上升，到水面回到底部
-  for (const b of state.bubbles){
-    b.y -= 0.05 * dt;
-    if (b.y < WATER_LINE + 0.04) { b.y = 0.95; b.x = 0.1 + Math.random() * 0.8; }
+
+// 凹透鏡＝焦距取負號，薄透鏡公式一個字都不用改：v = uf/(u−f) 代負的 f 進去，
+// 自動得到「不論物距多少都是正立、縮小、位在物與鏡之間的虛像」。這就是階段 2 只換符號約定的意思。
+function signedF(){ return state.lens === 'concave' ? -state.f : state.f; }
+
+// 薄透鏡成像。u、f 單位是格，回傳的 v 同樣是格；m 為橫向放大率（負＝倒立）。
+// u = f 時出射光平行，不成像（v→∞），這是奇異點不是錯誤狀態。
+function imaging(u, f){
+  const d = u - f;
+  if (Math.abs(d) < 1e-6) return { none:true };
+  const v = u * f / d;
+  return { v, m:-v / u, real:v > 0 };
+}
+// 「平行光」＝物在無限遠：出射光全部通過焦點，等價於 v=f、放大率 0（聚成一點，沒有像的形狀）。
+// 這是焦點的定義本身，也讓紙屏的彌散斑公式原封不動就能用。
+function currentImage(){
+  const f = signedF();
+  // 凹透鏡的平行光聚不起來：v = −|f| 是虛焦點，出射光發散、反向延長線才交在焦點上
+  return state.shape === 'parallel'
+    ? { v:f, m:0, real:f > 0, parallel:true }
+    : imaging(state.u, f);
+}
+// 物距落在五檔的哪一段。「2f 上」與「f 上」是單點，其餘三個是區間，
+// 所以連動不對稱：拖物體時這裡只回報落點，不會把物體吸過去。
+function segOf(u, f){
+  const e = 0.06;
+  if (Math.abs(u - f) < e) return 3;
+  if (Math.abs(u - 2 * f) < e) return 1;
+  if (u > 2 * f) return 0;
+  if (u > f) return 2;
+  return 4;
+}
+// 該透鏡最厚處的半厚（格）。凸透鏡最厚在中央、凹透鏡最厚在鏡緣
+function lensMaxHalfT(){
+  return state.lens === 'convex' ? LENS_T[state.f] / 2 : LENS_TC / 2 + LENS_T[state.f] / 2;
+}
+// 物距的可拖範圍：近端不得讓物體插進透鏡（§2.9 未定 2 的解），遠端留住物體整個寬度
+function uRange(){
+  const halfT = lensMaxHalfT(), hw = OBJ_HALF_W[state.shape];
+  // 不加額外餘裕：§2.9／§2.10 定的「f=2 搭 f 內」就是 u=0.75 格、剛好貼著透鏡不重疊，
+  // 多夾 0.03 會讓那個定案位置拉不到。
+  // 凹透鏡取的是鏡緣半厚（最保守），所以 f=2 搭「f 內」會被夾到 0.827 格而不是 0.75——
+  // 物體只有 2 格高、那個高度上的鏡面其實還很薄，但寧可留白也不要讓蠟燭插進鏡片。
+  return { min:+(halfT + hw).toFixed(3), max:+(GRID_X / 2 - hw).toFixed(3) };
+}
+
+/* ── 遮板（§2.3 迷思概念「遮住透鏡一半，像會少一半」） ──
+   從透鏡上緣往下遮 state.mask 格。只有**打在透鏡上**的光線會被擋：三條特徵光線是作圖工具，
+   落在鏡緣以外時本來就不受口徑限制，不能因為板身畫過去就當它被擋住。 */
+function maskTopY(){ return G.axisY - LENS_H / 2 * G.g; }
+function maskBotY(){ return maskTopY() + state.mask * G.g; }
+function maskHalfW(){ return Math.max(0.3, lensMaxHalfT() + 0.05) * G.g; }
+function isBlocked(y){
+  return y !== null && y >= maskTopY() - 1e-6 && y < maskBotY() - 1e-6;
+}
+// 透光比例 → 亮度倍率。取 0.45 次方而不是線性：線性在遮掉七成時像就幾乎看不見了，
+// 學生反而看不到「形狀完全沒有變」——這一頁要證的正是形狀不變，不是亮度精確。
+function dimFactor(){
+  const open = Math.max(0, (LENS_H - state.mask) / LENS_H);
+  return open <= 0.001 ? 0 : Math.pow(open, 0.45);
+}
+// 三條特徵光線各自打在透鏡平面上的高度（③ 在 u≈f 時沒有交點，回 null）。
+// 繪製與圖例都讀這一支，「哪一條被遮住」才不會有兩套判斷。
+function lensHitY(i, P){
+  if (i === 0) return P.y;
+  if (i === 1) return G.axisY;
+  const f = signedF(), u = state.u;
+  if (Math.abs(u - f) < 0.02) return null;
+  return G.axisY - OBJ_H * G.g * f / (f - u);
+}
+
+/* ═══ 4. 繪製：讀 state 畫畫面，不改 state ═══
+   圖層順序照設計稿 D 表：越像「答案」的畫得越上面、越粗；越像「尺」的越下面、越細。
+   可被壓淡的只有完整光束與反向延長線；格線與三條特徵光線永不壓淡。 */
+const board = document.getElementById('board');
+const scene = document.getElementById('scene');
+function svgEl(tag, attrs){
+  const e = document.createElementNS(SVGNS, tag);
+  for (const k in attrs) if (attrs[k] !== null && attrs[k] !== undefined) e.setAttribute(k, attrs[k]);
+  return e;
+}
+const px = n => (Math.round(n * 100) / 100);
+
+// 物體造型 → 畫布的 transform。sx／sy 已含「格→px」；像用負的 sy 表示倒立。
+function shapeTF(shape, x, sx, sy){
+  if (shape === 'candle'){
+    const k = OBJ_H / CANDLE.h;      // svg 單位 → 格
+    return `translate(${px(x)},${px(G.axisY)}) scale(${(sx * k).toFixed(6)},${(sy * k).toFixed(6)}) ${CANDLE.base}`;
   }
+  return `translate(${px(x)},${px(G.axisY)}) scale(${sx.toFixed(4)},${sy.toFixed(4)})`;
 }
-
-/* ═══ 4. 繪製：讀 state 畫畫面，不改 state ═══ */
-let bgCtx, fgCtx, stageW = 0, stageH = 0;
-
-function blockSide(){ return 34 + state.vol * 4; }   // 體積 → 邊長（px），示意非等比
-function equilibriumTop(ph){
-  const side = blockSide(), waterY = stageH * WATER_LINE;
-  if (ph.floats) return waterY - side * (1 - ph.subFrac);
-  if (ph.status === '懸浮') return waterY + (stageH * 0.5 - side) * 0.5;
-  return stageH - 14 - side;                          // 沉底：留底部間隙
-}
-
-function renderBg(){
-  const ctx = bgCtx; if (!ctx) return;
-  ctx.clearRect(0, 0, stageW, stageH);
-  const waterY = stageH * WATER_LINE;
-  ctx.fillStyle = C.air;
-  ctx.fillRect(0, 0, stageW, waterY);
-  const grad = ctx.createLinearGradient(0, waterY, 0, stageH);
-  grad.addColorStop(0, C.water1); grad.addColorStop(1, C.water2);
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, waterY, stageW, stageH - waterY);
-  ctx.fillStyle = C.waterLine;
-  ctx.fillRect(0, waterY - 1, stageW, 2);
-  // 右側水深刻度（靜態內容只畫在背景層，參數不變就不重繪）
-  ctx.fillStyle = C.tick;
-  for (let i = 1; i <= 4; i++){
-    ctx.fillRect(stageW - 22, waterY + (stageH - waterY) * i / 5, 16, 2);
+// 箭頭與 F 形由模型繪製，與蠟燭共用同一組基準：足端在原點、總高 2 格、半寬 ≤0.4 格
+const SHAPE_D = {
+  arrow:'M-0.07 0 H0.07 V-1.4 H0.28 L0 -2 L-0.28 -1.4 H-0.07 Z',
+  f:'M-0.3 0 V-2 H0.3 V-1.75 H-0.12 V-1.15 H0.12 V-0.9 H-0.12 V0 Z',
+};
+// 物體與像共用這一支：像只是「換一組縮放 ＋ 灰色輪廓框 ＋ 降透明度」。
+// 外框一律 non-scaling-stroke，否則框線會跟著放大率一起被縮放。
+function drawShape(parent, shape, x, sx, sy, opt){
+  const tf = shapeTF(shape, x, sx, sy);
+  const strokeAttrs = {
+    fill:'none', stroke:opt.stroke, 'stroke-width':px(opt.sw),
+    'vector-effect':'non-scaling-stroke', 'stroke-linejoin':'round',
+    'stroke-dasharray':opt.dash || null, transform:tf,
+  };
+  if (shape === 'candle'){
+    parent.append(svgEl('use', { href:'#cdSrc', transform:tf, 'fill-opacity':opt.fillOpacity || null }));
+    parent.append(svgEl('use', Object.assign({ href:'#cdOut' }, strokeAttrs)));
+  } else {
+    parent.append(svgEl('path', {
+      d:SHAPE_D[shape], transform:tf, fill:C.objFill, 'fill-opacity':opt.fillOpacity || null,
+    }));
+    parent.append(svgEl('path', Object.assign({ d:SHAPE_D[shape] }, strokeAttrs)));
   }
-}
-
-function drawArrow(ctx, x, y0, y1, color, label){
-  // 力的向量標準畫法：3px 桿＋實心三角頭＋文字標籤（DESIGN_SPEC 第 3 節）
-  const dir = Math.sign(y1 - y0), head = 10;
-  ctx.strokeStyle = color; ctx.lineWidth = 3;
-  ctx.beginPath(); ctx.moveTo(x, y0); ctx.lineTo(x, y1 - dir * head); ctx.stroke();
-  ctx.fillStyle = color;
-  ctx.beginPath();
-  ctx.moveTo(x, y1);
-  ctx.lineTo(x - 7, y1 - dir * head);
-  ctx.lineTo(x + 7, y1 - dir * head);
-  ctx.closePath(); ctx.fill();
-  ctx.font = `700 ${12 * U}px ${FONT_STACK}`;   // canvas 內的字級是字面量，media query 管不到，一律乘 U
-  ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-  ctx.fillText(label, x + 12, (y0 + y1) / 2);
 }
 
 function render(){
-  const ctx = fgCtx; if (!ctx) return;
-  ctx.clearRect(0, 0, stageW, stageH);
-  const ph = physics();
-  const side = blockSide();
-  if (state.blockTop === null) state.blockTop = equilibriumTop(ph);
-  const bx = state.blockX * stageW - side / 2, by = state.blockTop;
+  if (!(stageW > 0 && stageH > 0)) return;
+  G = geom();
+  scene.textContent = '';
+  const g = G.g, cx = G.cx, ax = G.axisY;
+  const f = state.f, u = state.u;
+  const im = currentImage();
+  const P = { x:cx - u * g, y:ax - OBJ_H * g };          // 物體頂端＝特徵光線的起點
 
-  // 氣泡（一顆帶 H₂O 標籤，示範 canvas 內化學式）
-  ctx.strokeStyle = 'rgba(255,255,255,.85)'; ctx.lineWidth = 1.5;
-  state.bubbles.forEach((b, i) => {
-    ctx.beginPath(); ctx.arc(b.x * stageW, b.y * stageH, 5, 0, Math.PI * 2); ctx.stroke();
-    if (i === 0) drawFormula(ctx, 'H_2O', b.x * stageW + 10, b.y * stageH + 4, 12, '#3B5578');
+  // 光路只畫在上 2/3；下 1/3 是留白帶，圖例卡與小窗放那裡
+  const clip = svgEl('clipPath', { id:'optClip' });
+  clip.append(svgEl('rect', { x:0, y:0, width:px(G.W), height:px(G.optH) }));
+  scene.append(clip);
+  const L = svgEl('g', { 'clip-path':'url(#optClip)' });
+  scene.append(L);
+
+  // ── 第 1、2 層：格線。以鏡心與主軸為基準每 5 格一條主格線——基準若取畫布左緣，
+  // 主格線會落在與物理無關的位置，學生從透鏡起算就對不上。
+  const minor = [], major = [];
+  const iL = Math.ceil(cx / g), iR = Math.ceil((G.W - cx) / g);
+  for (let i = -iL; i <= iR; i++){
+    const x = cx + i * g;
+    if (x < 0 || x > G.W) continue;
+    (i % 5 === 0 ? major : minor).push(`M${px(x)} 0V${px(G.optH)}`);
+  }
+  const jU = Math.ceil(ax / g), jD = Math.ceil((G.optH - ax) / g);
+  for (let j = -jU; j <= jD; j++){
+    const y = ax + j * g;
+    if (y < 0 || y > G.optH) continue;
+    (j % 5 === 0 ? major : minor).push(`M0 ${px(y)}H${px(G.W)}`);
+  }
+  L.append(
+    svgEl('path', { d:minor.join(''), stroke:C.gridMinor, 'stroke-width':1, fill:'none' }),
+    svgEl('path', { d:major.join(''), stroke:C.gridMajor, 'stroke-width':1.4, fill:'none' })
+  );
+
+  // ── 第 3 層：主軸（實線。課本畫虛線，但本專案守住「虛線只有三個用途」，§2.7）
+  L.append(svgEl('line', { x1:0, y1:px(ax), x2:px(G.W), y2:px(ax), stroke:C.axis, 'stroke-width':2 }));
+
+  // ── 第 4 層：透鏡（雙凸或雙凹，高 6 格）
+  drawLens(L);
+
+  // ── 第 5 層：紙屏（含屏上的像）
+  if (state.paper) drawPaper(L, im);
+
+  // ── 第 6～8 層：光路
+  drawRays(L, P, im);
+
+  // ── 第 8b 層：遮板。畫在光路之上——它是擋在透鏡前面的一片不透明板子，
+  // 被它擋住的光線在 drawRays 裡就已經不畫了，所以蓋上去不會遮到「應該看得見」的線
+  drawMask(L);
+
+  // ── 第 9 層：物體（平行光模式沒有物體，光從畫面外平行射入）
+  if (!im.parallel) drawShape(L, state.shape, P.x, g, g, { stroke:C.objStroke, sw:2 * G.sc });
+
+  // ── 第 10 層：像
+  drawImage(L, im);
+
+  // ── 第 11 層：觀察者眼睛
+  if (state.eye) drawEye(L, im);
+
+  // ── 第 12 層：F／2F 記號。實心圓點標在主軸上，F 與 2F 都標字母（§2.7 定案，
+  // 與課本不同：課本只標 F）。永遠最上層並加白色外描邊。
+  const fs = Math.round(20 * U), r = 4 * G.sc;
+  const gm = svgEl('g', {});
+  for (const [k, label] of [[-2, '2F'], [-1, 'F'], [1, 'F'], [2, '2F']]){
+    const x = cx + k * f * g;
+    if (x < 0 || x > G.W) continue;   // 焦距大、畫布窄時 2F 可能落在畫布外
+    gm.append(svgEl('circle', { cx:px(x), cy:px(ax), r:px(r), fill:C.mark }));
+    const t = svgEl('text', {
+      x:px(x), y:px(ax + r + fs * 0.95), 'text-anchor':'middle', 'font-size':fs, 'font-weight':700,
+      fill:C.mark, stroke:'#fff', 'stroke-width':3, 'paint-order':'stroke',
+    });
+    t.textContent = label;
+    gm.append(t);
+  }
+  L.append(gm);
+
+  drawOutOfRange(L, im);
+  syncOverlays(im, P);
+}
+
+/* 透鏡。二次貝茲的最大偏移是控制點的一半，所以控制點一律取 2×目標偏移。
+   凸透鏡：中央最厚 LENS_T、鏡緣收成一點。
+   凹透鏡：中央固定薄 LENS_TC、鏡緣厚 LENS_TC ＋ LENS_T，兩側鏡面往內凹。
+   同一張曲率表換一個方向用，兩種透鏡共用「焦距越短鏡面越彎」這條規則。 */
+function drawLens(L){
+  const g = G.g, cx = G.cx, ax = G.axisY, half = LENS_H / 2 * g;
+  const bow = LENS_T[state.f] / 2 * g;      // 單面相對中線的凹陷／凸出深度
+  let d;
+  if (state.lens === 'convex'){
+    d = `M${px(cx)} ${px(ax - half)} Q${px(cx + 2 * bow)} ${px(ax)} ${px(cx)} ${px(ax + half)}`
+      + ` Q${px(cx - 2 * bow)} ${px(ax)} ${px(cx)} ${px(ax - half)} Z`;
+  } else {
+    const hc = LENS_TC / 2 * g, he = hc + bow;   // 中央半厚、鏡緣半厚
+    // 控制點取 (2·hc − he)，貝茲中點才會落在 ±hc（中點 ＝ (P0 + 2C + P2) ÷ 4）
+    d = `M${px(cx - he)} ${px(ax - half)} Q${px(cx - 2 * hc + he)} ${px(ax)} ${px(cx - he)} ${px(ax + half)}`
+      + ` L${px(cx + he)} ${px(ax + half)} Q${px(cx + 2 * hc - he)} ${px(ax)} ${px(cx + he)} ${px(ax - half)} Z`;
+  }
+  L.append(svgEl('path', {
+    d, fill:C.glass, 'fill-opacity':0.6, stroke:C.gear,
+    'stroke-width':px(2 * G.sc), 'stroke-linejoin':'round',
+  }));
+}
+
+/* 遮板：一片從上方拉下來的不透明板子。停在 mask=0 時只露出 0.35 格的板緣貼在透鏡上方，
+   不做成整條長桿——長桿會把透鏡上方那片格線整片蓋掉，學生就數不到格子了。 */
+function drawMask(L){
+  const g = G.g, cx = G.cx, top = maskTopY(), bot = maskBotY(), hw = maskHalfW();
+  const lip = 0.35 * g;
+  L.append(svgEl('rect', {
+    x:px(cx - hw), y:px(top - lip), width:px(2 * hw), height:px(bot - top + lip),
+    fill:C.gear, rx:px(0.05 * g),
+  }));
+  if (dimFactor() !== 0) return;
+  // 全遮住時「像不見了」必須講清楚為什麼，否則學生只看到東西消失（DEV_SPEC 5.2 狀態要看得見）
+  const t = svgEl('text', {
+    x:px(cx), y:px(G.axisY + LENS_H / 2 * g + 0.95 * g), 'text-anchor':'middle',
+    'font-size':Math.round(13 * U), 'font-weight':700, fill:C.mark,
+    stroke:'#fff', 'stroke-width':3, 'paint-order':'stroke',
   });
+  t.textContent = '透鏡被完全遮住，沒有光通過';
+  L.append(t);
+}
 
-  // 魚：sprite 貼圖，禁止動畫幀內 fillText emoji（DEV_SPEC 6.3）
-  const fishY = stageH * (WATER_LINE + 0.38);
-  ctx.drawImage(makeSprite('🐟', 30, state.fish.dir > 0), state.fish.x * stageW - 30, fishY - 30);
+/* 光路：三條特徵光線、反向延長線、完整光束。
+   光線起點是物體頂端；蠟燭與火焰同色，所以每條線先畫一層白色粗描邊再畫橘線
+   （§2.11 定案「光線加白外描邊」），否則起點會與火焰糊在一起。 */
+function drawRays(L, P, im){
+  const g = G.g, cx = G.cx, ax = G.axisY, f = signedF(), u = state.u;
+  const W = G.W;
+  const solid = [], dashed = [];
 
-  // 方塊
-  const matC = state.material === 'iron' ? [C.iron, C.ironBd]
-             : state.material === 'wood' ? [C.wood, C.woodBd] : [C.custom, C.customBd];
-  ctx.fillStyle = matC[0]; ctx.strokeStyle = matC[1]; ctx.lineWidth = 2;
-  roundRect(ctx, bx, by, side, side, 6); ctx.fill(); ctx.stroke();
+  // 出射後的交會點（實像在右、虛像在左）。u = f 時三條線互相平行、沒有交點。
+  const I = im.none ? null : { x:cx + im.v * g, y:ax - im.m * OBJ_H * g };
 
-  // 力的箭頭：起點在幾何中心，長度 ∝ 力的大小
-  if (state.showForces){
-    const cx = bx + side / 2, cy = by + side / 2;
-    const scale = 60 / Math.max(ph.buoyN, ph.weightN);
-    drawArrow(ctx, cx, cy, cy - Math.max(18, ph.buoyN * scale), C.buoy, '浮力');
-    drawArrow(ctx, cx, cy, cy + Math.max(18, ph.weightN * scale), C.gravity, '重力');
+  // 平行光：一束平行主軸的光射入。凸透鏡出射後全部通過焦點——這就是焦點的定義本身；
+  // 凹透鏡出射後發散，要把反向延長線畫出來才看得到它們交在虛焦點上。
+  // 條數取 5（課本畫法）：3px 的實線再多，在透鏡附近會糊成一片。
+  // 這個模式沒有物體，三條特徵光線也不適用，所以把它們一起關掉。
+  const rays = im.parallel ? [false, false, false] : state.rays;
+  if (im.parallel){
+    const n = 5, half = LENS_H / 2 * g * 0.82;
+    for (let i = 0; i < n; i++){
+      const y = ax - half + (2 * half) * i / (n - 1);
+      if (isBlocked(y)) continue;
+      solid.push(`M0 ${px(y)}H${px(cx)}`);
+      solid.push(`M${px(cx)} ${px(y)}L${px(W)} ${px(y + (ax - y) / (f * g) * (W - cx))}`);
+      // 焦點在 (cx + f·g, ax)：凸透鏡在右（實際通過）、凹透鏡在左（反向延長線才到得了）
+      if (!im.real) dashed.push(`M${px(cx)} ${px(y)}L${px(cx + f * g)} ${px(ax)}`);
+    }
+  }
+
+  // ① 平行主軸射入 → 出射線一定通過 (cx + f·g, ax)：
+  // 凸透鏡是真的通過右焦點，凹透鏡是「看起來像從左焦點射出來」，所以要補反向延長線。
+  if (rays[0] && !isBlocked(P.y)){
+    solid.push(`M${px(P.x)} ${px(P.y)}H${px(cx)}`);
+    const k = (ax - P.y) / (f * g);                 // f 帶負號時斜率跟著反號，出射即發散
+    solid.push(`M${px(cx)} ${px(P.y)}L${px(W)} ${px(P.y + k * (W - cx))}`);
+    if (I && !im.real) dashed.push(`M${px(cx)} ${px(P.y)}L${px(I.x)} ${px(I.y)}`);
+  }
+  // ② 通過鏡心 → 方向不變
+  if (rays[1] && !isBlocked(ax)){
+    const k = (ax - P.y) / (cx - P.x);
+    solid.push(`M${px(P.x)} ${px(P.y)}L${px(W)} ${px(ax + k * (W - cx))}`);
+    // 只有「虛像比物體更外側」（凸透鏡當放大鏡）才需要往左上補延長線。
+    // 凹透鏡的虛像落在物與鏡之間，那一段本來就是實際光線走過的路，再畫虛線會疊在實線上。
+    if (I && !im.real && I.x < P.x) dashed.push(`M${px(P.x)} ${px(P.y)}L${px(I.x)} ${px(I.y)}`);
+  }
+  // ③ 入射線從物體頂端射向 (cx − f·g, ax)，出射後平行主軸。
+  // 凸透鏡：那一點是左焦點，光真的通過它；凹透鏡：f 反號後那一點變成右焦點，
+  // 光是「朝著它去」但在透鏡就被折開了——課本講的「射向另一側焦點」，同一式子通用。
+  const y3 = lensHitY(2, P);
+  if (rays[2] && y3 !== null && !isBlocked(y3)){
+    if (Math.abs(y3 - ax) < G.optH * 4){            // 太接近 f 時 y3 會爆掉，超過畫布數倍就不畫
+      solid.push(`M${px(P.x)} ${px(P.y)}L${px(cx)} ${px(y3)}`);
+      solid.push(`M${px(cx)} ${px(y3)}H${px(W)}`);
+      if (I && !im.real) dashed.push(`M${px(cx)} ${px(y3)}L${px(I.x)} ${px(I.y)}`);
+    }
+  }
+
+  // 第 6 層：完整光束。從物體頂端發出十幾條，全部收斂到同一點——
+  // 這正是「像不是那三條線交出來的」的證據。透明度 40%（§2.8 定案）。
+  if (state.beam){
+    const beam = [];
+    const half = LENS_H / 2 * g, n = 13;
+    for (let i = 0; i < n; i++){
+      const y = ax - half + (2 * half) * i / (n - 1);
+      // 被遮板擋住的那幾條整條不畫——剩下的仍然聚到同一點，這就是「像不會少一半」的證據
+      if (isBlocked(y)) continue;
+      // 平行光的入射段從畫布左緣平行射入；其餘造型是從物體頂端發散
+      beam.push(im.parallel ? `M0 ${px(y)}H${px(cx)}`
+                            : `M${px(P.x)} ${px(P.y)}L${px(cx)} ${px(y)}`);
+      if (im.none){                                  // 出射光全部平行，射出畫面不成像
+        const k = (ax - P.y) / (f * g);
+        beam.push(`M${px(cx)} ${px(y)}L${px(G.W)} ${px(y + k * (G.W - cx))}`);
+      } else {
+        // 出射方向：實像是「透鏡上的點 → 像點」；虛像的像點在透鏡**左**側，光線並沒有真的
+        // 往左跑，而是往右發散、看起來才像從那一點射出來——方向要取反，否則整束光會射錯邊。
+        const dx = I.x - cx, dy = I.y - y;
+        const dirX = im.real ? dx : -dx, dirY = im.real ? dy : -dy;
+        const s = (G.W - cx) / dirX;   // dirX 恆為正，終點一律落在畫布右緣
+        beam.push(`M${px(cx)} ${px(y)}L${px(cx + dirX * s)} ${px(y + dirY * s)}`);
+      }
+    }
+    L.append(svgEl('path', {
+      d:beam.join(''), fill:'none', stroke:C.ray, 'stroke-width':px(1.8 * G.sc),
+      opacity:0.4, 'stroke-linejoin':'round',
+    }));
+  }
+
+  // 第 7 層：反向延長線（虛像才有）。虛線、降透明度，是「虛像只有三個虛線用途」的第二種。
+  if (dashed.length){
+    L.append(svgEl('path', {
+      d:dashed.join(''), fill:'none', stroke:C.ray, 'stroke-width':px(3 * G.sc),
+      opacity:0.5, 'stroke-dasharray':`${px(7 * G.sc)} ${px(5 * G.sc)}`,
+    }));
+  }
+  // 第 8 層：三條特徵光線。同色同粗（§2.5 第 14 點），先鋪白邊再畫橘線。
+  // 白邊可以合併成一條 path，橘線**必須逐段各自一個 path**：marker-end 只認整條 path 的
+  // 最後一個頂點，合併起來就只有最後一段長得出箭頭。marker 屬性可繼承，掛在 g 上即可。
+  if (solid.length){
+    L.append(svgEl('path', {
+      d:solid.join(''), fill:'none', stroke:'#fff', 'stroke-width':px(3 * G.sc + 3.4),
+      'stroke-linecap':'round', 'stroke-linejoin':'round',
+    }));
+    const gr = svgEl('g', {
+      fill:'none', stroke:C.ray, 'stroke-width':px(3 * G.sc),
+      'stroke-linecap':'round', 'stroke-linejoin':'round', 'marker-end':'url(#ah)',
+    });
+    for (const seg of solid) gr.append(svgEl('path', { d:seg }));
+    L.append(gr);
   }
 }
-function roundRect(ctx, x, y, w, h, r){
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.arcTo(x + w, y, x + w, y + h, r);
-  ctx.arcTo(x + w, y + h, x, y + h, r);
-  ctx.arcTo(x, y + h, x, y, r);
-  ctx.arcTo(x, y, x + w, y, r);
-  ctx.closePath();
+
+/* 像：實像＝灰色實線框，虛像＝灰色虛線框，濃淡一致（§2.6 C2／C3、§2.8）。
+   蠟燭的像保留紅黃、只換外框（§2.6 C4）。 */
+function drawImage(L, im){
+  if (im.none || Math.abs(im.m) < 1e-6) return;   // 平行光聚成一點，沒有形狀可畫
+  const dim = dimFactor();
+  if (dim === 0) return;                          // 透鏡整片被遮住，沒有光通過就沒有像
+  const g = G.g;
+  const x = G.cx + im.v * g;
+  // 遮板遮掉的是進光量，不是像的哪一半：整個像一起變暗，位置與形狀一個字都不動
+  const gg = dim < 1 ? svgEl('g', { opacity:px(dim) }) : L;
+  drawShape(gg, state.shape, x, Math.abs(im.m) * g, im.m * g, {
+    stroke:C.img, sw:0.1 * g, fillOpacity:IMG_OPACITY,
+    dash:im.real ? null : `${px(0.28 * g)} ${px(0.2 * g)}`,
+  });
+  if (gg !== L) L.append(gg);
 }
 
-// 數據卡只在參數變更時更新，不在動畫幀內寫 DOM
-function updateReadouts(){
-  const ph = physics();
-  document.getElementById('outRho').textContent = ph.rho.toFixed(2);
-  document.getElementById('outBuoy').textContent = ph.buoyN.toFixed(1);
-  document.getElementById('outDisp').textContent = ph.dispL.toFixed(1);
-  document.getElementById('outState').textContent = ph.status;
-  document.getElementById('massVal').textContent = state.mass.toFixed(1);
-  document.getElementById('volVal').textContent = state.vol.toFixed(1);
+/* 紙屏：左高右低的平行四邊形（落差 0.8 格），不畫厚度側面（§2.6 9a）。
+   屏上的像用相似三角形定位：主光線通過鏡心，所以屏在 vs 處攔到的像高 ＝ 物高 × vs/u。
+   彌散斑 d = A × |屏距 − 像距| ÷ 像距，A 取透鏡口徑。 */
+function paperV(){
+  const im = currentImage();
+  if (state.paperV !== null) return state.paperV;
+  return (im.none || !im.real) ? 9 : Math.min(im.v, GRID_X / 2 - 0.6);
+}
+// 屏上的光斑直徑（格）。實像是會聚後再散開、虛像與凹透鏡是「看起來從像點發散過來」，
+// 兩者都等於 口徑 × |屏距 − 像距| ÷ |像距|，取絕對值之後同一式子通用。
+// 〔階段 2 修訂：原本 !im.real 直接回 null，屏上永遠畫同一團固定大小的光。凹透鏡**只有**虛像，
+//   那樣拖屏完全沒有回饋，學生驗證不到「越拉遠越散」。〕
+function blurOf(im, vs){
+  if (im.none) return null;                          // 出射光互相平行：屏上是等寬光帶，沒有彌散斑
+  return LENS_H * Math.abs(vs - im.v) / Math.abs(im.v);
+}
+// 散開的光有多亮：光量固定、攤開的面積越大就越暗。用來畫「接不到的那一團光」
+function spreadOpacity(d){
+  return Math.max(0.12, Math.min(0.85, 0.85 * LENS_H / Math.max(d, LENS_H)));
+}
+function drawPaper(L, im){
+  const g = G.g, ax = G.axisY, vs = paperV();
+  const x = G.cx + vs * g, half = LENS_H / 2 * g, skew = 0.4 * g, w = 0.15 * g;
+  L.append(svgEl('path', {
+    d:`M${px(x - w)} ${px(ax - half - skew)}L${px(x + w)} ${px(ax - half + skew)}`
+      + `L${px(x + w)} ${px(ax + half + skew)}L${px(x - w)} ${px(ax + half - skew)}Z`,
+    fill:C.paper, stroke:C.gear, 'stroke-width':px(2 * G.sc), 'stroke-linejoin':'round',
+  }));
+  // 屏上的像：側視圖只表現得出高度，二維的樣子交給下方小窗
+  const dim = dimFactor();
+  if (dim === 0 || im.none) return;                  // 全遮或不成像：屏面上什麼都接不到
+  const d = blurOf(im, vs);
+  if (im.parallel || !im.real){
+    // 接不到像：屏上是一段散開的光，長度＝光斑直徑，越散越暗。
+    // 凸透鏡的平行光把屏放到焦點上會收成一點，凹透鏡則不論放哪裡都散——這正是要學生自己拖出來的
+    const hh = Math.min(G.optH / 2, Math.max(0.05 * g, d * g / 2));
+    L.append(svgEl('line', { x1:px(x), y1:px(ax - hh), x2:px(x), y2:px(ax + hh),
+      stroke:C.ray, 'stroke-width':px(3 * G.sc), 'stroke-linecap':'round',
+      opacity:px(spreadOpacity(d) * dim) }));
+  } else if (vs > 0.2){
+    const sy = -(vs / state.u) * g;                  // 負號＝倒立
+    const gg = svgEl('g', { opacity:px(Math.max(0.18, 0.75 - d * 0.5) * dim) });
+    drawShape(gg, state.shape, x, Math.abs(vs / state.u) * g, sy, { stroke:C.img, sw:0.06 * g, fillOpacity:0.5 });
+    L.append(gg);
+  }
 }
 
-/* ═══ 共用 helper：canvas 化學式（DEV_SPEC 4.4，照抄不要改） ═══ */
-function parseFormula(str){
-  const segs = []; let i = 0;
-  while (i < str.length){
-    const ch = str[i];
-    if (ch === '_' || ch === '^'){
-      const kind = ch === '_' ? 'sub' : 'sup'; let t;
-      if (str[i + 1] === '{'){ const end = str.indexOf('}', i + 2); t = str.slice(i + 2, end); i = end + 1; }
-      else { t = str[i + 1]; i += 2; }
-      segs.push({ t, [kind]: true });
+/* 觀察者眼睛：固定在觀察側主軸稍上方、不可拖（§2.2）。
+   畫的是「眼睛收到來自像的方向的光」——實像用實線，虛像用虛線（那是腦補的方向）。 */
+function drawEye(L, im){
+  const g = G.g, ax = G.axisY;
+  const ex = G.cx + 8.5 * g, ey = ax - 1.6 * g, r = 0.55 * g;
+  if (!im.none){
+    const I = { x:G.cx + im.v * g, y:ax - im.m * OBJ_H * g };
+    L.append(svgEl('line', {
+      x1:px(I.x), y1:px(I.y), x2:px(ex - r * 1.6), y2:px(ey),
+      stroke:C.ray, 'stroke-width':px(2 * G.sc), opacity:0.55,
+      'stroke-dasharray':im.real ? null : `${px(6 * G.sc)} ${px(4 * G.sc)}`,
+    }));
+  }
+  // 杏仁形眼睛：兩段對稱的二次貝茲 ＋ 瞳孔
+  L.append(svgEl('path', {
+    d:`M${px(ex - r * 1.6)} ${px(ey)} Q${px(ex)} ${px(ey - r * 1.15)} ${px(ex + r * 1.6)} ${px(ey)}`
+      + ` Q${px(ex)} ${px(ey + r * 1.15)} ${px(ex - r * 1.6)} ${px(ey)} Z`,
+    fill:C.eye, stroke:C.gear, 'stroke-width':px(2.4 * G.sc), 'stroke-linejoin':'round',
+  }));
+  L.append(svgEl('circle', { cx:px(ex), cy:px(ey), r:px(r * 0.42), fill:C.gear }));
+}
+
+/* 出界提示（PROJECT_PLAN §2.7：這是常態功能不是備案）。
+   u→f 時 v→∞，任何有限格數都無法全覆蓋，所以「像在更遠處」與「不成像」必須畫得出來。
+   最嚴禁的是圖上消失但讀數照報——這裡本來就不報數值，改成在邊緣講清楚發生了什麼。 */
+function drawOutOfRange(L, im){
+  const g = G.g, ax = G.axisY;
+  let label = null;
+  if (im.none) label = '出射光互相平行，不成像';
+  else if (im.real && G.cx + im.v * g > G.W - 0.3 * g) label = '像在更遠處';
+  else if (!im.real && G.cx + im.v * g < 0.3 * g) label = '虛像在更遠處';
+  if (!label) return;
+  const toRight = im.none || im.real;
+  const x = toRight ? G.W - 14 : 14, dir = toRight ? 1 : -1;
+  const y = ax - 1.1 * g;
+  const gg = svgEl('g', {});
+  gg.append(svgEl('path', {
+    d:`M${px(x)} ${px(y)}L${px(x - dir * 13)} ${px(y - 8)}L${px(x - dir * 13)} ${px(y + 8)}Z`,
+    fill:C.mark,
+  }));
+  const t = svgEl('text', {
+    x:px(x - dir * 20), y:px(y + 5), 'text-anchor':toRight ? 'end' : 'start',
+    'font-size':Math.round(13 * U), 'font-weight':700, fill:C.mark,
+    stroke:'#fff', 'stroke-width':3, 'paint-order':'stroke',
+  });
+  t.textContent = label;
+  gg.append(t);
+  L.append(gg);
+}
+
+/* HTML 疊層：圖例卡、紙屏小窗、拖曳暗示。三者都在留白帶或貼著器材，不進 SVG。 */
+// 第三條在兩種透鏡的講法不同：凸透鏡是「通過焦點射入」，凹透鏡是「射向另一側焦點」。
+// 左欄核取的文字與圖例卡讀同一份，兩處不會分岔。
+const RAY_NAMES = {
+  convex:['① 平行主軸', '② 通過鏡心', '③ 通過焦點'],
+  concave:['① 平行主軸', '② 通過鏡心', '③ 射向焦點'],
+};
+function syncRayNames(){
+  const names = RAY_NAMES[state.lens];
+  for (let i = 0; i < 3; i++) document.getElementById('rn' + i).textContent = names[i];
+}
+function syncOverlays(im, P){
+  const legend = document.getElementById('legend');
+  legend.hidden = !state.legend;
+  if (state.legend){
+    legend.textContent = '';
+    const row = (cls, html) => {
+      const d = document.createElement('div');
+      d.className = 'row' + cls; d.innerHTML = html; legend.append(d);
+    };
+    if (im.parallel){
+      row('', '<span class="ln"></span>平行主軸射入的光');
+      row('', '<span class="ln grey"></span>出射後全部通過焦點 F');
     } else {
-      let j = i;
-      while (j < str.length && str[j] !== '_' && str[j] !== '^') j++;
-      segs.push({ t: str.slice(i, j) }); i = j;
+      // 關掉的那條不從卡上消失，改成灰虛線＋「已關閉」——畫面上不留沒有物理意義的灰線，
+      // 但「本來有三條」這件事仍要看得到。被遮板擋掉的同理：學生要看得出線是**為什麼**不見的。
+      const names = RAY_NAMES[state.lens];
+      state.rays.forEach((on, i) => {
+        const blocked = on && isBlocked(lensHitY(i, P));
+        row(on && !blocked ? '' : ' off',
+          `<span class="ln"></span>${names[i]}${!on ? '（已關閉）' : blocked ? '（被遮板擋住）' : ''}`);
+      });
+      row('', dimFactor() === 0 ? '<span class="ln grey"></span>透鏡被完全遮住'
+        : im.none ? '<span class="ln grey"></span>此位置不成像'
+        : im.real ? '<span class="ln grey"></span>實像（倒立）'
+                  : '<span class="ln greydash"></span>虛像（正立）');
     }
   }
-  return segs;
-}
-function measureFormula(ctx, formula, px){
-  const segs = typeof formula === 'string' ? parseFormula(formula) : formula;
-  let w = 0;
-  for (const s of segs){
-    ctx.font = `${(s.sub || s.sup) ? Math.round(px * 0.62) : px}px ${FONT_STACK}`;
-    w += ctx.measureText(s.t).width;
+
+  // 紙屏小窗：屏是一條線、屏上的像是二維的，正視圖補這一半。模糊用真高斯 filter:blur()。
+  const win = document.getElementById('screenwin');
+  win.hidden = !state.paper;
+  if (state.paper){
+    win.style.top = px(G.optH + 12) + 'px';   // 貼齊留白帶頂端，高度由 CSS 的 bottom:12px 撐滿
+    drawWindow(im);
   }
-  return w;
-}
-function drawFormula(ctx, formula, x, y, px, color){
-  const segs = typeof formula === 'string' ? parseFormula(formula) : formula;
-  ctx.save();
-  ctx.fillStyle = color; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
-  let cx = x;
-  for (const s of segs){
-    const size = (s.sub || s.sup) ? Math.round(px * 0.62) : px;
-    const dy = s.sub ? px * 0.20 : s.sup ? -px * 0.45 : 0;
-    ctx.font = `${size}px ${FONT_STACK}`;
-    ctx.fillText(s.t, cx, y + dy);
-    cx += ctx.measureText(s.t).width;
+
+  // 拖曳暗示：雙向箭頭貼在器材足端下方（平行光沒有物體可拖）
+  const hintObj = document.getElementById('hintObj');
+  hintObj.hidden = !!im.parallel;
+  hintObj.style.left = px(G.cx - state.u * G.g) + 'px';
+  hintObj.style.top = px(G.axisY + 6) + 'px';
+  const hintPaper = document.getElementById('hintPaper');
+  hintPaper.hidden = !state.paper;
+  if (state.paper){
+    hintPaper.style.left = px(G.cx + paperV() * G.g) + 'px';
+    hintPaper.style.top = px(G.axisY + LENS_H / 2 * G.g + 6) + 'px';
   }
-  ctx.restore();
+  // 遮板的暗示貼在板子下緣左側：貼下緣正中會壓在透鏡上，看起來像透鏡的一部分
+  const hintMask = document.getElementById('hintMask');
+  hintMask.style.left = px(G.cx - maskHalfW() - 13) + 'px';
+  hintMask.style.top = px(maskBotY() - 9) + 'px';
+  syncControls(im);
 }
 
-/* ═══ 共用 helper：emoji sprite 預渲染（DEV_SPEC 6.3，照抄不要改） ═══ */
-const spriteCache = {};
-function makeSprite(emoji, px, flip = false){
-  const key = emoji + px + (flip ? 'f' : '');
-  if (spriteCache[key]) return spriteCache[key];
-  const c = document.createElement('canvas');
-  c.width = c.height = px * 2;
-  const g = c.getContext('2d');
-  g.font = `${px}px ${FONT_STACK}`;
-  g.textAlign = 'center'; g.textBaseline = 'middle';
-  if (flip){ g.translate(c.width, 0); g.scale(-1, 1); }
-  g.fillText(emoji, px, px);
-  spriteCache[key] = c;
-  return c;
-}
-function ensureSpritesReady(emoji, px, onReady, tries = 0){
-  const s = makeSprite(emoji, px);
-  const data = s.getContext('2d').getImageData(0, 0, s.width, s.height).data;
-  const blank = !data.some(v => v !== 0);
-  if (blank && tries < 60){
-    delete spriteCache[emoji + px];
-    requestAnimationFrame(() => ensureSpritesReady(emoji, px, onReady, tries + 1));
-  } else onReady();
+// 平行光模式下「物距」與「特徵光線」都不適用。停用而不是整組隱藏：隱藏會讓左欄高度
+// 跳動，也讓學生不知道那些控制項去哪了；物距的讀數改寫「物在無限遠」講清楚原因。
+function syncControls(im){
+  const par = !!im.parallel;
+  document.getElementById('uSlider').disabled = par;
+  for (const id of ['chkR1', 'chkR2', 'chkR3']) document.getElementById(id).disabled = par;
+  document.getElementById('uGroup').classList.toggle('off', par);
+  document.getElementById('rayGroup').classList.toggle('off', par);
+  if (par) document.getElementById('uSegName').textContent = '物在無限遠';
 }
 
-/* ═══ 5. 互動：Pointer Events（滑鼠/觸控/觸控筆單一寫法） ═══ */
-
-/* 下拉選單（DESIGN_SPEC 第 4 節）。closeAllDd() 與下面兩個 document 監聽器逐字搬自
-   motion-graphs-sim 的 .dd 實作，不要自行改寫——用 capture 與「點在自己身上不關」
-   這兩點都是踩過才寫成這樣的。 */
-function closeAllDd(){
-  for (const d of document.querySelectorAll('.dd.open')){
-    d.classList.remove('open');
-    const b = d.querySelector('.dd-btn');
-    if (b) b.setAttribute('aria-expanded', 'false');
+// 小窗畫的是屏面正視：像在這裡是二維的，離焦時整幅糊掉。
+// 尺度取「小窗高度 ＝ 10 格」，模糊半徑也跟著同一個尺度算——小窗改高度時不必回頭重調常數。
+function drawWindow(im){
+  const g2 = document.getElementById('winScene');
+  const svg = document.getElementById('winsvg');
+  g2.textContent = '';
+  const w = svg.clientWidth, h = svg.clientHeight;
+  if (!(w > 0 && h > 0)) return;               // 小窗還沒排版完（剛打開那一幀）就先不畫
+  const cx = w / 2, cy = h / 2, k = h / 10;
+  const vs = paperV();
+  const dim = dimFactor();
+  g2.setAttribute('opacity', px(dim));         // 遮板遮掉的是進光量，整幅一起變暗、形狀不變
+  if (dim === 0) return;
+  if (im.none){
+    // 出射光互相平行：屏面上是一片沒有結構的散光，屏放在哪裡都一樣
+    svg.style.filter = `blur(${px(k * 0.5)}px)`;
+    g2.append(svgEl('ellipse', { cx:px(cx), cy:px(cy), rx:px(w * 0.29), ry:px(h * 0.24), fill:C.ray, 'fill-opacity':0.32 }));
+    return;
   }
-}
-// 點到下拉以外的任何地方就收起來。用 capture 才不會被其他 handler 先攔掉；
-// 點在下拉自己身上時不關，否則選項還沒收到 click 就消失了
-document.addEventListener('pointerdown', e => {
-  if (!e.target.closest('.dd')) closeAllDd();
-}, true);
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeAllDd();
-});
-/* 以下的綁定方式與 motion 不同：那邊的紙帶清單會增減，用 innerHTML 重建＋事件委派；
-   這裡是靜態下拉，直接綁在元素上。清單如果會動態重建，改抄 motion 的委派寫法。 */
-for (const dd of document.querySelectorAll('.dd')){
-  const btn = dd.querySelector('.dd-btn');
-  btn.addEventListener('click', () => {
-    const willOpen = !dd.classList.contains('open');
-    closeAllDd();
-    if (willOpen){
-      dd.classList.add('open');
-      btn.setAttribute('aria-expanded', 'true');
-    }
-  });
-  dd.querySelector('.dd-list').addEventListener('click', e => {
-    const opt = e.target.closest('button[role="option"]');
-    if (!opt) return;
-    for (const o of dd.querySelectorAll('button[role="option"]'))
-      o.setAttribute('aria-selected', String(o === opt));
-    dd.querySelector('.dd-btn .v').textContent = opt.textContent;
-    closeAllDd();
-    // 呼叫端接這個事件拿新值：dd.addEventListener('dd:change', e => e.detail.value)
-    dd.dispatchEvent(new CustomEvent('dd:change', { detail:{ value:opt.dataset.v }, bubbles:true }));
-  });
-}
-const fgCanvas = document.getElementById('fgCanvas');
-let dragging = false;
-fgCanvas.addEventListener('pointerdown', e => {
-  const r = fgCanvas.getBoundingClientRect();
-  const x = e.clientX - r.left, y = e.clientY - r.top;
-  const side = blockSide(), bx = state.blockX * stageW - side / 2;
-  if (x > bx - 10 && x < bx + side + 10 && y > state.blockTop - 10 && y < state.blockTop + side + 10){
-    dragging = true;
-    fgCanvas.setPointerCapture(e.pointerId);   // 拖出畫布邊界也不會斷
+  const d = blurOf(im, vs);                    // 光斑直徑（格）
+  if (im.parallel || !im.real){
+    // 接不到像：屏面上是一團圓斑。凸透鏡的平行光在焦點處最小最亮；
+    // 凹透鏡與虛像則是屏拉得越遠、斑越大越淡——拖屏必須有回饋，才驗證得出「虛像接不到」
+    const r = Math.max(2, d * k / 2);
+    svg.style.filter = `blur(${px(Math.max(1, r * 0.22))}px)`;
+    g2.append(svgEl('ellipse', {
+      cx:px(cx), cy:px(cy), rx:px(Math.min(w * 0.46, r)), ry:px(Math.min(h * 0.46, r)),
+      fill:C.ray, 'fill-opacity':px(spreadOpacity(d)),
+    }));
+    return;
   }
-});
-fgCanvas.addEventListener('pointermove', e => {
-  if (!dragging) return;
-  const r = fgCanvas.getBoundingClientRect();
-  state.blockX = Math.min(0.9, Math.max(0.1, (e.clientX - r.left) / stageW));
-  if (!running) render();
-});
-fgCanvas.addEventListener('pointerup', e => {
-  dragging = false;
-  fgCanvas.releasePointerCapture(e.pointerId);
-});
-
-// 材質膠囊
-document.getElementById('matChips').addEventListener('click', e => {
-  const btn = e.target.closest('.chip'); if (!btn) return;
-  for (const c of document.querySelectorAll('#matChips .chip')) c.setAttribute('aria-pressed', c === btn);
-  state.material = btn.dataset.mat;
-  const p = PRESETS[state.material];
-  if (p){
-    state.mass = p.mass; state.vol = p.vol;
-    setSlider('massSlider', p.mass); setSlider('volSlider', p.vol);
-  }
-  state.blockTop = null;   // 材質切換直接跳到新平衡位置
-  onParamChange();
-});
-
-function setSlider(id, v){
-  const el = document.getElementById(id);
-  el.value = v; refreshFill(el);
+  svg.style.filter = `blur(${(d * k * 0.55).toFixed(2)}px)`;
+  const scale = vs / state.u;                  // 屏上像高 ＝ 物高 × vs/u（相似三角形，主光線過鏡心）
+  // drawShape 讀的是模組級的 G，小窗換一套尺度作圖，畫完立刻換回來
+  const gsave = G;
+  G = { axisY:cy, g:k, sc:1, cx, W:w, optH:h, H:h };
+  drawShape(g2, state.shape, cx, Math.abs(scale) * k, -scale * k,
+    { stroke:C.img, sw:k * 0.13, fillOpacity:0.85 });
+  G = gsave;
+  if (OBJ_H * scale * k < 2) g2.append(svgEl('circle', { cx:px(cx), cy:px(cy), r:3, fill:C.ray, 'fill-opacity':0.6 }));
 }
+
+/* ═══ 5. 互動 ═══ */
 function refreshFill(el){
-  const pct = (el.value - el.min) / (el.max - el.min) * 100;
-  el.style.setProperty('--fill', pct + '%');
+  el.style.setProperty('--fill', (el.value - el.min) / (el.max - el.min) * 100 + '%');
 }
-document.getElementById('massSlider').addEventListener('input', e => {
-  state.mass = +e.target.value; refreshFill(e.target); markCustom(); onParamChange();
-});
-document.getElementById('volSlider').addEventListener('input', e => {
-  state.vol = +e.target.value; refreshFill(e.target); markCustom(); onParamChange();
-});
-function markCustom(){
-  // 手動調滑桿即脫離預設材質
-  if (state.material === 'custom') return;
-  state.material = 'custom';
-  for (const c of document.querySelectorAll('#matChips .chip'))
-    c.setAttribute('aria-pressed', c.dataset.mat === 'custom');
-}
-function onParamChange(){
-  updateReadouts();
-  if (!running) { if (state.blockTop === null) state.blockTop = equilibriumTop(physics()); render(); }
-}
-document.getElementById('chkForces').addEventListener('change', e => {
-  state.showForces = e.target.checked;
-  if (!running) render();
-});
-/* 速度：分段切換器三檔。設值一律走 setSpeed()——播放、重置、鍵盤都走同一個入口，
-   才不會出現「state 改了但按鈕沒亮」這種漏同步（DESIGN_SPEC 第 4 節疊層那條的同一個道理） */
-function setSpeed(v){
-  state.speedBase = v;
-  for (const b of document.querySelectorAll('#segSpeed button'))
-    b.setAttribute('aria-pressed', String(+b.dataset.speed === v));
-}
-document.getElementById('segSpeed').addEventListener('click', e => {
-  const b = e.target.closest('button[data-speed]');
-  if (b) setSpeed(+b.dataset.speed);
-});
-document.getElementById('chkSlow').addEventListener('change', e => { state.slow = e.target.checked; });
-
-/* ═══ 6. 動畫迴圈（DEV_SPEC 6.2 骨架） ═══ */
-let running = false, wasRunning = false, last = 0, rafId = 0;
-function effSpeed(){ return state.speedBase * (state.slow ? 0.25 : 1); }
-function loop(ts){
-  if (!running) return;
-  const dt = Math.min((ts - last) / 1000, 0.05);   // 鉗 50ms：切分頁回來不跳格
-  last = ts;
-  update(dt * effSpeed());
+// 物距一律走這裡設值：拖桿、拖物體、換焦距三條路徑共用同一個入口，
+// 才不會出現「state 改了但拖桿沒動」這種漏同步
+function setU(u, fromSlider){
+  const r = uRange();
+  state.u = Math.min(r.max, Math.max(r.min, u));
+  const seg = segOf(state.u, state.f);
+  document.getElementById('uSegName').textContent = U_SEGS[seg].name;
+  if (!fromSlider){
+    const sl = document.getElementById('uSlider');
+    sl.value = seg; refreshFill(sl);
+  }
   render();
-  rafId = requestAnimationFrame(loop);
 }
-function play(){
-  if (running) return;
-  running = true; last = performance.now();
-  rafId = requestAnimationFrame(loop);
-  document.querySelector('#btnPlay i').className = 'fa-solid fa-pause';
-  document.getElementById('btnPlay').setAttribute('aria-label', '暫停');
+// 換透鏡（焦距或種類）前先把紙屏當下的位置固定住：paperV() 在使用者還沒拖過時回傳的是
+// 「當前對焦處」，像距一變紙屏就會自己跑掉。固定住之後看到的才是「原本對焦的屏現在糊了」。
+function freezePaper(){
+  if (state.paper && state.paperV === null) state.paperV = paperV();
 }
-function pause(){
-  running = false; cancelAnimationFrame(rafId);
-  document.querySelector('#btnPlay i').className = 'fa-solid fa-play';
-  document.getElementById('btnPlay').setAttribute('aria-label', '播放');
+function setLens(v){
+  if (state.lens === v) return;
+  freezePaper();
+  state.lens = v;
+  for (const b of document.querySelectorAll('#lensSeg button'))
+    b.setAttribute('aria-pressed', String(b.dataset.lens === v));
+  syncRayNames();
+  // 物距不動（比照焦距的 A 類裁示），但可拖範圍與段名要重算：
+  // 凹透鏡最厚處在鏡緣，近端會比凸透鏡再退開一點
+  setU(state.u, false);
 }
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden){ wasRunning = running; pause(); }
-  else if (wasRunning) play();
+function setF(v){
+  freezePaper();
+  state.f = v;
+  for (const b of document.querySelectorAll('#fChips .chip'))
+    b.setAttribute('aria-pressed', String(+b.dataset.f === v));
+  // 切焦距只改焦距：物體與紙屏都留在原處，學生才看得到「同一個物距、換一個透鏡」的差別。
+  // u 的數值不動，但它相對於新的 F／2F 落在哪一段會變，setU 會重新判段並把拖桿移過去。
+  setU(state.u, false);
+}
+document.getElementById('lensSeg').addEventListener('click', e => {
+  const b = e.target.closest('button[data-lens]');
+  if (b) setLens(b.dataset.lens);
 });
-document.getElementById('btnPlay').addEventListener('click', () => running ? pause() : play());
-document.getElementById('btnStep').addEventListener('click', () => {
-  if (running) return;
-  update((1 / 60) * effSpeed()); render();
+document.getElementById('fChips').addEventListener('click', e => {
+  const b = e.target.closest('.chip[data-f]');
+  if (b) setF(+b.dataset.f);
 });
+document.getElementById('shapeChips').addEventListener('click', e => {
+  const b = e.target.closest('.chip[data-shape]');
+  if (!b) return;
+  for (const c of document.querySelectorAll('#shapeChips .chip'))
+    c.setAttribute('aria-pressed', String(c === b));
+  state.shape = b.dataset.shape;
+  setU(state.u, false);                // 造型換了半寬也換，可拖範圍要重新夾一次
+});
+document.getElementById('uSlider').addEventListener('input', e => {
+  refreshFill(e.target);
+  state.paperV = null;
+  setU(U_SEGS[+e.target.value].k * state.f, true);
+});
+for (const [id, key, idx] of [['chkR1','rays',0], ['chkR2','rays',1], ['chkR3','rays',2]]){
+  document.getElementById(id).addEventListener('change', e => {
+    state[key][idx] = e.target.checked; render();
+  });
+}
+for (const [id, key] of [['chkBeam','beam'], ['chkPaper','paper'], ['chkEye','eye'], ['chkLegend','legend']]){
+  document.getElementById(id).addEventListener('change', e => {
+    state[key] = e.target.checked;
+    if (key === 'paper' && e.target.checked) state.paperV = null;
+    render();
+  });
+}
+
+/* 畫布拖曳：物體與紙屏。一律 Pointer Events ＋ setPointerCapture（鐵律 5），
+   拖出畫布邊界也不會斷線。 */
+let drag = null;
+board.addEventListener('pointerdown', e => {
+  if (!G) return;
+  const r = board.getBoundingClientRect();
+  const x = e.clientX - r.left, y = e.clientY - r.top;
+  const objX = G.cx - state.u * G.g;
+  const tol = Math.max(22, 0.7 * G.g);
+  if (state.paper){
+    const pX = G.cx + paperV() * G.g;
+    if (Math.abs(x - pX) < tol && Math.abs(y - G.axisY) < LENS_H / 2 * G.g + tol){
+      drag = 'paper'; board.setPointerCapture(e.pointerId); return;
+    }
+  }
+  if (state.shape !== 'parallel'
+      && Math.abs(x - objX) < tol && y > G.axisY - OBJ_H * G.g - tol && y < G.axisY + tol){
+    drag = 'obj'; board.setPointerCapture(e.pointerId); return;
+  }
+  // 遮板放最後判：它的命中範圍橫跨透鏡上方一大片，先判會把貼近透鏡的物體整個蓋掉。
+  // 縱向從板緣上方 0.9 格起算，物體的命中區（主軸往上 2 格）與它只差幾十 px，不會互搶。
+  if (Math.abs(x - G.cx) < maskHalfW() + 14
+      && y > maskTopY() - 0.9 * G.g && y < maskBotY() + 0.6 * G.g){
+    drag = 'mask'; board.setPointerCapture(e.pointerId);
+  }
+});
+board.addEventListener('pointermove', e => {
+  if (!drag) return;
+  const r = board.getBoundingClientRect();
+  const x = e.clientX - r.left, y = e.clientY - r.top;
+  if (drag === 'obj'){
+    setU((G.cx - x) / G.g, false);
+  } else if (drag === 'mask'){
+    // 遮板只在透鏡那 6 格之內移動：拉到底就是整片遮住，再往下沒有意義
+    state.mask = Math.min(LENS_H, Math.max(0, (y - maskTopY()) / G.g));
+    render();
+  } else {
+    // 紙屏只能放在透鏡右側，且不得拖出畫布
+    state.paperV = Math.min(GRID_X / 2 - 0.6, Math.max(0.6, (x - G.cx) / G.g));
+    render();
+  }
+});
+for (const ev of ['pointerup', 'pointercancel']){
+  board.addEventListener(ev, e => {
+    if (!drag) return;
+    drag = null;
+    if (board.hasPointerCapture(e.pointerId)) board.releasePointerCapture(e.pointerId);
+  });
+}
+
 document.getElementById('btnReset').addEventListener('click', () => {
-  pause();
   state = initState();
-  setSlider('massSlider', state.mass); setSlider('volSlider', state.vol);
-  setSpeed(state.speedBase);
-  document.getElementById('chkSlow').checked = false;
-  document.getElementById('chkForces').checked = true;
-  for (const c of document.querySelectorAll('#matChips .chip'))
-    c.setAttribute('aria-pressed', c.dataset.mat === 'wood');
-  updateReadouts(); renderBg(); render();
+  for (const b of document.querySelectorAll('#lensSeg button'))
+    b.setAttribute('aria-pressed', String(b.dataset.lens === state.lens));
+  syncRayNames();
+  for (const c of document.querySelectorAll('#fChips .chip'))
+    c.setAttribute('aria-pressed', String(+c.dataset.f === state.f));
+  for (const c of document.querySelectorAll('#shapeChips .chip'))
+    c.setAttribute('aria-pressed', String(c.dataset.shape === state.shape));
+  const sl = document.getElementById('uSlider');
+  sl.value = U_DEFAULT_SEG; refreshFill(sl);
+  for (const [id, v] of [['chkR1',true], ['chkR2',true], ['chkR3',false],
+                         ['chkBeam',false], ['chkPaper',false], ['chkEye',false], ['chkLegend',true]])
+    document.getElementById(id).checked = v;
+  setU(state.u, false);
 });
 
-/* ═══ 7. 初始化 ═══ */
+// 分頁切換（單一 html 內 display 切換）
+document.getElementById('nav').addEventListener('click', e => {
+  const tab = e.target.closest('.navtab'); if (!tab) return;
+  const n = +tab.dataset.screen;
+  state.screen = n;
+  for (const t of document.querySelectorAll('.navtab')) t.setAttribute('aria-selected', String(t === tab));
+  for (const s of document.querySelectorAll('.screen')) s.classList.remove('active');
+  document.getElementById('screen' + n).classList.add('active');
+  if (n === 2) relayout();   // 隱藏時量到的尺寸是 0，切回來要重新量
+});
+
+// <900px：設定以浮出面板呈現（兩欄配置只有這一顆 chip）
+document.getElementById('tabSettings').addEventListener('click', () => {
+  const on = document.body.classList.toggle('show-settings');
+  document.getElementById('tabSettings').setAttribute('aria-pressed', String(on));
+});
+
+/* ═══ 6. 初始化 ═══ */
 // 實體像素只算這一處：uiScale() 與 layoutScale() 都要判裝置級別，兩邊各寫一次就是
 // 同一個常數出現兩個字面量（DEV_SPEC 第 1 節「單一真相來源」）
 function physPx(){
@@ -759,115 +1251,59 @@ function physPx(){
 }
 // UI 等比放大（DEV_SPEC 5.4）：依「實體像素」判裝置級別，不是 CSS 寬度、也不是斷點
 function uiScale(){
-  // 網址帶 ?u=1.8 直接指定倍率，蓋過自動判定。教室大屏把帶參數的網址存成書籤就好——
-  // 自動判定依賴 screen API，它在部分環境要等很久才有值、甚至一直回 0，不能當唯一手段。
+  // 網址帶 ?u=1.8 直接指定倍率，蓋過自動判定。自動判定依賴 screen API，
+  // 它在部分環境要等很久才有值、甚至一直回 0，不能當唯一手段。
   const forced = parseFloat(new URLSearchParams(location.search).get('u'));
   if (forced > 0) return clampScale(forced);
-  const sw = Math.max(window.screen.width || 0, window.innerWidth || 0) || 1280;
-  const cssW = window.innerWidth || sw;
-  const phys = physPx();   // 實體像素＝裝置級別
+  const cssW = window.innerWidth || 1280;
+  const phys = physPx();
   let u;
   if (phys >= 3000){
     // 教室觸控大屏。要補償的是「一個 CSS px 等於幾毫米」，那取決於系統縮放設定：
-    // 同一台 3840 大屏，Windows 100% 給 3840 CSS px（每 px 很小、要放大 2.3 倍），
-    // 200% 給 1920 CSS px（每 px 已經夠大、1.15 倍就夠）。與 CSS 寬度成正比才能
-    // 讓字的「實際物理高度」不隨縮放設定改變。
+    // 同一台 3840 大屏，Windows 100% 給 3840 CSS px（要放大 2.3 倍），200% 給 1920（1.15 倍就夠）。
     u = cssW / 1920 * 1.15;
   } else if (phys >= 2000){
     u = 1.15;   // 平板：把 12–13px 的主體字拉過 14px 的近距離可讀底線
   } else {
-    u = 1;      // 桌機：坐 60 cm 看，現況已夠清楚
+    u = 1;      // 桌機
   }
   return clampScale(u);
 }
-// 放大到版面容不下時，flex 會被擠成負值、畫布被吃到剩幾十 px 高，整個畫面等於作廢
+// 放大到版面容不下時，grid 會被擠爆、畫布被吃到剩幾十 px 高
 function clampScale(u){
   const cssW = window.innerWidth || 1280, cssH = window.innerHeight || 800;
   return Math.max(1, Math.min(u, 4, cssW / 900, cssH / 620));
 }
-// 版面放大係數（DEV_SPEC 5.4）：固定 px 的欄寬乘的是它。平板只放大字級（--ul 維持 1），
-// 教室大屏連版面一起放大。手動 ?u= 一律視為大屏用途（存書籤投影），版面跟著放大。
+// 版面放大係數：固定 px 的欄寬乘的是它。平板只放大字級（--ul 維持 1），教室大屏連版面一起放大
 function layoutScale(u){
   const forced = parseFloat(new URLSearchParams(location.search).get('u'));
   return (forced > 0 || physPx() >= 3000) ? u : 1;
 }
 let U = uiScale(), UL = layoutScale(U);
-// 初值也必須無條件寫進 CSS。applyScale() 只在「值有變化」時才寫，若載入當下算出的 U
-// 就已經是最終值，CSS 的 --u 會一直停在 :root 的預設 1 —— canvas 用 U 排版、CSS 用 1，
-// 兩者就對不上（DEV_SPEC 第 1 節「單一真相來源」）。
+// 初值也必須無條件寫進 CSS：只在「值有變化」時才寫，會讓初值即終值的情況永遠停在預設 1
 function writeScale(){
   document.documentElement.style.setProperty('--u', String(U));
   document.documentElement.style.setProperty('--ul', String(UL));
 }
 writeScale();
-// 回傳「這次有沒有真的改變」：有改變會讓版面尺寸變動並再觸發一次 fitAll，
-// 下一次 uiScale() 算出同值就回 false，因此不會無限循環。
-// UL 也要比對：視窗被拖到另一台螢幕時，u 可能算出同值而裝置級別已經變了（5.4-6）
+// UL 也要比對：視窗被拖到另一台螢幕時，u 可能算出同值而裝置級別已經變了（DEV_SPEC 5.4-6）
 function applyScale(){
   const u = uiScale(), ul = layoutScale(u);
-  if (Math.abs(u - U) < 1e-6 && Math.abs(ul - UL) < 1e-6) return false;
+  if (Math.abs(u - U) < 1e-6 && Math.abs(ul - UL) < 1e-6) return;
   U = u; UL = ul;
   writeScale();
-  return true;
 }
 
-// 畫布尺寸與 DPR（DEV_SPEC 6.1）：高 DPR 平板鉗 2，之後全用 CSS px 座標
-function fitCanvas(canvas){
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  const r = canvas.getBoundingClientRect();
-  canvas.width = Math.round(r.width * dpr);
-  canvas.height = Math.round(r.height * dpr);
-  const ctx = canvas.getContext('2d');
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  return ctx;
-}
-const bgCanvas = document.getElementById('bgCanvas');
-function fitAll(){
-  applyScale();                // 視窗尺寸或所在螢幕改變時，重算放大係數
-  const r = document.getElementById('screen0').getBoundingClientRect();
+function relayout(){
+  applyScale();
+  const r = document.getElementById('screen2').getBoundingClientRect();
   stageW = r.width; stageH = r.height;
-  bgCtx = fitCanvas(bgCanvas);
-  fgCtx = fitCanvas(fgCanvas);
-  state.blockTop = null;       // 尺寸變了，方塊回平衡位置
-  renderBg(); render();
+  render();
 }
-new ResizeObserver(fitAll).observe(document.getElementById('stageWrap'));
-
-// 換螢幕（筆電接投影機、外接不同 DPI 螢幕）時 DPR 變了但 CSS 尺寸不變，
-// ResizeObserver 不會觸發，canvas 會維持舊解析度而糊掉——課堂投影正是這個情境（DEV_SPEC 6.1）
-function watchDPR(){
-  matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`)
-    .addEventListener('change', () => { fitAll(); watchDPR(); }, { once:true });   // 每次觸發後用新 DPR 重新註冊
-}
-watchDPR();
-// screen API 在頁面剛載入時可能回報 0，uiScale() 會因此算錯 → load 後補算一次；
-// 視窗被拖到另一台螢幕時 screen.width 也會變
-window.addEventListener('load', fitAll);
-window.addEventListener('resize', fitAll);
-
-// 分頁切換（單一 html 內 display 切換）
-document.getElementById('nav').addEventListener('click', e => {
-  const tab = e.target.closest('.navtab'); if (!tab) return;
-  const n = +tab.dataset.screen;
-  if (n !== 0) pause();        // 離開模擬分頁就暫停，不浪費效能
-  state.screen = n;
-  for (const t of document.querySelectorAll('.navtab')) t.setAttribute('aria-selected', t === tab);
-  for (const s of document.querySelectorAll('.screen')) s.classList.remove('active');
-  document.getElementById('screen' + n).classList.add('active');
-  if (n === 0) fitAll();
-});
-
-// <768px：設定 / 數據以浮出面板呈現
-function bindSheet(btnId, cls, otherCls){
-  document.getElementById(btnId).addEventListener('click', e => {
-    const open = document.body.classList.toggle(cls);
-    document.body.classList.remove(otherCls);
-    document.getElementById('tabSettings').setAttribute('aria-pressed', document.body.classList.contains('show-settings'));
-    document.getElementById('tabData').setAttribute('aria-pressed', document.body.classList.contains('show-data'));
-  });
-}
-bindSheet('tabSettings', 'show-settings', 'show-data');
-bindSheet('tabData', 'show-data', 'show-settings');
+new ResizeObserver(relayout).observe(document.getElementById('stageWrap'));
+// screen API 在頁面剛載入時可能回報 0，uiScale() 會因此算錯 → load 後補算一次
+window.addEventListener('load', relayout);
+window.addEventListener('resize', relayout);
 
 // 全螢幕（DEV_SPEC 5.2）：API 不存在就把按鈕藏起來，不留無效按鈕
 const appEl = document.getElementById('app');
@@ -896,11 +1332,10 @@ function syncFullBtn(){
 }
 if (appEl.requestFullscreen || appEl.webkitRequestFullscreen){
   fullBtn.addEventListener('click', () => {
-    if (isFull()) { exitFull(); return; }
+    if (isFull()){ exitFull(); return; }
     const enter = (appEl.requestFullscreen || appEl.webkitRequestFullscreen).bind(appEl);
     try { Promise.resolve(enter()).catch(() => {}); } catch (e) {}
   });
-  // 用 Esc 或系統手勢離開時圖示也要跟著切回來
   for (const ev of ['fullscreenchange', 'webkitfullscreenchange'])
     document.addEventListener(ev, syncFullBtn);
   syncFullBtn();
@@ -913,11 +1348,9 @@ document.getElementById('helpModal').addEventListener('click', e => {
   if (e.target === e.currentTarget) e.currentTarget.classList.remove('open');
 });
 
-// 起始：滑桿填色、數據卡、sprite 就緒後強制重繪一次（字形未 ready 首繪會空白）
-for (const el of document.querySelectorAll('input[type="range"]')) refreshFill(el);
-updateReadouts();
-fitAll();
-ensureSpritesReady('🐟', 30, () => { makeSprite('🐟', 30, true); render(); });
+syncRayNames();   // HTML 的預設值是凸透鏡，這一行是為了讓「文字只有一個來源」成立
+refreshFill(document.getElementById('uSlider'));
+relayout();
 </script>
 </body>
 </html>
