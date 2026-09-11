@@ -98,11 +98,11 @@ button:active,.chip:active,label.check:active{transform:scale(.96);filter:bright
 /* padding 下緣為 0：那一段留給抽屜自己的 margin:8px，兩者相加才等於上緣的 12px。
    2026-09-10 加回抽屜時一併改回來（取消抽屜那次改成 12px，見 §3 開頭的註解） */
 main{flex:1;position:relative;display:grid;
-  grid-template-columns:minmax(302px,1fr) 3fr;grid-template-rows:1fr auto;
+  grid-template-columns:minmax(302px,1fr) 3fr;grid-template-rows:1fr;
   gap:12px;padding:12px 14px 0;min-height:0}
 /* 控制項多於一屏時左欄自己捲動（PROJECT_PLAN §2.5 第 15 點「由模型調整」）：
    min-height:0 不可省——它是 grid item 又是 flex container，預設 min-height:auto
-   會依內容高度撐開整列，把動作卡擠出畫面而且不會出現捲軸。 */
+   會依內容高度撐開整列，捲軸也不會出現。 */
 .panel{grid-column:1;grid-row:1;background:var(--c-surface);border:1px solid var(--c-bd);border-radius:10px;
   padding:12px;display:flex;flex-direction:column;gap:6px;min-width:0;min-height:0;overflow-y:auto}
 .panel h2{font-size:calc(13px * var(--u));font-weight:700;margin:0}
@@ -118,37 +118,42 @@ main{flex:1;position:relative;display:grid;
    核取列高 44 是命中區下限不能減，改排兩欄才是不違規的解。
    欄距 10px：每格寬約 145px 遠大於 44，水平方向命中區不會互相重疊。 */
 .checkgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
-/* 動作卡（DESIGN_SPEC 第 1 節）：與左欄同寬、緊貼其下方。**不得加陰影**——
-   陰影只有抽屜、滑桿把手、.seg 選中格三個例外，動作卡不是抽屜。 */
-.actioncard{grid-column:1;grid-row:2;background:var(--c-surface);border:1px solid var(--c-bd);
-  border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px}
-.btn{width:100%;height:44px;border-radius:10px;background:var(--c-primary);color:#fff;
-  font-size:calc(14px * var(--u));font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px}
-.stage{grid-column:2;grid-row:1 / span 2;position:relative;background:var(--c-surface);
+/* 〔2026-09-11 移除動作卡：DESIGN_SPEC 第 1 節寫明動作卡是**沒有抽屜**的模擬才用的元件，
+   而重置與叫出設定面板的 chip 都該留在抽屜裡（第 1 節「抽屜只放播放控制…以及跟著它們走的重置」、
+   以及「這兩顆 chip 有抽屜的模擬放抽屜裡」）。本模擬兩者都放進了動作卡，是上一批加抽屜時
+   沒有回頭查規範造成的。**A** 使用者 2026-09-11「如果我要求加入元件，一定要先看有沒有既有規範」。〕 */
+.stage{grid-column:2;grid-row:1;position:relative;background:var(--c-surface);
   border:1px solid var(--c-bd);border-radius:10px;overflow:hidden;min-width:0;min-height:0}
 .board{position:absolute;inset:0;width:100%;height:100%}
 .mobile-tabs{display:none;gap:8px;flex:none}
 
 /* gap 6 在觸控時很容易按到隔壁頁，規範定值是 10 */
-/* 底部抽屜（DESIGN_SPEC 第 1 節「抽屜的存廢」）。本模擬 2026-09-10 起有播放動畫，
-   符合「有隨時間推進的動畫才設抽屜」的判準；樣式比照 motion-graphs-sim/index.html:262-277。
-   陰影往上打是抽屜的三個例外之一（動作卡不得有），表示它浮在畫布之上。 */
-.drawer{flex:none;margin:8px 14px;background:var(--c-surface);border:1px solid var(--c-bd);
-  border-radius:12px;padding:6px 18px 8px;box-shadow:0 -4px 12px rgba(28,36,51,.05)}
-.drawer-row{display:flex;align-items:center;gap:20px}
+/* 底部抽屜（DESIGN_SPEC 第 1 節「抽屜的存廢」與「抽屜盒模型」）。本模擬 2026-09-10 起有播放
+   動畫，符合「有隨時間推進的動畫才設抽屜」的判準。
+   盒模型**照規範的定值**：margin 12/14、padding 10/20/12、r12、內部 `.row` gap 20。
+   〔2026-09-11 更正：上一批照抄 `motion-graphs-sim/index.html:262-277` 的 margin 8 ／
+     padding 6-18-8，那是 2026-08-26 使用者為那個模擬單獨指定的壓縮值，不是規範值，
+     照抄等於把例外擴散出去。**A** 使用者 2026-09-11「以溶解度模擬的為準，他的高度是最小高度」——
+     `dissolution-sim` 是三份實作裡唯一逐項符合規範的那一份。〕
+   陰影往上打是抽屜的三個例外之一，表示它浮在畫布之上。 */
+.drawer{flex:none;margin:12px 14px;background:var(--c-surface);border:1px solid var(--c-bd);
+  border-radius:12px;padding:10px 20px 12px;box-shadow:0 -4px 12px rgba(28,36,51,.05)}
+.drawer .row{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
 .playbtns{display:flex;gap:8px;flex:none}
 .round-btn{width:44px;height:44px;border-radius:50%;background:var(--c-bg);
   border:1px solid var(--c-bd-ctl);color:var(--c-text-2);display:flex;align-items:center;
   justify-content:center;font-size:calc(15px * var(--u))}
 .round-btn.primary{background:var(--c-primary);border-color:var(--c-primary);color:#fff;font-size:calc(16px * var(--u))}
 .round-btn:disabled{background:var(--c-bg);border-color:var(--c-bd);color:var(--c-bd-ctl);cursor:default}
-.speedbox{display:flex;align-items:center;gap:10px;flex:none}
-.speedbox .name{font-size:calc(13px * var(--u));color:var(--c-text-2);font-weight:700;flex:none;line-height:1.3}
-/* 左欄的 .seg 是整欄全寬，抽屜裡的速度切換器只要包住三顆字 */
-.speedbox .seg{width:auto}
-/* 這一頁沒有動畫可播時的說明。不留一顆按了沒反應的鈕，而是講清楚為什麼 */
+.speed{display:flex;align-items:center;gap:10px;flex:none}
+.speed .name{font-size:calc(13px * var(--u));color:var(--c-text-2);font-weight:700;flex:none;line-height:1.3}
+/* 左欄的 `.seg` 佔滿整欄（2026-09-07 規範），**抽屜裡的不套那一條**：抽屜是橫向排列，
+   撐滿只會把速度切換器拉成整排最長的東西。區段尺寸因此回到規範原值 min-width 56、內距 14，
+   與 `dissolution-sim/index.html:226` 逐字相同〔**A** 使用者 2026-09-11「以溶解度模擬的為準」〕 */
+.speed .seg{width:auto}
+.speed .seg button{flex:1 0 auto;min-width:56px;padding:0 14px}
+/* 這一頁沒有光線可播時的說明。不留一顆按了沒反應的鈕，而是講清楚為什麼 */
 .drawerhint{font-size:calc(12.5px * var(--u));color:var(--c-text-3);line-height:1.3}
-@media (max-width:900px){ .drawer-row{flex-wrap:wrap;row-gap:12px} }
 
 .bottomnav{height:56px;flex:none;display:flex;align-items:center;padding:0 18px;background:var(--c-nav);gap:10px}
 .navtab{white-space:nowrap;flex:none;height:38px;padding:0 18px;border-radius:8px;color:var(--c-nav-idle);font-size:calc(13.5px * var(--u));display:flex;align-items:center}
@@ -188,7 +193,8 @@ main{flex:1;position:relative;display:grid;
 .seg{display:flex;width:100%;flex:none;background:var(--c-bg);
   border:1px solid var(--c-bd-ctl);border-radius:10px;padding:3px}
 .seg button{position:relative;flex:1;height:36px;padding:0 10px;min-width:0;border-radius:8px;
-  font-size:calc(13px * var(--u));font-weight:700;color:var(--c-text-3);white-space:nowrap}
+  font-size:calc(13px * var(--u));font-weight:700;color:var(--c-text-3);white-space:nowrap;
+  display:flex;align-items:center;justify-content:center;transition:background .15s,color .15s}
 .seg button::after{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
   width:100%;height:100%;min-width:44px;min-height:44px}
 .seg button[aria-pressed="true"]{background:var(--c-surface);color:var(--c-text);box-shadow:0 1px 3px rgba(28,36,51,.16)}
@@ -278,7 +284,8 @@ label.check input:checked+.box i{visibility:visible}
 /* hover 一律包在 (hover:hover)，iPad 點擊才不會殘留 hover 狀態 */
 @media (hover:hover){
   .icon-btn:hover{border-color:var(--c-primary);color:var(--c-primary)}
-  .btn:hover{background:var(--c-primary-dark)}
+  .round-btn:not(:disabled):hover{border-color:var(--c-primary);color:var(--c-primary)}
+  .round-btn.primary:not(:disabled):hover{background:var(--c-primary-dark);color:#fff}
   .chip[aria-pressed="false"]:hover{border-color:var(--c-primary)}
   .seg button[aria-pressed="false"]:hover{color:var(--c-text-2)}
   .navtab[aria-selected="false"]:hover{color:#fff}
@@ -296,9 +303,8 @@ label.check input:checked+.box i{visibility:visible}
     display:flex;grid-column:1;grid-row:1;align-self:end;max-height:62%;z-index:5;
     box-shadow:0 8px 28px rgba(28,36,51,.25)}
   .stage{grid-column:1;grid-row:1}
-  /* 動作卡不跟著左欄摺：動作鈕是主要操作路徑，收進面板會讓一步變三步 */
-  .actioncard{grid-column:1;grid-row:2;flex-direction:row;align-items:center;gap:10px}
-  .btn{width:auto;flex:1}
+  /* 叫出設定面板的 chip 在抽屜裡（DESIGN_SPEC 第 1 節：有抽屜的模擬放抽屜）。
+     推到最右端，與左邊的播放控制分開 */
   .mobile-tabs{display:flex;margin-left:auto}
 }
 </style>
@@ -480,12 +486,26 @@ label.check input:checked+.box i{visibility:visible}
         </div>
       </div>
 
+      <!-- 針孔頁專屬：物體上的三個發光點，各自發一組通過針孔的光
+           〔**A** 使用者 2026-09-10「讓我可以分開顯示從頂點發出的通過針孔光、中點發出的
+             通過針孔光、底部發出的通過針孔光」，**B** 選定名稱與預設〕。
+           取代原本單一核取的「單點光束示範」。 -->
+      <div class="group" id="pinPtGroup" hidden>
+        <div class="grouplabel">發光點</div>
+        <div class="checkgrid">
+          <label class="check"><input type="checkbox" id="chkP1" checked><span class="box"><i class="fa-solid fa-check"></i></span>頂端</label>
+          <label class="check"><input type="checkbox" id="chkP2"><span class="box"><i class="fa-solid fa-check"></i></span>中段</label>
+          <label class="check"><input type="checkbox" id="chkP3"><span class="box"><i class="fa-solid fa-check"></i></span>底端</label>
+        </div>
+      </div>
+
       <!-- 教學輔助疊層一律預設關（DESIGN_SPEC 第 4 節） -->
       <div class="group" id="showGroup">
         <div class="grouplabel">顯示</div>
         <div class="checkgrid">
-          <!-- 針孔頁專屬：只從物體頂端發一組示範光線，勾起來再加底端那一點（§2.3 頁1 第 6 點） -->
-          <label class="check" id="wrapDot" hidden><input type="checkbox" id="chkDot" checked><span class="box"><i class="fa-solid fa-check"></i></span>單點光束示範</label>
+          <!-- 「完整光束」在針孔頁的意思與另外三頁不同：那三頁是「除了特徵光線之外的光」，
+               這一頁是「發出來但被擋板擋住的光」。名稱維持一致（**B** 使用者 2026-09-10 選定），
+               語意差別由圖例卡與畫面本身表達。 -->
           <label class="check"><input type="checkbox" id="chkBeam"><span class="box"><i class="fa-solid fa-check"></i></span>完整光束</label>
           <!-- 遮板與紙屏一樣是「放進光路的器材」，開關方式一致、同樣預設關（使用者 2026-09-06 裁示）。
                排序照光行進的順序：光束 → 遮板（在透鏡）→ 紙屏（在像處）→ 眼睛。
@@ -559,28 +579,27 @@ label.check input:checked+.box i{visibility:visible}
         <div class="draghint" id="hintHole" hidden><i class="fa-solid fa-arrows-left-right"></i></div>
     </div>
 
-    <div class="actioncard">
-      <button class="btn" id="btnReset"><i class="fa-solid fa-rotate-left"></i>重置這一頁</button>
-      <div class="mobile-tabs">
-        <button class="chip" id="tabSettings" aria-pressed="false"><i class="fa-solid fa-gear" style="margin-right:6px"></i>設定</button>
-      </div>
-    </div>
   </main>
 
   <!-- 底部導覽列：單元內分頁。四頁**全部已實作**，沒有點進去是死路的頁
        （DESIGN_SPEC 第 1 節／DEV_SPEC 9.5「未完成的功能不得出現在導覽列」已滿足）。 -->
   <!-- 底部抽屜：**只放播放控制**（判準見專案 memory「抽屜只放播放控制」；
        **B** 使用者 2026-09-10 選定「只放播放暫停與速度」，所以沒有單步與進度捲軸）。
-       版面骨架比照 motion-graphs-sim/index.html:630-655，兩個模擬的抽屜要長一樣，
+       結構與 dissolution-sim/index.html:585-605 逐項對齊
+       〔**A** 使用者 2026-09-11「以溶解度模擬的為準」〕：播放與重置同在 .playbtns，
+       速度在 .speed，叫出設定面板的 chip 在最右端（窄螢幕才顯示）。
        位置同樣是 main 之後、導覽列之前。
        四頁都掛著這一層而不是只在透鏡頁出現：抽屜進出會讓畫布高度跳動，
        換頁時整張圖重新縮放，比「有一顆這一頁按不動的鈕」糟得多。 -->
   <div class="drawer" id="drawer">
-    <div class="drawer-row">
+    <div class="row">
       <div class="playbtns">
         <button class="round-btn primary" id="btnPlay" aria-label="播放"><i class="fa-solid fa-play" id="playIcon"></i></button>
+        <!-- 重置屬於「跟著播放控制走的重置」（DESIGN_SPEC 第 1 節），所以在抽屜不在左欄。
+             四頁各自重置，aria-label 要講清楚重置的是哪一個範圍 -->
+        <button class="round-btn" id="btnReset" aria-label="重置這一頁"><i class="fa-solid fa-rotate-left"></i></button>
       </div>
-      <div class="speedbox">
+      <div class="speed">
         <span class="name">動畫速度</span>
         <div class="seg" id="segSpeed" role="group" aria-label="動畫速度">
           <button data-speed="0.5" aria-pressed="false">0.5×</button>
@@ -589,6 +608,10 @@ label.check input:checked+.box i{visibility:visible}
         </div>
       </div>
       <span class="drawerhint" id="drawerHint"></span>
+      <!-- 本模擬是兩欄（無右欄），所以只有「設定」一顆 chip，沒有 dissolution 的「數據」 -->
+      <div class="mobile-tabs">
+        <button class="chip" id="tabSettings" aria-pressed="false"><i class="fa-solid fa-gear" style="margin-right:6px"></i>設定</button>
+      </div>
     </div>
   </div>
 
@@ -611,6 +634,13 @@ label.check input:checked+.box i{visibility:visible}
        反過來拉拖桿，物體會跳到該段的代表位置。打開紙屏後，紙屏也可以左右拖。
        物體、紙屏、遮板、針孔擋板旁邊那個<b>藍框的小箭頭握把</b>本身也可以直接抓著拖，
        不必精準點到器材上。</p>
+    <p>透鏡頁與面鏡頁的器材中央有一條<b>淺灰色的垂直線</b>，那是<b>光轉向的平面</b>。
+       作圖法把折射與反射都當成發生在這個平面上，所以三條特徵光線一律在這條線上轉折，
+       不是在透鏡的表面或鏡面的弧上。器材本身仍照真實形狀畫，兩者不會完全重合。</p>
+    <p>畫面下方的<b>播放鍵</b>讓光從物體出發往前走，<b>四個頁面都可以播</b>。光線同時發出，
+       走到交會的那一刻像才出現。成的是虛像時，光線發散之後會一起往回延伸虛線，
+       <b>同時抵達虛像</b>才顯示。速度有 0.5×、1×、2× 三檔；動到任何器材或設定，
+       畫面就回到「整條光路都畫出來」的樣子。</p>
     <p><b>凸透鏡</b>的三條特徵光線：① 平行主軸射入、經透鏡後通過焦點；② 通過鏡心、方向不變；
        ③ 通過焦點射入、經透鏡後平行主軸。三條都關掉時像仍在原處——像的位置由光路決定，
        不是由畫了幾條線決定。</p>
@@ -621,9 +651,9 @@ label.check input:checked+.box i{visibility:visible}
        （板子旁邊的上下箭頭就是可以拖的意思）。被擋住的光線不再畫出來，但剩下的光仍然聚在同一點——
        像只會變暗，形狀不會少掉一半。整片遮住時才完全沒有像。</p>
     <h3 style="font-size:calc(15px * var(--u));margin:16px 0 8px">面鏡成像</h3>
-    <p>面鏡把光<b>折回同一側</b>，所以像與紙屏都在鏡子的左邊。三條特徵光線與透鏡同名，
-       只是反射回去；每一條打在鏡面的位置都畫了一條<b>黑色虛線的法線</b>（垂直鏡面）。
-       第②條「通過鏡心」的法線剛好就是主軸，兩條會疊在一起，這不是漏畫。</p>
+    <p>面鏡把光<b>折回同一側</b>，所以像與紙屏都在鏡子的左邊。三條特徵光線與透鏡同名，只是反射回去。
+       把物體換成<b>「平行光」</b>之後，光會真的<b>打在鏡面的弧上反射</b>，每一條的反射點都畫出一條
+       <b>黑色虛線的法線</b>（垂直鏡面）——那個模式沒有像的大小與位置要顧，可以完全照反射定律畫。</p>
     <p><b>平面鏡</b>沒有焦距，所以焦距與物距那兩組控制項會整組收起來，物體改成直接在畫布上拖。
        主軸下方那兩段標記線，是鏡前的物距與鏡後的像距，各自標出了格數——<b>拖物體時兩段永遠一樣長、
        兩個格數也永遠一樣</b>，像並沒有貼在鏡面上。這兩個數字是全部四頁唯一標出來的數值，
@@ -633,8 +663,9 @@ label.check input:checked+.box i{visibility:visible}
        凹面鏡成實像時同時上下顛倒，看起來就像整個轉了 180°。蠟燭與箭頭左右對稱，看不出這件事，
        所以要用 F 才驗得出來。</p>
     <h3 style="font-size:calc(15px * var(--u));margin:16px 0 8px">針孔成像</h3>
-    <p>針孔沒有焦距，靠的是<b>光的直線前進</b>。發光點射出很多道光，擋板把大部分擋掉（淡色的那些），
-       只有對準孔的那幾道通得過。<b>孔小時只有一道通過</b>，屏上就是一個點，清晰但暗；
+    <p>針孔沒有焦距，靠的是<b>光的直線前進</b>。左欄的<b>「發光點」</b>可以分別打開物體的頂端、中段、
+       底端，每一個點都射出很多道光，只有對準孔的那幾道通得過；勾<b>「完整光束」</b>就看得到
+       被擋板擋掉的其他光（淡色的那些）。<b>孔小時只有一道通過</b>，屏上就是一個點，清晰但暗；
        孔大時好幾道都通過、落在屏上不同位置，就變亮但糊——<b>亮和糊是同一件事的兩面</b>。</p>
     <p>改「孔的形狀」看下方的紙屏正面：糊掉的斑會變成圓的、方的或三角的，<b>但整幅像的形狀不會變</b>。
        孔要夠大才看得出斑的形狀。改「孔的數量」則會在屏上得到好幾個完整的像。</p>
@@ -857,6 +888,10 @@ const C = {
   gridMinor:'#D5DAE1',  // 次格線 1.41:1
   gridMajor:'#A6AEBA',  // 主格線 2.24:1
   axis:'#7A8496',       // 主軸 3.77:1
+  plane:'#9FA8B5',      // 折射／反射的交界面（淺灰垂直線）。**鏡心那一格本來就是主格線**
+                        // （格線以鏡心為基準每 5 格加深），所以這個值必須比主格線 #A6AEBA
+                        // 再深一點、再寬一點，否則畫出來只像「那條主格線變淡了」。
+                        // 仍然比主軸 #7A8496 淡：它是參考面，不是量測用的尺
   mark:'#1C2433',       // F／2F 記號
   ray:'#D2700F',        // 光線・延長線 3.46:1
   glass:'#C5DDE8',      // 透鏡玻璃
@@ -881,7 +916,11 @@ function initState(){
     hole:0,                           // 頁 1(針孔)：孔徑三檔的索引，對應 HOLE_RAYS 的通過道數
     hshape:'circle',                  // 孔的形狀：circle｜square｜tri。只影響屏上光斑的形狀，不影響像的形狀
     hcount:1,                         // 孔的數量 1～3：每個孔各自放行一組光線，屏上就有幾個完整的像
-    dot:true,                         // 針孔頁：單點光束示範（從物體頂端發一組離散光線）
+    // 針孔頁的三個發光點（頂端／中段／底端），各自發一組通過針孔的光。預設只開頂端
+    // 〔**B** 使用者 2026-09-10 選定「頂端／中段／底端，只開頂端」，
+    //   取代原本單一核取的「單點光束示範」〕。這三處（HTML 的 checked、這裡、
+    //   重置的還原值）必須一致，DESIGN_SPEC 第 4 節
+    pinPts:[true, false, false],
     f:3,                              // 焦距的**絕對值**（格）。正負號一律由 signedF() 決定，
                                       // state 不存負數——五檔物距、F／2F 記號、透鏡厚度都用絕對值
     maskOn:false,                     // 遮板是否放進光路。與紙屏一樣預設關（使用者裁示）
@@ -1105,56 +1144,99 @@ function lensHitY(i, P){
 /* ═══ 4. 繪製：讀 state 畫畫面，不改 state ═══
    圖層順序照設計稿 D 表：越像「答案」的畫得越上面、越粗；越像「尺」的越下面、越細。
    可被壓淡的只有完整光束與反向延長線；格線與三條特徵光線永不壓淡。 */
-/* ── 播放動畫的裁剪（**B** 使用者 2026-09-10「先做透鏡頁一頁，驗過再擴」）──
+/* ── 播放動畫的裁剪（四頁共用，**A** 使用者 2026-09-10「每一頁的每個模擬都要有光路動畫」，
+     取代 2026-09-10 稍早的 **B**「先做透鏡頁一頁，驗過再擴」）──
    `state.anim` ＝ 光從物體出發後已經走了多少 px。null ＝ 沒在播，一切原封輸出。
-   同一條光線的段落依 `ray` 分組**依序累加**，所以出射段要等入射段走完才開始長：
+   同一條光線的**實線**段落依 `ray` 分組依序累加，所以出射段要等入射段走完才開始長：
    光是從物體出發的，不是從器材出發的〔**A**「光線會從物體同時發出」〕。
-   反向延長線排在該條光線的實線之後，於是「發散之後才重新向後延伸虛線」是自然的結果，
-   不必另外寫一個階段〔**A**「如果發散後會再重新向後延伸虛線」〕。 */
+   帶 `beam` 標記的段落是完整光束，輸出到另一組（畫得細而淡），但**與特徵光線同一個時鐘**
+   〔**A**「開啟完整光束並按下播放鍵，這些多產生的光線也會有動畫」〕。
+
+   反向延長線（虛線）不照距離走，走的是**共同進度**：各自在自己的出射段跑滿 ANIM_LEAD 格
+   之後開始長，全部在同一刻走完，於是同時抵達虛像
+   〔**A**「通過鏡面後跑一小段距離就 2 條虛線一起延伸，同時抵達虛像的成像點」〕。
+   路程長的走得快、短的走得慢——這條線本來就不是真的光，它是「眼睛以為光從那裡來」的作圖線，
+   同時抵達才看得出「交會成像」是一瞬間的事。
+   〔沿革：初版把虛線接在該條實線之後照距離累加，於是虛線要等出射線走到畫布邊才開始長，
+     三條又各自長短不一、先後抵達，看不出交會的那一刻（使用者 2026-09-10 回報）。〕 */
 const segD = s => `M${px(s.x1)} ${px(s.y1)}L${px(s.x2)} ${px(s.y2)}`;
+const ANIM_LEAD = 1;              // 出射之後再走幾格，反向延長線才開始長
 let animRevealAt = Infinity;      // 像該出現的距離（px）。由 clipByAnim() 算，drawImage() 讀
-let animTotal = 0;                // 這一輪最長那條光線的總長（px），播到這裡就算播完
-function clipByAnim(solid, dashed, I){
-  animTotal = 0;
+let animTotal = 0;                // 這一輪走完全部需要多少距離（px），播到這裡就算播完
+function clipByAnim(solid, dashed, I, opt){
+  const lead = ANIM_LEAD * G.g;
+  const sl = s => Math.hypot(s.x2 - s.x1, s.y2 - s.y1) || 1e-6;
   const byRay = new Map();
-  const put = (s, dash) => {
-    if (!byRay.has(s.ray)) byRay.set(s.ray, []);
-    byRay.get(s.ray).push({ s, dash });
+  const grp = r => {
+    if (!byRay.has(r)) byRay.set(r, { s:[], d:[] });
+    return byRay.get(r);
   };
-  for (const s of solid) put(s, false);
-  for (const s of dashed) put(s, true);
-  /* 像出現的時機：光（或反向延長線）走到像點的那一刻
-     〔**A**「光線交會時或延伸光線交會時才會顯示像」〕。
-     取**最後一條**到達像點的距離——三條都到齊才叫交會。
-     只在有限值之間取最大：有些畫法下某一條不通過像點（例如平行光模式沒有像的形狀），
+  for (const s of solid) grp(s.ray).s.push(s);
+  for (const s of dashed) grp(s.ray).d.push(s);
+
+  /* 第一遍：量長度、定時刻。像出現的時機有三種來源，優先序由具體到一般：
+     ① opt.revealAtEnd（針孔頁）＝ 最後一道光打到紙屏的那一刻，那一頁的像不是交會出來的
+     ② 有虛線 ＝ 虛線一起抵達的那一刻（虛像）
+     ③ 都不是 ＝ 光走到像點 I 的距離，取**最後一條**到達的（三條都到齊才叫交會）。
+     ③ 只在有限值之間取最大：有些畫法下某一條不通過像點（平行光模式沒有像的形狀），
      那一條回不了有限值，不能讓它把整個 reveal 拖成無限大。 */
-  let reveal = -Infinity;
-  const sOut = [], dOut = [];
-  for (const segs of byRay.values()){
-    let start = 0;
-    for (const { s, dash } of segs){
-      const dx = s.x2 - s.x1, dy = s.y2 - s.y1;
-      const len = Math.hypot(dx, dy) || 1e-6;
+  let dashEnd = -Infinity, solidMax = 0, reveal = -Infinity;
+  for (const q of byRay.values()){
+    let start = 0, lastStart = 0;
+    for (const s of q.s){
+      const n = sl(s);
+      lastStart = start;
       if (I){
-        const t = ((I.x - s.x1) * dx + (I.y - s.y1) * dy) / (len * len);
+        const dx = s.x2 - s.x1, dy = s.y2 - s.y1;
+        const t = ((I.x - s.x1) * dx + (I.y - s.y1) * dy) / (n * n);
         if (t >= -0.02 && t <= 1.02){
           const d = Math.hypot(I.x - (s.x1 + dx * t), I.y - (s.y1 + dy * t));
-          if (d < 8) reveal = Math.max(reveal, start + t * len);
+          if (d < 8) reveal = Math.max(reveal, start + t * n);
         }
       }
-      if (state.anim !== null){
-        const vis = Math.max(0, Math.min(len, state.anim - start));
-        if (vis > 0.5){
-          const k = vis / len;
-          (dash ? dOut : sOut).push({ ray:s.ray, x1:s.x1, y1:s.y1, x2:s.x1 + dx * k, y2:s.y1 + dy * k });
-        }
-      }
-      start += len;
+      start += n;
     }
-    animTotal = Math.max(animTotal, start);
+    q.dStart = lastStart + lead;      // 最後一段實線就是出射段，跑滿 lead 之後虛線開始長
+    q.dTotal = q.d.reduce((a, s) => a + sl(s), 0);
+    solidMax = Math.max(solidMax, start);
+    if (q.dTotal > 0) dashEnd = Math.max(dashEnd, q.dStart + q.dTotal);
   }
-  animRevealAt = reveal > -Infinity ? reveal : Infinity;
-  return state.anim === null ? { s:solid, d:dashed } : { s:sOut, d:dOut };
+  animTotal = Math.max(solidMax, dashEnd > -Infinity ? dashEnd : 0);
+  animRevealAt = (opt && opt.revealAtEnd) ? animTotal
+               : dashEnd > -Infinity ? dashEnd
+               : reveal > -Infinity ? reveal : Infinity;
+
+  const out = { s:[], d:[], bs:[], bd:[] };
+  if (state.anim === null){
+    for (const s of solid) (s.beam ? out.bs : out.s).push(s);
+    for (const s of dashed) (s.beam ? out.bd : out.d).push(s);
+    return out;
+  }
+  // 一段走了 walked 這麼長，截出看得見的那一截；不足 0.5px 就整段不畫（避免留下一顆點）
+  const cut = (s, walked, n, into) => {
+    const vis = Math.max(0, Math.min(n, walked));
+    if (vis <= 0.5) return;
+    const k = vis / n;
+    into.push({ x1:s.x1, y1:s.y1, x2:s.x1 + (s.x2 - s.x1) * k, y2:s.y1 + (s.y2 - s.y1) * k });
+  };
+  for (const q of byRay.values()){
+    let start = 0;
+    for (const s of q.s){
+      const n = sl(s);
+      cut(s, state.anim - start, n, s.beam ? out.bs : out.s);
+      start += n;
+    }
+    if (q.dTotal > 0){
+      const span = Math.max(1e-6, dashEnd - q.dStart);
+      let walked = Math.max(0, Math.min(1, (state.anim - q.dStart) / span)) * q.dTotal;
+      for (const s of q.d){
+        const n = sl(s);
+        cut(s, walked, n, s.beam ? out.bd : out.d);
+        walked -= n;
+      }
+    }
+  }
+  return out;
 }
 
 const board = document.getElementById('board');
@@ -1245,6 +1327,8 @@ function render(){
   if (state.screen === 0) renderPinhole(L);
   else if (state.screen === 3) renderEye(L);
   else renderOptic(L);
+  // 光線畫完才知道這一輪有多長：播放鈕能不能按、是不是該轉成「重新播放」，都要等這裡才算得準
+  syncPlayBtn();
 }
 
 // ── 第 1、2 層：格線。以鏡心與主軸為基準每 5 格一條主格線——基準若取畫布左緣，
@@ -1276,6 +1360,19 @@ function renderOptic(L){
   const g = G.g, cx = G.cx, ax = G.axisY, u = state.u;
   const im = currentImage();
   const P = { x:cx - u * g, y:ax - objH() * g };          // 物體頂端＝特徵光線的起點
+
+  /* ── 第 3b 層：折射／反射的**交界面**。三條特徵光線一律在通過鏡心的這個平面上轉折
+     （近軸作圖法），可是透鏡有厚度、面鏡是彎的，轉折點因此不會落在器材畫出來的外形上——
+     面鏡尤其明顯，f=2、高 2 格時光線在鏡體後方約 0.28 格處轉彎。
+     畫一條淺灰垂直線把那個平面標出來，那個轉折就有了依據，這也是 PhET 的做法
+     〔**A** 使用者 2026-09-11「像 phet 的圖一樣用淺淺灰色的垂直線畫反射／折射的交界線」〕。
+     畫在器材**之下**：它是背景參考線，不能蓋過透鏡與鏡體的描邊。
+     平行光模式不畫——那個模式的面鏡是真的在弧上反射（見 drawRays 的 hitX），
+     再畫一條垂直的交界面會與畫面互相矛盾。 */
+  if (!im.parallel) L.append(svgEl('line', {
+    x1:px(cx), y1:0, x2:px(cx), y2:px(G.optH),
+    stroke:C.plane, 'stroke-width':px(3 * G.sc),
+  }));
 
   // ── 第 4 層：器材（透鏡或面鏡，高 6 格）
   if (state.screen === 1) drawMirror(L); else drawLens(L);
@@ -1445,8 +1542,9 @@ function drawRays(L, P, im){
      截短需要端點，字串算不出來。`ray` ＝ 這一段屬於第幾條光線，同一條的段落依序相接
      （入射段 → 出射段 → 反向延長線），累加距離才會是「從物體出發」而不是「從器材出發」。 */
   const solid = [], dashed = [], normals = [];
-  const S = (ray, x1, y1, x2, y2) => solid.push({ ray, x1, y1, x2, y2 });
-  const D = (ray, x1, y1, x2, y2) => dashed.push({ ray, x1, y1, x2, y2 });
+  // beam ＝ 這一段屬於完整光束，畫在另一個圖層（細而淡），但與特徵光線走同一個時鐘
+  const S = (ray, x1, y1, x2, y2, beam) => solid.push({ ray, x1, y1, x2, y2, beam });
+  const D = (ray, x1, y1, x2, y2, beam) => dashed.push({ ray, x1, y1, x2, y2, beam });
 
   // 出射後的交會點。u = f 時三條線互相平行、沒有交點。
   const I = im.none ? null : { x:cx + sx * im.v * g, y:ax - im.m * objH() * g };
@@ -1466,8 +1564,19 @@ function drawRays(L, P, im){
      ①的轉折點高於鏡子上緣，那個高度根本沒有鏡面）。
      代價：轉折點落在鏡體**後方**（矢高減鏡體厚度），f=2、高 2 格時約 0.28 格。
      拋物面在這件事上優於球面：同焦距同高度的矢高恆較小（差值主項 h⁴/(64f³)），
-     f=2、高 2 格時 0.500 對 0.536，鏡緣處 1.125 對 1.354。鏡面因此維持拋物線。 */
-  const hitX = () => cx;
+     f=2、高 2 格時 0.500 對 0.536，鏡緣處 1.125 對 1.354。鏡面因此維持拋物線。
+
+     **平行光模式是例外：它落在真正的鏡面弧上**〔**A** 使用者 2026-09-10「平行光的部分
+     我就希望可以讓他在鏡面反射，並且畫出法線，因為這沒有成像大小、位置的問題」〕。
+     這一支不必付上面那個代價，因為拋物面在這裡是**精確**的：
+     x = cx − (y−ax)²/(4fg) 這條拋物線的焦點恰好就是 fx（代入 u²=4pX 得 p=−fg，
+     而面鏡的 sx=−1 讓 fx=cx−fg，兩者同一點），所以平行主軸的光打在弧上、
+     依真實反射律反射之後**精確通過焦點**，出射線的式子一個字都不必改。
+     法線畫的也是真法線：拋物線在該點的法線方向 ∝ (1, (y−ax)/(2fg))，
+     正好就是下面 normals 那一段本來在用的式子。
+     兩種落點不會同時出現在畫面上：平行光模式把三條特徵光線整組關掉（見下方 rays）。 */
+  const arcHit = state.screen === 1 && im.parallel && isFinite(f);
+  const hitX = y => arcHit ? cx - (y - ax) * (y - ax) / (4 * f * g) : cx;
   /* 出射線的終點：從器材上的落點**朝像點**延伸到畫布邊。
      出射線的終點：從器材上的落點**朝像點**延伸到畫布邊。
      〔沿革：2026-09-07～09-10 之間反射點畫在鏡面弧上，那時這一段記著「離開主軸就不能用近軸
@@ -1510,9 +1619,12 @@ function drawRays(L, P, im){
       const hp = hitX(y);
       S(i, 0, y, hp, y);
       // 平行光模式：入射光全部平行主軸，所以出射一律通過焦點——那是焦點的定義本身。
-      // 落點回到 cx（2026-09-10）之後這一式與連像點恆等，寫成連焦點是為了讓意圖看得出來
+      // 面鏡的落點在鏡面弧上（見 hitX），這一式因此是嚴格的反射律，不是近軸近似
       S(i, hp, y, outX, y + (ax - y) * ((outX - hp) / (fx - hp)));
       if (!im.real) D(i, hp, y, fx, ax);
+      // 法線只有這個模式畫（見下方那一段）。at ＝ 光走到鏡面時已經走了多遠，
+      // 播放中要等光真的走到了才把法線畫出來
+      normals.push({ y, at:Math.abs(hp) });
     }
   }
 
@@ -1535,7 +1647,6 @@ function drawRays(L, P, im){
       const b0 = axisEnd(h0, P.y, I.x, !(f > 0));
       D(0, h0, P.y, b0.x, b0.y);
     }
-    normals.push(P.y);
   }
   // ② 通過鏡心 → 透鏡方向不變；面鏡的法線就是主軸，所以反射後斜率取反號
   if (rays[1] && !isBlocked(ax)){
@@ -1549,7 +1660,6 @@ function drawRays(L, P, im){
       if (sx < 0) D(1, cx, ax, I.x, I.y);
       else if (I.x < P.x) D(1, P.x, P.y, I.x, I.y);
     }
-    normals.push(ax);
   }
   // ③ 入射線從物體頂端射向 (cx − f·g, ax)，出射後平行主軸。
   // 凸透鏡：那一點是左焦點，光真的通過它；凹透鏡：f 反號後那一點變成右焦點，
@@ -1561,64 +1671,80 @@ function drawRays(L, P, im){
       S(2, P.x, P.y, h3, y3);
       S(2, h3, y3, outX, y3);
       if (I && !im.real) D(2, h3, y3, I.x, I.y);
-      normals.push(y3);
     }
   }
 
-  // 面鏡的法線：三條特徵光線打在鏡面的那一點都畫（§2.7 定案，含與主軸重合的第②條，
-  // 使用者選 (b) 照畫並在圖例註明）。黑虛線＝「虛線只有三個用途」的第三種。
-  // 法線方向 ∝ (1, dy/(2fg))，也就是近軸下「落點連向曲率中心 C＝(cx−2fg, ax)」的方向。
-  // 這個方向同時等於拋物面在弧上該點的法線（兩者已驗算相同），所以 2026-09-10 把落點
-  // 改回垂直平面之後，這一式**一個字都不必動**，只是畫的位置跟著 hitX() 回到 cx。
-  // 註記：它是近軸示意，與嚴格反射律在 f=2、高 2 格時差約 1.5°，與全頁其餘畫法一致。
-  // 平面鏡 f＝∞ 時第二項為 0，法線恆為水平。
+  /* 面鏡的法線：**只有平行光模式畫**〔**A** 使用者 2026-09-10「蠟燭、箭頭、f 的光線就不要
+     畫法線了，因為為了達到像的正確性畫法線沒意義。平行光的部分我就希望可以讓他在鏡面反射，
+     並且畫出法線，因為這沒有成像大小、位置的問題」〕。
+     **這推翻了 §2.7 的定案**「三條特徵光線打在鏡面的那一點都畫，含與主軸重合的第②條」。
+     修訂鏈：2026-09-06 **B**（選 (b)「照畫並在圖例註明」）→ 2026-09-10 **A**（後者生效）。
+     推翻的理由：三條特徵光線的落點在通過鏡心的垂直線上（見 hitX），那個位置沒有鏡面，
+     法線就成了一條沒有依據的垂線——畫它等於在教一件不成立的事。
+     平行光落在真的弧上，法線是真法線、反射是真的反射律，畫出來才有意義。
+     黑虛線＝「虛線只有三個用途」的第三種。方向 ∝ (1, (y−ax)/(2fg))，
+     就是拋物線在該點的法線。平面鏡 f＝∞ 時第二項為 0，法線恆為水平。 */
   if (state.screen === 1 && normals.length){
     const len = 1.5 * g, nd = [];
-    for (const y of normals){
+    for (const { y, at } of normals){
+      // 播放中：光還沒走到鏡面就先不畫。法線是「這道光在這裡反射」的說明，不是背景圖
+      if (state.anim !== null && state.anim < at) continue;
       const hx = hitX(y);
       const dx = 1, dy = isFinite(f) ? (y - ax) / (2 * f * g) : 0;
       const n = Math.hypot(dx, dy) || 1;
       const ux = dx / n * len / 2, uy = dy / n * len / 2;
       nd.push(`M${px(hx - ux)} ${px(y - uy)}L${px(hx + ux)} ${px(y + uy)}`);
     }
-    L.append(svgEl('path', {
+    if (nd.length) L.append(svgEl('path', {
       d:nd.join(''), fill:'none', stroke:C.mark, 'stroke-width':px(1.6 * G.sc),
       'stroke-dasharray':`${px(5 * G.sc)} ${px(4 * G.sc)}`, opacity:0.8,
     }));
   }
 
-  // 第 6 層：完整光束。從物體頂端發出十幾條，全部收斂到同一點——
-  // 這正是「像不是那三條線交出來的」的證據。透明度 40%（§2.8 定案）。
+  /* 第 6 層：完整光束。從物體頂端發出十幾條，全部收斂到同一點——
+     這正是「像不是那三條線交出來的」的證據。透明度 40%（§2.8 定案）。
+     **2026-09-10 起改用與三條特徵光線相同的端點結構**：這樣它才進得了播放動畫，
+     虛像時也才長得出反向延長線〔**A**「完整光束開啟後產生的那些光，如果會形成虛像的話
+     也要向後延伸。如果開啟完整光束並按下播放鍵，這些多產生的光線也會有動畫」〕。
+     ray 編號從 100 起跳，與三條特徵光線（0／1／2）分開累加距離。 */
   if (state.beam){
-    const beam = [];
     const half = LENS_H / 2 * g, n = 13;
     for (let i = 0; i < n; i++){
       const y = ax - half + (2 * half) * i / (n - 1);
       // 被遮板擋住的那幾條整條不畫——剩下的仍然聚到同一點，這就是「像不會少一半」的證據
       if (isBlocked(y)) continue;
+      const r = 100 + i;
       // 平行光的入射段從畫布左緣平行射入；其餘造型是從物體頂端發散。
-      // 落點與三條特徵光線同樣走 hitX()（2026-09-10 起恆為 cx），兩者才不會在不同的地方轉彎
+      // 落點與三條特徵光線同樣走 hitX()，兩者才不會在不同的地方轉彎
       const hb = hitX(y);
-      beam.push(im.parallel ? `M0 ${px(y)}L${px(hb)} ${px(y)}`
-                            : `M${px(P.x)} ${px(P.y)}L${px(hb)} ${px(y)}`);
+      if (im.parallel) S(r, 0, y, hb, y, true);
+      else S(r, P.x, P.y, hb, y, true);
       if (im.none){                                  // 出射光全部平行，射出畫面不成像
         const k = (ax - P.y) / (sx * f * g);
-        beam.push(`M${px(hb)} ${px(y)}L${px(outX)} ${px(y + k * (outX - hb))}`);
+        S(r, hb, y, outX, y + k * (outX - hb), true);
       } else {
         // 出射方向與三條特徵光線共用同一支 outEnd()：實像連向像點、虛像取反方向
         const eb = outEnd(hb, y);
-        beam.push(`M${px(hb)} ${px(y)}L${px(eb.x)} ${px(eb.y)}`);
+        S(r, hb, y, eb.x, eb.y, true);
+        // 虛像：每一條都要往回延伸，與三條特徵光線一起交在虛像上
+        if (I && !im.real) D(r, hb, y, I.x, I.y, true);
       }
     }
-    L.append(svgEl('path', {
-      d:beam.join(''), fill:'none', stroke:C.ray, 'stroke-width':px(1.8 * G.sc),
-      opacity:0.4, 'stroke-linejoin':'round',
-    }));
   }
 
   // 播放中就把每條光線按已走過的距離截短；沒在播時原封輸出。
   // 這一支同時算出「像該在什麼時候出現」，drawImage() 下一幀會讀到
   const cut = clipByAnim(solid, dashed, I);
+
+  // 完整光束畫在最下面：實線那組細而淡，虛線那組是它們的反向延長線，再淡一點
+  if (cut.bs.length) L.append(svgEl('path', {
+    d:cut.bs.map(segD).join(''), fill:'none', stroke:C.ray,
+    'stroke-width':px(1.8 * G.sc), opacity:0.4, 'stroke-linejoin':'round',
+  }));
+  if (cut.bd.length) L.append(svgEl('path', {
+    d:cut.bd.map(segD).join(''), fill:'none', stroke:C.ray, 'stroke-width':px(1.8 * G.sc),
+    opacity:0.28, 'stroke-dasharray':`${px(5 * G.sc)} ${px(4 * G.sc)}`,
+  }));
 
   // 第 7 層：反向延長線（虛像才有）。虛線、降透明度，是「虛像只有三個虛線用途」的第二種。
   if (cut.d.length){
@@ -1711,6 +1837,8 @@ function renderPinhole(L){
    側視圖只表現得出高度，二維的樣子仍交給下方小窗——與另外兩頁的分工一致。
    孔越大糊得越開，像就越淡：濃淡讀 pinSpread()，與小窗同一個來源。 */
 function drawPinImage(L, scale){
+  // 播放中：像要等最後一道光打到紙屏才出現（與另外三頁同一條規則）
+  if (state.anim !== null && state.anim < animRevealAt) return;
   const g = G.g;
   const op = px(Math.max(0.22, 0.8 - pinSpread() * 1.6));
   // 每個孔各自成一個完整的像，差別只在高度——孔幾個、屏上就幾個像
@@ -1741,34 +1869,52 @@ function drawBarrier(L){
 
 /* 離散光線。等間隔打在**擋板平面**上（不是等角度）——「孔幾個間距寬 → 幾道通得過」
    才會是學生數得出來的對應（§2.3 頁 1 第 2 點）。
+   發光點由左欄「發光點」那三個核取各自控制（頂端／中段／底端）；
+   **被擋住的光要勾「完整光束」才畫**〔**A** 使用者 2026-09-10「可以勾選完整光束，
+   會根據我選了哪些點，顯示出其他有發出但是被針孔板擋住的光」〕。
+   〔沿革：原本是單一核取「單點光束示範」開頂端那一點、「完整光束」再補上底端與中段，
+     被擋住的光則一律畫。三個點分不開，也沒辦法只看通得過去的那幾道。〕
    被擋的畫到板面就停、淡灰色；通過的一路直線走到紙屏。 */
 function drawPinRays(L, P){
   const g = G.g, cx = pinX(), ax = G.axisY, u = pinU(), vs = pinS();
   const span = Math.max(...holeCenters().map(Math.abs)) + holeHalf() + PIN_EXTRA * PIN_SPACING;
   const n = Math.round(span / PIN_SPACING);
-  // 示範點：預設只有物體頂端；「完整光束」在本頁＝再加底端與中段兩個點（§2.3 頁 1 第 6 點）
+  // 三個發光點的高度：頂端、中段（物高的一半）、底端
   const src = [];
-  if (state.dot) src.push(P.y);
-  if (state.beam){ src.push(ax); src.push(ax - objH() * g * 0.55); }
-  if (!src.length) return;
-  const pass = [], block = [];
+  if (state.pinPts[0]) src.push(P.y);
+  if (state.pinPts[1]) src.push(ax - objH() * g / 2);
+  if (state.pinPts[2]) src.push(ax);
+  // 一個點都沒選：仍然要跑一次空的裁剪，把上一幀留下的 animTotal 歸零
+  if (!src.length){ clipByAnim([], [], null, { revealAtEnd:true }); return; }
+  /* 端點結構＋每道光各自一個 ray 編號，整扇光在播放時一起往前推
+     〔**A**「每一頁的每個模擬都要有光路動畫」〕。
+     被擋住的那些借 `beam` 這個標記走「細而淡」的那一組輸出——這一頁沒有完整光束的概念，
+     淡的那一層裝的就是它們。 */
+  const solid = [];
+  let r = 0;
   for (const sy of src){
     for (let i = -n; i <= n; i++){
       const t = i * PIN_SPACING, hy = ax + t * g;
-      const seg = `M${px(P.x)} ${px(sy)}L${px(cx)} ${px(hy)}`;
-      if (!passes(t)){ block.push(seg); continue; }
+      const ok = passes(t);
+      if (!ok && !state.beam) continue;
+      const ray = r++;
+      solid.push({ ray, x1:P.x, y1:sy, x2:cx, y2:hy, beam:!ok });
       // 過孔之後直線前進：相似三角形，水平距離從 u 變成 u + vs
-      pass.push(seg + `L${px(cx + vs * g)} ${px(hy + (hy - sy) * (vs / u))}`);
+      if (ok) solid.push({ ray, x1:cx, y1:hy, x2:cx + vs * g, y2:hy + (hy - sy) * (vs / u) });
     }
   }
+  // 這一頁的像不是幾條線交出來的，是整片投影：等最後一道光打到紙屏才顯示（revealAtEnd）
+  const cut = clipByAnim(solid, [], null, { revealAtEnd:true });
   // 被擋住的先畫、畫得很淡：它們是「大部分的光都過不去」的對照組，不能搶走通過那幾道的注意力
-  if (block.length) L.append(svgEl('path', {
-    d:block.join(''), fill:'none', stroke:C.ray, 'stroke-width':px(1.4 * G.sc), opacity:0.2,
+  if (cut.bs.length) L.append(svgEl('path', {
+    d:cut.bs.map(segD).join(''), fill:'none', stroke:C.ray,
+    'stroke-width':px(1.4 * G.sc), opacity:0.2,
   }));
-  if (pass.length){
-    L.append(svgEl('path', { d:pass.join(''), fill:'none', stroke:'#fff',
+  if (cut.s.length){
+    const d = cut.s.map(segD).join('');
+    L.append(svgEl('path', { d, fill:'none', stroke:'#fff',
       'stroke-width':px(2.6 * G.sc + 3), 'stroke-linejoin':'round' }));
-    L.append(svgEl('path', { d:pass.join(''), fill:'none', stroke:C.ray,
+    L.append(svgEl('path', { d, fill:'none', stroke:C.ray,
       'stroke-width':px(2.6 * G.sc), 'stroke-linejoin':'round' }));
   }
 }
@@ -1805,6 +1951,8 @@ function drawPinWindow(){
   g2.removeAttribute('opacity');
   const w = svg.clientWidth, h = svg.clientHeight;
   if (!(w > 0 && h > 0)) return;
+  // 播放中：小窗與紙屏上的像同步，光還沒打到屏就先空著
+  if (state.anim !== null && state.anim < animRevealAt) return;
   const scale = pinS() / pinU();                 // 屏上像高 ＝ 物高 × 像距/物距
   /* 小窗尺度**固定**，與另外兩頁的 drawWindow 同為 PIN_WIN_GRID 格
      〔**B** 使用者 2026-09-10 選定「比照另外兩頁：窗高等於 10 格」〕。
@@ -1900,6 +2048,8 @@ function drawEyeball(L, o){
    總放大率 ＝ 眼鏡的 × 水晶體的；|m| = 眼軸 ÷ 物距 < 1，所以恆為縮小的倒立實像。 */
 function drawEyeImage(L, o){
   if (o.im.none) return;
+  // 播放中：像要等光線走到交會處才出現（與另外三頁同一條規則）
+  if (state.anim !== null && state.anim < animRevealAt) return;
   const g = G.g, m = o.mg * o.im.m;
   if (!isFinite(m) || Math.abs(m) < 1e-6) return;
   drawShape(L, state.shape, optCx() + o.im.v * g, Math.abs(m) * g, m * g, {
@@ -1969,29 +2119,33 @@ function drawEyeRays(L, P, o){
      這一頁的核心命題是「像沒有落在視網膜上」，光線在視網膜就被切斷時，
      學生只看得到兩條線各自穿過視網膜，看不到它們究竟在哪裡會合。 */
   const endX = (I && o.im.real && I.x > rx) ? I.x : rx;
+  /* 與另外三頁一樣把每一段記成**端點座標**而不是路徑字串，播放動畫才截得短
+     〔**A** 使用者 2026-09-10「每一頁的每個模擬都要有光路動畫」〕。
+     這一頁的像恆為縮小的倒立實像，沒有反向延長線，所以虛線那一組一直是空的。 */
   const solid = [];
+  const seg = (ray, x1, y1, x2, y2, beam) => solid.push({ ray, x1, y1, x2, y2, beam });
   // 把「蠟燭 → 鏡片 → 水晶體」這段畫出來：先由 S 與水晶體上的落點定出鏡片上的落點，
   // 再從蠟燭實際的位置連過去。沒戴眼鏡時就是一條直線。
-  const inbound = y => {
-    if (!gOK){ solid.push(`M${px(P.x)} ${px(P.y)}L${px(cx)} ${px(y)}`); return; }
+  const inbound = (ray, y, beam) => {
+    if (!gOK){ seg(ray, P.x, P.y, cx, y, beam); return; }
     const k = (y - S.y) / (cx - S.x);
     const qy = S.y + k * (gx - S.x);
-    solid.push(`M${px(P.x)} ${px(P.y)}L${px(gx)} ${px(qy)}`);
-    solid.push(`M${px(gx)} ${px(qy)}L${px(cx)} ${px(y)}`);
+    seg(ray, P.x, P.y, gx, qy, beam);
+    seg(ray, gx, qy, cx, y, beam);
   };
   // ① 平行主軸射入 → 出射通過焦點。落點高度 ＝ S 的高度，那一段才會是水平的
   if (state.eyeRays[0]){
     const y1 = S.y, fx = cx + o.f * g;
-    inbound(y1);
+    inbound(0, y1);
     const k = (ax - y1) / (fx - cx);
-    solid.push(`M${px(cx)} ${px(y1)}L${px(endX)} ${px(y1 + k * (endX - cx))}`);
+    seg(0, cx, y1, endX, y1 + k * (endX - cx));
   }
   // ② 通過水晶體中心 → 方向不變，一路直線走到視網膜。
   // 它與 retinaScale() 是同一條線：那支函式回的 −EYE_L/uEye 就是這條線在視網膜上的高度比
   if (state.eyeRays[1]){
     const k = (ax - S.y) / (cx - S.x);
-    inbound(ax);
-    solid.push(`M${px(cx)} ${px(ax)}L${px(endX)} ${px(ax + k * (endX - cx))}`);
+    inbound(1, ax);
+    seg(1, cx, ax, endX, ax + k * (endX - cx));
   }
   // ③ 通過前焦點射入 → 出射平行主軸
   if (state.eyeRays[2]){
@@ -1999,43 +2153,39 @@ function drawEyeRays(L, P, o){
     if (Math.abs(dx) > 1e-6){
       const y3 = S.y + (F.y - S.y) / dx * (cx - S.x);
       if (Math.abs(y3 - ax) < G.optH * 4){        // 物太靠近焦點時 y3 會爆掉，超過畫布數倍就不畫
-        inbound(y3);
-        solid.push(`M${px(cx)} ${px(y3)}H${px(endX)}`);
+        inbound(2, y3);
+        seg(2, cx, y3, endX, y3);
       }
     }
   }
   // 完整光束（核取才畫）：均勻分佈在瞳孔口徑內，全部收斂到同一點——
-  // 這是「像不是那兩條線交出來的」的證據，也是彌散斑真正的來源
+  // 這是「像不是那兩條線交出來的」的證據，也是彌散斑真正的來源。
+  // ray 編號從 100 起跳，與三條特徵光線分開累加距離，但走同一個時鐘
   if (state.beam){
-    const half = EYE_PUPIL / 2 * g, n = 9, beam = [];
+    const half = EYE_PUPIL / 2 * g, n = 9;
     for (let i = 0; i < n; i++){
       const ry = ax - half + (2 * half) * i / (n - 1);
-      if (!gOK){
-        beam.push(`M${px(P.x)} ${px(P.y)}L${px(cx)} ${px(ry)}`);
-      } else {
-        const k = (ry - S.y) / (cx - S.x);
-        const qy = S.y + k * (gx - S.x);
-        beam.push(`M${px(P.x)} ${px(P.y)}L${px(gx)} ${px(qy)}`);
-        beam.push(`M${px(gx)} ${px(qy)}L${px(cx)} ${px(ry)}`);
-      }
+      const r = 100 + i;
+      inbound(r, ry, true);
       let ey = ry;
       if (I){
         const dx = I.x - cx, dy = I.y - ry;
         const dirX = o.im.real ? dx : -dx, dirY = o.im.real ? dy : -dy;
         if (Math.abs(dirX) > 1e-9) ey = ry + dirY * ((endX - cx) / dirX);
       }
-      beam.push(`M${px(cx)} ${px(ry)}L${px(endX)} ${px(ey)}`);
+      seg(r, cx, ry, endX, ey, true);
     }
-    L.append(svgEl('path', { d:beam.join(''), fill:'none', stroke:C.ray,
-      'stroke-width':px(1.8 * G.sc), opacity:0.4, 'stroke-linejoin':'round' }));
   }
-  if (!solid.length) return;
+  const cut = clipByAnim(solid, [], I);
+  if (cut.bs.length) L.append(svgEl('path', { d:cut.bs.map(segD).join(''), fill:'none',
+    stroke:C.ray, 'stroke-width':px(1.8 * G.sc), opacity:0.4, 'stroke-linejoin':'round' }));
+  if (!cut.s.length) return;
   // 白色外描邊：光線要走在眼球的填色上，沒有外描邊會糊進玻璃體（與蠟燭那條同一個理由）
-  L.append(svgEl('path', { d:solid.join(''), fill:'none', stroke:'#fff',
+  L.append(svgEl('path', { d:cut.s.map(segD).join(''), fill:'none', stroke:'#fff',
     'stroke-width':px(3 * G.sc + 3.4), 'stroke-linecap':'round', 'stroke-linejoin':'round' }));
   const gr = svgEl('g', { fill:'none', stroke:C.ray, 'stroke-width':px(3 * G.sc),
     'stroke-linecap':'round', 'stroke-linejoin':'round', 'marker-end':'url(#ah)' });
-  for (const s of solid) gr.append(svgEl('path', { d:s }));
+  for (const s of cut.s) gr.append(svgEl('path', { d:segD(s) }));
   L.append(gr);
 }
 
@@ -2236,7 +2386,8 @@ function syncOverlays(im, P, eye){
     } else if (im.pinhole){
       const n = HOLE_RAYS[state.hole];
       row('', `<span class="ln"></span>通過孔的光：${n} 道`);
-      row(' off', '<span class="ln"></span>被擋板擋住的光');
+      // 被擋住的光改由「完整光束」控制，沒勾就整組不畫——圖例要說得出它為什麼不見
+      row(' off', `<span class="ln"></span>被擋板擋住的光${state.beam ? '' : '（已關閉）'}`);
       row('', n === 1 ? '<span class="ln grey"></span>屏上一個點：清晰但暗'
                       : `<span class="ln grey"></span>屏上 ${n} 個位置：亮但糊`);
       if (state.hcount > 1) row('', `<span class="ln grey"></span>${state.hcount} 個孔 → ${state.hcount} 個完整的像`);
@@ -2244,6 +2395,10 @@ function syncOverlays(im, P, eye){
       row('', '<span class="ln"></span>平行主軸射入的光');
       row('', im.real ? '<span class="ln grey"></span>出射後全部通過焦點 F'
                       : '<span class="ln greydash"></span>出射後發散，反向延長線交在虛焦點 F');
+      // 面鏡的平行光是**真的打在鏡面弧上反射**，所以法線這一列只在這個模式出現
+      // 〔**A** 使用者 2026-09-10，取代 §2.8「三條特徵光線的落點都畫法線」的定案〕
+      if (state.screen === 1)
+        row('', '<span class="ln greydash" style="border-top-color:#1C2433"></span>法線（垂直鏡面）');
     } else {
       // 關掉的那條不從卡上消失，改成灰虛線＋「已關閉」——畫面上不留沒有物理意義的灰線，
       // 但「本來有三條」這件事仍要看得到。被遮板擋掉的同理：學生要看得出線是**為什麼**不見的。
@@ -2256,12 +2411,9 @@ function syncOverlays(im, P, eye){
         row(on && !blocked ? '' : ' off',
           `<span class="ln"></span>${names[i]}${!on ? '（已關閉）' : blocked ? '（被遮板擋住）' : ''}`);
       });
-      // 面鏡頁多兩列：法線是這一頁才有的元素，而②的法線與主軸重合要講清楚，
-      // 否則學生會以為那條法線沒畫出來（§2.8 定案，使用者選 (b) 照畫並註明）
-      if (state.screen === 1){
-        row('', '<span class="ln greydash" style="border-top-color:#1C2433"></span>法線（垂直鏡面）');
-        row(' off', '②的法線與主軸重合，兩條疊在一起');
-      }
+      // 交界面那條淺灰垂直線（2026-09-11 新增）：畫面上多出來的元素一定要在圖例裡有名字，
+      // 否則學生會把它當成另一條格線。行內色值與 C.plane 同一個值
+      row('', '<span class="ln" style="border-top-color:#9FA8B5"></span>光轉向的平面（折射／反射面）');
       row('', dimFactor() === 0 ? '<span class="ln grey"></span>透鏡被完全遮住'
         : im.none ? '<span class="ln grey"></span>此位置不成像'
         : im.real ? '<span class="ln grey"></span>實像（倒立）'
@@ -2338,7 +2490,7 @@ function syncControls(im){
   // 針孔頁的紙屏是主要器材不給開關（§2.7），眼睛頁的屏是視網膜、屬眼球構造（§2.6 N3）；
   // 那兩頁也都沒有「觀察者眼睛」——眼睛頁的主體本來就是一顆眼睛。
   document.getElementById('wrapMask').hidden = pg !== 2;
-  document.getElementById('wrapDot').hidden = pg !== 0;
+  document.getElementById('pinPtGroup').hidden = pg !== 0;
   document.getElementById('wrapPaper').hidden = pg === 0 || isEye;
   // 眼睛頁的特徵光線是自己那三條，與另外兩頁的三條分開（預設值不同）
   document.getElementById('eyeRayGroup').hidden = !isEye;
@@ -2444,14 +2596,22 @@ function drawEyeWindow(o){
    （先取 6 格／秒，實測 1.7 秒太趕，物體到透鏡那一段幾乎來不及看。） */
 const ANIM_GRID_PER_SEC = 4;
 let animRaf = 0, animLast = 0, animKey = '';
-// 目前只有透鏡頁有動畫（**B** 使用者 2026-09-10「先做透鏡頁一頁，驗過再擴」）
-function animPlayable(){ return state.screen === 2; }
+/* 四頁都有光路動畫〔**A** 使用者 2026-09-10「每一頁的每個模擬都要有光路動畫」，
+   取代同日稍早的 **B**「先做透鏡頁一頁，驗過再擴」〕。
+   唯一播不動的情況是這一頁當下一條光線都沒有：針孔頁三個發光點都不勾，
+   或平面鏡選了平行光（沒有焦點，那個模式不畫線）。animTotal 由上一次 render() 算出來，
+   所以 render() 結尾要再同步一次按鈕狀態，不然會慢一拍。 */
+function animPlayable(){ return animTotal > 0; }
 /* 改任何參數都回到「完整顯示」：半條光線配著新的物距是錯的畫面。
    用**參數指紋**比對而不是在每個事件處理裡各加一行——後者只要漏掉一處就會留下錯畫面，
-   而這一頁改得動狀態的入口有十幾個。播放中指紋不變，所以不會自己把自己重置掉。 */
+   而四頁改得動狀態的入口有幾十個。播放中指紋不變，所以不會自己把自己重置掉。
+   指紋要涵蓋**四頁所有會改變光路的參數**，漏一個就會出現「動了器材、光線卻停在半路」。 */
 function animGuard(){
   const k = [state.screen, state.lens, state.mirror, state.f, state.u.toFixed(3), state.shape,
-             state.rays.join(''), state.maskOn, state.mask.toFixed(2), state.beam].join('|');
+             state.rays.join(''), state.maskOn, state.mask.toFixed(2), state.beam,
+             state.hole, state.hshape, state.hcount, state.pinPts.join(''), state.pinX.toFixed(3),
+             state.paperV === null ? 'auto' : state.paperV.toFixed(3), state.paper,
+             state.eyeType, state.glasses, state.power, state.eyeRays.join('')].join('|');
   if (k === animKey) return;
   animKey = k;
   if (state.anim !== null || state.playing){
@@ -2492,7 +2652,7 @@ function syncPlayBtn(){
     'fa-solid ' + (atEnd ? 'fa-rotate-left' : state.playing ? 'fa-pause' : 'fa-play');
   btn.setAttribute('aria-label', atEnd ? '重新播放' : state.playing ? '暫停' : '播放');
   for (const b of document.querySelectorAll('#segSpeed button')) b.disabled = !on;
-  document.getElementById('drawerHint').textContent = on ? '' : '這一頁沒有可播放的光路動畫';
+  document.getElementById('drawerHint').textContent = on ? '' : '目前沒有光線可以播放';
 }
 document.getElementById('btnPlay').addEventListener('click', () => {
   if (state.playing){ state.playing = false; syncPlayBtn(); }
@@ -2644,13 +2804,14 @@ document.getElementById('uSlider').addEventListener('input', e => {
   state.paperV = null;
   setU(U_SEGS[+e.target.value].k * state.f, true);
 });
-for (const [id, key, idx] of [['chkR1','rays',0], ['chkR2','rays',1], ['chkR3','rays',2]]){
+for (const [id, key, idx] of [['chkR1','rays',0], ['chkR2','rays',1], ['chkR3','rays',2],
+                              ['chkP1','pinPts',0], ['chkP2','pinPts',1], ['chkP3','pinPts',2]]){
   document.getElementById(id).addEventListener('change', e => {
     state[key][idx] = e.target.checked; render();
   });
 }
 for (const [id, key] of [['chkBeam','beam'], ['chkMask','maskOn'], ['chkPaper','paper'],
-                         ['chkDot','dot'], ['chkGlass','glasses']]){
+                         ['chkGlass','glasses']]){
   document.getElementById(id).addEventListener('change', e => {
     state[key] = e.target.checked;
     if (key === 'paper' && e.target.checked) state.paperV = null;
@@ -2769,7 +2930,7 @@ document.getElementById('btnReset').addEventListener('click', () => {
   // 這一份清單必須與 initState() 逐項對得上（DESIGN_SPEC 第 4 節）
   for (const [id, v] of [['chkR1',true], ['chkR2',true], ['chkR3',false],
                          ['chkBeam',false], ['chkMask',false], ['chkPaper',false],
-                         ['chkDot',true], ['chkGlass',false],
+                         ['chkP1',true], ['chkP2',false], ['chkP3',false], ['chkGlass',false],
                          ['chkER1',true], ['chkER2',true], ['chkER3',false]])
     document.getElementById(id).checked = v;
   setU(state.u, false);
@@ -2783,6 +2944,10 @@ document.getElementById('nav').addEventListener('click', e => {
   // 眼睛頁的物體固定是蠟燭：這一頁講的是「眼睛在看一個東西」，箭頭與 F 形沒有那個語境，
   // 平行光更是連物體都沒有。從別頁帶著造型切進來會留在原造型上（使用者 2026-09-07 回報）
   if (n === 3 && state.shape !== 'candle') pickShape('candle');
+  // 針孔頁同理：那一頁沒有「平行光」（平行光＝物在無限遠，針孔沒有焦距也就沒有這個模式），
+  // 而它的 chip 在這一頁是收起來的。從別頁帶著平行光切進來時，四顆 chip 全不亮、
+  // 物體也畫不出來（2026-09-10 驗證動畫時發現的既有缺陷，與眼睛頁那一條是同一型）
+  else if (n === 0 && state.shape === 'parallel') pickShape('candle');
   for (const t of document.querySelectorAll('.navtab')) t.setAttribute('aria-selected', String(t === tab));
   // 四頁全部畫在同一張畫布上，沒有分頁容器要切——換頁只改 state.screen 再重畫一次
   state.paperV = null;       // 換頁時紙屏回到該頁的預設位置，不把上一頁的座標帶過來
