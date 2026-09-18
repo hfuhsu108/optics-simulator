@@ -273,6 +273,8 @@ label.check input:checked+.box i{visibility:visible}
   border-radius:999px;padding:1px calc(7px * var(--u));
   box-shadow:0 1px 3px rgba(28,36,51,.18)}
 #hintMask{cursor:ns-resize}
+/* 色光頁的觀察者眼睛：不可拖，只是光的終點。字級由 JS 依格邊長寫入 */
+.colorEye{position:absolute;transform:translate(-50%,-50%);pointer-events:none;color:var(--c-text);line-height:1}
 
 /* 說明彈窗 */
 .modal{position:fixed;inset:0;background:rgba(28,36,51,.45);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
@@ -452,6 +454,39 @@ label.check input:checked+.box i{visibility:visible}
         </div>
       </div>
 
+      <!-- ── 頁 5 色光專屬（導覽列排最後，PROJECT_PLAN §14） ──
+           切換呈色原理會把整個場面換掉（色紙＋反射 ↔ 玻璃紙＋穿透），符合 .seg 的連動判準。
+           光源三顆與顏色都只改一個參數 → 膠囊。光源可複選〔**B**「三顆各自開關，可同時開」〕，
+           顏色單選五種〔**A** 使用者 2026-09-18「顏色先3原色+黑白就好」〕。
+           透明體屬階段 2（§14.4），接上之前先停用，不讓學生點進一個空場面。 -->
+      <div class="pagectl" data-page="5">
+        <div class="group">
+          <div class="grouplabel">物體</div>
+          <div class="seg" id="colorModeSeg">
+            <button data-cmode="opaque" aria-pressed="true">不透明體</button>
+            <button data-cmode="clear" aria-pressed="false" disabled>透明體</button>
+          </div>
+        </div>
+        <div class="group">
+          <div class="grouplabel">色光（可複選）</div>
+          <div class="chips" id="lightChips">
+            <button class="chip" data-light="0" aria-pressed="true">紅光</button>
+            <button class="chip" data-light="1" aria-pressed="true">綠光</button>
+            <button class="chip" data-light="2" aria-pressed="true">藍光</button>
+          </div>
+        </div>
+        <div class="group">
+          <div class="grouplabel">色紙的顏色</div>
+          <div class="chips" id="paperColorChips">
+            <button class="chip" data-pcolor="4" aria-pressed="true">紅</button>
+            <button class="chip" data-pcolor="2" aria-pressed="false">綠</button>
+            <button class="chip" data-pcolor="1" aria-pressed="false">藍</button>
+            <button class="chip" data-pcolor="7" aria-pressed="false">白</button>
+            <button class="chip" data-pcolor="0" aria-pressed="false">黑</button>
+          </div>
+        </div>
+      </div>
+
       <!-- ── 以下四組四頁共用（針孔頁與平面鏡會收起焦距與物距） ── -->
       <div class="group" id="fGroup">
         <div class="grouplabel">焦距</div>
@@ -598,6 +633,17 @@ label.check input:checked+.box i{visibility:visible}
             <marker id="ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="4.4" markerHeight="4.4" orient="auto-start-reverse">
               <path d="M0 1.6 L9 5 L0 8.4 z" fill="#D2700F"/>
             </marker>
+            <!-- 色光頁的三色箭頭：marker 的填色不會跟著線色走（context-stroke 在 Safari 不可靠），
+                 所以一色一個。色值與 JS 的 LIGHT_RGB 同一組 -->
+            <marker id="ahR" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="4.4" markerHeight="4.4" orient="auto-start-reverse">
+              <path d="M0 1.6 L9 5 L0 8.4 z" fill="#E0342B"/>
+            </marker>
+            <marker id="ahG" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="4.4" markerHeight="4.4" orient="auto-start-reverse">
+              <path d="M0 1.6 L9 5 L0 8.4 z" fill="#1E9E46"/>
+            </marker>
+            <marker id="ahB" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="4.4" markerHeight="4.4" orient="auto-start-reverse">
+              <path d="M0 1.6 L9 5 L0 8.4 z" fill="#2F6BDE"/>
+            </marker>
           </defs>
           <g id="scene"></g>
         </svg>
@@ -619,6 +665,8 @@ label.check input:checked+.box i{visibility:visible}
         <!-- 視深頁的鳥與魚：只能水平拖〔**A** 使用者 2026-09-14「魚和鳥能水平動就好」〕，所以沿用左右箭頭 -->
         <div class="draghint" id="hintBird" hidden><i class="fa-solid fa-arrows-left-right"></i></div>
         <div class="draghint" id="hintFish" hidden><i class="fa-solid fa-arrows-left-right"></i></div>
+        <!-- 色光頁的觀察者眼睛：圖示一律走 icon 庫，位置由 renderColor() 對到反射光的終點 -->
+        <div class="colorEye" id="colorEye" hidden><i class="fa-solid fa-eye"></i></div>
     </div>
 
   </main>
@@ -667,6 +715,8 @@ label.check input:checked+.box i{visibility:visible}
     <button class="navtab" data-screen="4" aria-selected="false">視深</button>
     <button class="navtab" data-screen="2" aria-selected="true">透鏡成像</button>
     <button class="navtab" data-screen="3" aria-selected="false">眼睛</button>
+    <!-- 色光頁排最後〔**B** 使用者 2026-09-18 選定「放最後（眼睛之後），標題『色光』（推薦）」〕，data-screen 取 5 -->
+    <button class="navtab" data-screen="5" aria-selected="false">色光</button>
     <!-- 版本與作者：靠 margin-left:auto 推到最右，文字由 APP_VERSION／APP_AUTHOR 填 -->
     <span class="navmeta" id="navMeta"></span>
   </nav>
@@ -747,6 +797,12 @@ label.check input:checked+.box i{visibility:visible}
        它並沒有被治好，只是每個位置都能落在視網膜上了。再去拉<b>矯正度數</b>就看得到度數不對的後果：
        <b>太弱那一檔，看遠還是糊；太強那一檔，連近處都糊掉</b>，三檔裡只有中間那一檔拖到哪裡都清楚。</p>
     <p>右下角的小窗是<b>視網膜上的像</b>——側視圖看不出來的那一半。像落得離視網膜越遠，那裡就越糊。</p>
+    <h3 style="font-size:calc(15px * var(--u));margin:16px 0 8px">色光</h3>
+    <p>光源可以分別打開<b>紅光、綠光、藍光</b>，三道一起開就是<b>白光</b>。光照到<b>不透明</b>的色紙時，
+       色紙只把<b>和自己同色</b>的光反射出去，其他顏色的光被<b>吸收</b>（光線停在色紙上）。
+       反射出來的光進入眼睛，就是我們看到的顏色。</p>
+    <p>所以紅色色紙在白光下是紅的，只照綠光時卻<b>沒有光被反射</b>，看起來就是黑的。
+       白色色紙反射所有照到的光，黑色色紙吸收所有的光。左下角的卡片會寫出每一種光的去向。</p>
     <button class="chip" id="btnCloseHelp" style="margin-left:auto">關閉</button>
   </div>
 </div>
@@ -946,6 +1002,26 @@ const BIRD = { vbW:158.12759, vbH:49.868801, tx:-19.764593, ty:-44.26229, ref:{ 
    畫面上兩條反向延長線就疊成一條、看不出交點。放大口徑幾乎不移動交點
    （node 實算：0.3／0.6／1.0 格時交點差 ≤ 0.02 格），所以這是純視覺參數，不改變視深。 */
 const REFR_PUPIL = 0.8;
+/* ── 頁 5 色光（導覽列排最後，data-screen 取 5，見 PROJECT_PLAN §14） ──
+   顏色一律用**理想三原色**的 3 位元表示〔**B**「理想三原色：只看物體含不含 R、G、B 成分」〕：
+   紅 4、綠 2、藍 1。照射光與物體各是一組位元，不透明物體反射兩者共有的成分（AND），其餘吸收。
+   物體可選的顏色只有紅、綠、藍、白、黑〔**A** 使用者 2026-09-18「顏色先3原色+黑白就好」〕，
+   但**看起來的顏色**是 AND 的結果，照射光可以複選，所以八種組合都可能出現在畫面上。 */
+const LIGHT_BIT = [4, 2, 1];                           // lights[i] 對應的位元：紅、綠、藍
+const LIGHT_RGB = ['#E0342B', '#1E9E46', '#2F6BDE'];  // 光線的畫色，與 defs 的 #ahR／#ahG／#ahB 同一組
+const LIGHT_MARK = ['url(#ahR)', 'url(#ahG)', 'url(#ahB)'];
+const LIGHT_NAME = ['紅光', '綠光', '藍光'];
+// 位元 → 顏色名與色紙的塗色。0＝黑、7＝白；兩兩疊加的三種只會出現在「看起來的顏色」
+const COLOR_NAME = { 0:'黑', 1:'藍', 2:'綠', 3:'青', 4:'紅', 5:'洋紅', 6:'黃', 7:'白' };
+const COLOR_FILL = { 0:'#1C1C1C', 1:'#2F6BDE', 2:'#1E9E46', 3:'#22C3D6', 4:'#E0342B', 5:'#D63AC8', 6:'#F5D21C', 7:'#FFFFFF' };
+/* 場面幾何（格，相對鏡心與主軸，往下為正）。光源在左上、色紙平放在中下、眼睛在右上，
+   左右對稱——入射角等於反射角，反射光自然落進眼睛，不必另外解。
+   光路區在 1366×768 只有約 8 格高、主軸在正中，上下各約 4 格。光源的燈罩往左上還伸出約 1 格，
+   取 −2.6 時燈罩頂端貼到畫布上緣，所以壓到 −2.0；色紙下方要留標籤的高度 */
+const COLOR_SRC = { x:-6, y:-2.0 };   // 光源出光口
+const COLOR_PAPER_Y = 2.2;            // 色紙表面
+const COLOR_PAPER_W = 4;              // 色紙寬
+const COLOR_RAY_GAP = 0.32;           // 三道光的間距（垂直於光線方向）：分得開、又看得出是同一束
 // 五檔物距的 k 值（u = k·f）與段名。代表值全部是使用者定的課本比例（§2.9）：
 // 1.75f 與 0.375f 直接取自課本量測，2.5f 是暫定值（數學上限 2.6f）。
 const U_SEGS = [
@@ -1053,6 +1129,11 @@ function initState(){
     // 高度與深度不能拖（只能水平動），所以這兩個值就是全頁的高度與深度
     bird:{ x:-1.0, h:2.0 },
     fish:{ x:0.5, d:2.2 },
+    // 頁 5 色光。預設三色全開（＝白光）照紅色色紙：一開頁先看到「白光下它就是紅的」，
+    // 再讓學生自己關掉紅光看它變黑〔C〕。這三處（HTML 的 aria-pressed、這裡、重置）必須一致
+    colorMode:'opaque',               // opaque｜clear（透明體屬階段 2）
+    lights:[true, true, true],
+    paperColor:4,
   };
 }
 let state = initState();
@@ -1425,7 +1506,8 @@ function render(){
   drawGrid(L);
   // ── 第 3 層：主軸（實線。課本畫虛線，但本專案守住「虛線只有三個用途」，§2.7）。
   // 折射頁沒有主軸，那個高度是水面，由 renderRefraction 畫
-  if (state.screen !== 4)
+  // 色光頁（5）同樣沒有主軸：那一頁講的是顏色，不是成像
+  if (state.screen !== 4 && state.screen !== 5)
     L.append(svgEl('line', { x1:0, y1:px(G.axisY), x2:px(G.W), y2:px(G.axisY), stroke:C.axis, 'stroke-width':2 }));
 
   // 三種模型：針孔是相似三角形＋離散光線（沒有焦距也沒有特徵光線）；眼睛是一片焦距會變的
@@ -1435,6 +1517,7 @@ function render(){
   if (state.screen === 0) renderPinhole(L);
   else if (state.screen === 3) renderEye(L);
   else if (state.screen === 4) renderRefraction(L);
+  else if (state.screen === 5) renderColor(L);
   else renderOptic(L);
   // 光線畫完才知道這一輪有多長：播放鈕能不能按、是不是該轉成「重新播放」，都要等這裡才算得準
   syncPlayBtn();
@@ -2501,6 +2584,20 @@ function syncOverlays(im, P, eye){
       row('', (eye.im.none || !(eye.im.v > 0)) ? '<span class="ln greydash"></span>光沒有收斂在視網膜上'
         : eye.sharp ? '<span class="ln grey"></span>像落在視網膜上，看得清楚'
         : `<span class="ln greydash"></span>像落在視網膜${eye.im.v < EYE_L ? '前' : '後'}，看起來是糊的`);
+    } else if (im.color){
+      // 色光頁的文字結論〔**B** 第 9 題「要（推薦）」〕：照了什麼光 → 色紙留下哪些、吃掉哪些 → 看起來什麼顏色。
+      // 反射與吸收只講**照到的**光：沒照到的光談不上被吸收
+      const { lit, seen } = im.color, paper = COLOR_NAME[state.paperColor] + '色色紙';
+      const sw = bits => `<span style="display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid #5F6B7E;background:${COLOR_FILL[bits]}"></span>`;
+      // 三列一律用色塊，不用 .ln 線段：.ln 的預設色是橘色光線，放在這裡會被讀成「橘光」
+      row('', lit ? `${sw(lit)}照射的光：${lightList(lit)}${lit === 7 ? '（合起來是白光）' : ''}`
+                  : `${sw(0)}沒有光照射`);
+      if (lit){
+        const absorbed = lit & ~seen;
+        row('', `${sw(state.paperColor)}${paper}：${seen ? '反射' + lightList(seen) : '不反射任何照到的光'}`
+          + (absorbed ? `，吸收${lightList(absorbed)}` : ''));
+      }
+      row('', `${sw(seen)}看起來是${COLOR_NAME[seen]}色${seen ? '' : '：沒有光進入眼睛'}`);
     } else if (im.refr){
       // 光的折射：誰的光射進誰的眼睛、眼睛怎麼把它延長回去、法線、像比實際淺還是高
       const o = im.refr, who = o.birdSees ? ['魚', '鳥'] : ['鳥', '魚'];
@@ -2555,7 +2652,7 @@ function syncOverlays(im, P, eye){
   const isEye = state.screen === 3;
   // 針孔頁的紙屏永遠在；眼睛頁的「屏」是視網膜，屬眼球構造，同樣常駐不做開關（§2.6 N3）
   // 折射頁沒有紙屏（§13.5）：state.paper 是跨頁保留的，從透鏡頁開著紙屏切過來也不能冒出小窗
-  const paperOn = state.screen === 4 ? false : (state.screen === 0 || isEye) ? true : state.paper;
+  const paperOn = state.screen >= 4 ? false : (state.screen === 0 || isEye) ? true : state.paper;
   win.hidden = !paperOn;
   if (paperOn){
     win.style.top = px(G.optH + 12) + 'px';   // 貼齊留白帶頂端，高度由 CSS 的 bottom:12px 撐滿
@@ -2568,7 +2665,8 @@ function syncOverlays(im, P, eye){
   // 拖曳暗示：雙向箭頭貼在器材足端下方（平行光沒有物體可拖）。握把本身也是拖曳把手。
   // 眼睛頁的蠟燭一樣可以拖，只有紙屏那個提示要收起來——視網膜長在眼球上，不能拖
   const hintObj = document.getElementById('hintObj');
-  hintObj.hidden = !!im.parallel || state.screen === 4;   // 折射頁拖的是鳥與魚，沒有「物體」
+  hintObj.hidden = !!im.parallel || state.screen >= 4;    // 折射頁拖的是鳥與魚、色光頁沒有可拖的東西
+  document.getElementById('colorEye').hidden = state.screen !== 5;
   hintObj.style.left = px(optCx() - state.u * G.g) + 'px';
   hintObj.style.top = px(G.axisY + 6) + 'px';
   const hintPaper = document.getElementById('hintPaper');
@@ -2628,22 +2726,25 @@ function syncControls(im){
   const isEye = pg === 3;
   // 光的折射頁（4）沒有焦距、物距、特徵光線、物體造型與紙屏（§13.4 第 11 點）
   const isRefr = pg === 4;
-  const noFocus = pg === 0 || isEye || isRefr || (pg === 1 && state.mirror === 'plane');
+  // 色光頁（5）也一樣，連「顯示」組都沒有：完整光束、遮板、紙屏在那一頁都沒有對應的東西
+  const isColor = pg === 5;
+  const noFocus = pg === 0 || isEye || isRefr || isColor || (pg === 1 && state.mirror === 'plane');
+  document.getElementById('showGroup').hidden = isColor;
   document.getElementById('fGroup').hidden = noFocus;
   document.getElementById('uGroup').hidden = noFocus;
   // 特徵光線：針孔頁與眼睛頁沒有；平面鏡只有兩條（沒有焦點可通過）
-  document.getElementById('rayGroup').hidden = pg === 0 || isEye || isRefr;
+  document.getElementById('rayGroup').hidden = pg === 0 || isEye || isRefr || isColor;
   document.getElementById('chkR3').closest('label.check').hidden = (pg === 1 && state.mirror === 'plane');
   // 顯示組逐項：遮板只在透鏡頁、單點示範只在針孔頁、視覺模擬只在眼睛頁。
   // 針孔頁的紙屏是主要器材不給開關（§2.7），眼睛頁的屏是視網膜、屬眼球構造（§2.6 N3）；
   // 那兩頁也都沒有「觀察者眼睛」——眼睛頁的主體本來就是一顆眼睛。
   document.getElementById('wrapMask').hidden = pg !== 2;
   document.getElementById('pinPtGroup').hidden = pg !== 0;
-  document.getElementById('wrapPaper').hidden = pg === 0 || isEye || isRefr;
+  document.getElementById('wrapPaper').hidden = pg === 0 || isEye || isRefr || isColor;
   // 眼睛頁的特徵光線是自己那三條，與另外兩頁的三條分開（預設值不同）
   document.getElementById('eyeRayGroup').hidden = !isEye;
   // 眼睛頁的物體一律蠟燭（§2.5 第 7 點），造型整組收起來
-  document.getElementById('shapeGroup').hidden = isEye || isRefr;
+  document.getElementById('shapeGroup').hidden = isEye || isRefr || isColor;
   // 「看遠／看近」的選中態依**蠟燭落在哪一區**反推（三等分），拖到中間區時兩顆都不亮——
   // 中間區刻意沒有膠囊（使用者裁示），所以這裡只可能亮 0 或 1 顆
   if (isEye){
@@ -3053,6 +3154,111 @@ function drawRefrOut(L, o){
   L.append(t);
 }
 
+/* ── 頁 5 色光：不透明體（PROJECT_PLAN §14） ──
+   光源發出紅、綠、藍三道平行光（開幾道畫幾道），分開畫才看得出哪一道被吸收、哪一道被反射
+   〔§14.3 第 2 點，C〕。色紙反射「照射光 AND 色紙成分」，被吸收的光停在色紙表面
+   〔**B**「被吸收的光線停在表面」〕，色紙塗成看起來的顏色〔**B**「物體畫成它看起來的顏色」〕。 */
+function colorInfo(){
+  const lit = state.lights.reduce((a, on, i) => a | (on ? LIGHT_BIT[i] : 0), 0);
+  return { lit, seen:lit & state.paperColor };
+}
+function renderColor(L){
+  const g = G.g, sc = G.sc, info = colorInfo();
+  const S = { x:G.cx + COLOR_SRC.x * g, y:G.axisY + COLOR_SRC.y * g };
+  const py = G.axisY + COLOR_PAPER_Y * g;
+  const len = Math.hypot(G.cx - S.x, py - S.y);
+  const d = { x:(G.cx - S.x) / len, y:(py - S.y) / len };   // 入射方向（單位向量）
+  const n = { x:-d.y, y:d.x };                                // 三道光沿這個方向排開
+
+  // 色紙：斜看的平行四邊形，才看得到它的表面顏色（側視只剩一條線）。
+  // 白色色紙在白底上靠描邊看得出來
+  const hw = COLOR_PAPER_W / 2 * g, sk = 0.35 * g;
+  L.append(svgEl('path', {
+    d:`M${px(G.cx - hw - sk)} ${px(py + sk)}H${px(G.cx + hw - sk)}L${px(G.cx + hw + sk)} ${px(py - sk)}H${px(G.cx - hw + sk)}Z`,
+    fill:COLOR_FILL[info.seen], stroke:C.gear, 'stroke-width':px(1.6 * sc), 'stroke-linejoin':'round',
+  }));
+  const fs = Math.round(13 * U);
+  const label = svgEl('text', {
+    x:px(G.cx), y:px(py + sk + fs + 6), 'text-anchor':'middle',
+    'font-size':fs, 'font-weight':700, fill:C.mark,
+  });
+  label.textContent = `${COLOR_NAME[state.paperColor]}色色紙`;
+  L.append(label);
+
+  // 光路：每道光一段入射；被反射的再接一段反射。反射段與入射段等長、方向上下鏡射，
+  // 場面左右對稱，所以三道反射光的終點都落在眼睛附近
+  const solid = [], ends = [];
+  state.lights.forEach((on, i) => {
+    if (!on) return;
+    const k = (i - 1) * COLOR_RAY_GAP * g;
+    const s = { x:S.x + n.x * k, y:S.y + n.y * k };
+    const t = (py - s.y) / d.y;
+    const h = { x:s.x + d.x * t, y:py };
+    solid.push({ ray:i, x1:s.x, y1:s.y, x2:h.x, y2:h.y });
+    if (info.seen & LIGHT_BIT[i]){
+      const e = { x:h.x + d.x * t, y:h.y - d.y * t };
+      solid.push({ ray:i, x1:h.x, y1:h.y, x2:e.x, y2:e.y });
+      ends.push(e);
+    }
+  });
+  const cut = clipByAnim(solid, [], null);
+  // clipByAnim 回傳的線段不帶 ray，要自己對回顏色：同一道光的線段在 solid 裡相鄰、順序不變，
+  // 截過的輸出也照這個順序，所以依序比對起點即可
+  const colorOf = seg => solid.find(s => Math.abs(s.x1 - seg.x1) < 0.01 && Math.abs(s.y1 - seg.y1) < 0.01).ray;
+  if (cut.s.length){
+    L.append(svgEl('path', {
+      d:cut.s.map(segD).join(''), fill:'none', stroke:'#fff', 'stroke-width':px(3 * sc + 3.4),
+      'stroke-linecap':'round', 'stroke-linejoin':'round',
+    }));
+    for (const s of cut.s){
+      const i = colorOf(s);
+      L.append(svgEl('path', {
+        d:segD(s), fill:'none', stroke:LIGHT_RGB[i], 'stroke-width':px(3 * sc),
+        'stroke-linecap':'round', 'marker-end':LIGHT_MARK[i],
+      }));
+    }
+  }
+  drawLamp(L, S, d, n);
+
+  // 眼睛：放在反射光的終點再往前一點。沒有光被反射時仍在同一個位置——
+  // 「看起來是黑的」正是因為沒有光進入眼睛，眼睛不能跟著消失
+  const eyeEl = document.getElementById('colorEye');
+  const ex = G.cx - (S.x - G.cx) + d.x * 0.5 * g, ey = S.y - d.y * 0.5 * g;
+  eyeEl.style.left = px(ex) + 'px';
+  eyeEl.style.top = px(ey) + 'px';
+  eyeEl.style.fontSize = px(1.1 * g) + 'px';
+  syncOverlays({ color:info });
+}
+// 光源：沿光線方向擺放的燈罩，出光口三顆小圓表示三色各自開關（關掉的留白圈）
+function drawLamp(L, S, d, n){
+  const g = G.g, sc = G.sc;
+  const ang = Math.atan2(d.y, d.x) * 180 / Math.PI;
+  const grp = svgEl('g', { transform:`translate(${px(S.x)} ${px(S.y)}) rotate(${px(ang)})` });
+  grp.append(svgEl('rect', {
+    x:px(-1.5 * g), y:px(-0.62 * g), width:px(1.5 * g), height:px(1.24 * g), rx:px(0.18 * g),
+    fill:C.gear, stroke:C.mark, 'stroke-width':px(1.4 * sc),
+  }));
+  state.lights.forEach((on, i) => {
+    grp.append(svgEl('circle', {
+      cx:px(-0.02 * g), cy:px((i - 1) * COLOR_RAY_GAP * g), r:px(0.13 * g),
+      fill:on ? LIGHT_RGB[i] : '#fff', stroke:C.mark, 'stroke-width':px(1.2 * sc),
+    }));
+  });
+  L.append(grp);
+  const fs = Math.round(13 * U);
+  const t = svgEl('text', {
+    // 標在燈罩正下方：上方貼近畫布上緣，放上面會被裁掉
+    x:px(S.x - 0.75 * g * d.x), y:px(S.y - 0.75 * g * d.y + 1.45 * g + fs * 0.35), 'text-anchor':'middle',
+    'font-size':fs, 'font-weight':700, fill:C.mark,
+  });
+  t.textContent = '光源';
+  L.append(t);
+}
+// 列出位元裡有哪幾種色光，給圖例卡的結論用
+function lightList(bits){
+  return LIGHT_NAME.filter((_, i) => bits & LIGHT_BIT[i]).join('、');
+}
+
 /* ═══ 5. 互動 ═══ */
 
 /* ── 播放控制（抽屜）──
@@ -3078,7 +3284,8 @@ function animGuard(){
              state.paperV === null ? 'auto' : state.paperV.toFixed(3), state.paper,
              state.eyeType, state.glasses, state.power, state.eyeRays.join(''),
              state.refrView, state.bird.x.toFixed(3), state.bird.h.toFixed(3),
-             state.fish.x.toFixed(3), state.fish.d.toFixed(3)].join('|');
+             state.fish.x.toFixed(3), state.fish.d.toFixed(3),
+             state.colorMode, state.lights.join(''), state.paperColor].join('|');
   if (k === animKey) return;
   animKey = k;
   if (state.anim !== null || state.playing){
@@ -3256,6 +3463,23 @@ document.getElementById('refrSeg').addEventListener('click', e => {
     x.setAttribute('aria-pressed', String(x === b));
   render();
 });
+// 色光頁：光源三顆各自開關（可複選）、色紙顏色單選
+document.getElementById('lightChips').addEventListener('click', e => {
+  const b = e.target.closest('.chip[data-light]');
+  if (!b) return;
+  const i = +b.dataset.light;
+  state.lights[i] = !state.lights[i];
+  b.setAttribute('aria-pressed', String(state.lights[i]));
+  render();
+});
+document.getElementById('paperColorChips').addEventListener('click', e => {
+  const b = e.target.closest('.chip[data-pcolor]');
+  if (!b) return;
+  state.paperColor = +b.dataset.pcolor;
+  for (const c of document.querySelectorAll('#paperColorChips .chip'))
+    c.setAttribute('aria-pressed', String(c === b));
+  render();
+});
 document.getElementById('shapeChips').addEventListener('click', e => {
   const b = e.target.closest('.chip[data-shape]');
   if (!b) return;
@@ -3369,6 +3593,8 @@ board.addEventListener('pointerdown', e => {
     }
     return;
   }
+  // 色光頁沒有可拖的東西（光源、色紙、眼睛都固定），同理先擋掉跨頁保留的紙屏與物體
+  if (state.screen === 5) return;
   const objX = optCx() - state.u * G.g;
   const tol = Math.max(22, 0.7 * G.g);
   if (state.paper || state.screen === 0){          // 針孔頁的紙屏永遠在，一樣可以拖
@@ -3414,6 +3640,12 @@ document.getElementById('btnReset').addEventListener('click', () => {
     b.setAttribute('aria-pressed', String(b.dataset.mirror === state.mirror));
   for (const b of document.querySelectorAll('#refrSeg button'))
     b.setAttribute('aria-pressed', String(b.dataset.refr === state.refrView));
+  for (const b of document.querySelectorAll('#colorModeSeg button'))
+    b.setAttribute('aria-pressed', String(b.dataset.cmode === state.colorMode));
+  for (const c of document.querySelectorAll('#lightChips .chip'))
+    c.setAttribute('aria-pressed', String(state.lights[+c.dataset.light]));
+  for (const c of document.querySelectorAll('#paperColorChips .chip'))
+    c.setAttribute('aria-pressed', String(+c.dataset.pcolor === state.paperColor));
   syncRayNames();
   for (const c of document.querySelectorAll('#fChips .chip'))
     c.setAttribute('aria-pressed', String(+c.dataset.f === state.f));
