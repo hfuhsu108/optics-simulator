@@ -171,6 +171,7 @@ main{flex:1;position:relative;display:grid;
 /* 左欄：共用的控制項一直在，只有各頁專屬的那幾組跟著分頁切換 */
 .pagectl{display:none;flex-direction:column;gap:6px}
 .pagectl.on{display:flex}
+#sheetGroups{display:flex;flex-direction:column;gap:6px}   /* 三片玻璃紙包一層，間距要與 .pagectl 相同 */
 /* 平面鏡沒有焦距，整組（含物距）要收起來而不是停用——那兩組對平面鏡不是「不能用」，是不存在。
    （收起來由第 2 節的 [hidden] 通用規則負責，這裡不再各自補一條 display:none。） */
 
@@ -458,13 +459,13 @@ label.check input:checked+.box i{visibility:visible}
            切換呈色原理會把整個場面換掉（色紙＋反射 ↔ 玻璃紙＋穿透），符合 .seg 的連動判準。
            光源三顆與顏色都只改一個參數 → 膠囊。光源可複選〔**B**「三顆各自開關，可同時開」〕，
            顏色單選五種〔**A** 使用者 2026-09-18「顏色先3原色+黑白就好」〕。
-           透明體屬階段 2（§14.4），接上之前先停用，不讓學生點進一個空場面。 -->
+           切到透明體時「色紙的顏色」整組換成三片玻璃紙〔**A**「可3片」〕。 -->
       <div class="pagectl" data-page="5">
         <div class="group">
           <div class="grouplabel">物體</div>
           <div class="seg" id="colorModeSeg">
             <button data-cmode="opaque" aria-pressed="true">不透明體</button>
-            <button data-cmode="clear" aria-pressed="false" disabled>透明體</button>
+            <button data-cmode="clear" aria-pressed="false">透明體</button>
           </div>
         </div>
         <div class="group">
@@ -475,7 +476,7 @@ label.check input:checked+.box i{visibility:visible}
             <button class="chip" data-light="2" aria-pressed="true">藍光</button>
           </div>
         </div>
-        <div class="group">
+        <div class="group" id="paperColorGroup">
           <div class="grouplabel">色紙的顏色</div>
           <div class="chips" id="paperColorChips">
             <button class="chip" data-pcolor="4" aria-pressed="true">紅</button>
@@ -485,6 +486,9 @@ label.check input:checked+.box i{visibility:visible}
             <button class="chip" data-pcolor="0" aria-pressed="false">黑</button>
           </div>
         </div>
+        <!-- 三片玻璃紙：每片「不放」或紅、綠、藍，由光源往眼睛依序排
+             〔**A** 使用者 2026-09-18「玻璃紙刪除黑、白」〕。膠囊由 JS 依 SHEET_CHOICES 產生，三組同一份清單 -->
+        <div id="sheetGroups" hidden></div>
       </div>
 
       <!-- ── 以下四組四頁共用（針孔頁與平面鏡會收起焦距與物距） ── -->
@@ -803,6 +807,9 @@ label.check input:checked+.box i{visibility:visible}
        反射出來的光進入眼睛，就是我們看到的顏色。</p>
     <p>所以紅色色紙在白光下是紅的，只照綠光時卻<b>沒有光被反射</b>，看起來就是黑的。
        白色色紙反射所有照到的光，黑色色紙吸收所有的光。左下角的卡片會寫出每一種光的去向。</p>
+    <p>切到<b>透明體</b>後，光改成穿過<b>玻璃紙</b>進入眼睛，最多可以疊三片。每一片只讓<b>和自己同色</b>的光通過，
+       其他顏色的光被吸收（光線停在那一片上）。
+       白光穿過紅色玻璃紙只剩紅光；再疊一片綠色玻璃紙，紅光也過不去，眼睛就什麼都看不到了。</p>
     <button class="chip" id="btnCloseHelp" style="margin-left:auto">關閉</button>
   </div>
 </div>
@@ -1022,6 +1029,16 @@ const COLOR_SRC = { x:-6, y:-2.0 };   // 光源出光口
 const COLOR_PAPER_Y = 2.2;            // 色紙表面
 const COLOR_PAPER_W = 4;              // 色紙寬
 const COLOR_RAY_GAP = 0.32;           // 三道光的間距（垂直於光線方向）：分得開、又看得出是同一束
+/* 透明體：光源、三片玻璃紙、眼睛排在主軸上，光水平射過去。三片等距排在中央〔C〕，
+   光源出光口與眼睛各離中央 8 格，玻璃紙之間留 4 格，被吸收的光停在哪一片看得清楚 */
+const CLEAR_SRC_X = -8;
+const CLEAR_EYE_X = 8.6;
+const SHEET_X = [-4, 0, 4];
+const SHEET_H = 3.6, SHEET_T = 0.4;   // 玻璃紙高與厚（格）。厚度誇大，才看得到它本身的顏色
+// 每片的選項：null＝不放；其餘是位元。玻璃紙只有三原色〔**A** 使用者 2026-09-18「玻璃紙刪除黑、白」〕，
+// 色紙仍是五色
+const SHEET_CHOICES = [[null, '不放'], [4, '紅'], [2, '綠'], [1, '藍']];
+const sheetName = b => `${COLOR_NAME[b]}色玻璃紙`;
 // 五檔物距的 k 值（u = k·f）與段名。代表值全部是使用者定的課本比例（§2.9）：
 // 1.75f 與 0.375f 直接取自課本量測，2.5f 是暫定值（數學上限 2.6f）。
 const U_SEGS = [
@@ -1131,9 +1148,11 @@ function initState(){
     fish:{ x:0.5, d:2.2 },
     // 頁 5 色光。預設三色全開（＝白光）照紅色色紙：一開頁先看到「白光下它就是紅的」，
     // 再讓學生自己關掉紅光看它變黑〔C〕。這三處（HTML 的 aria-pressed、這裡、重置）必須一致
-    colorMode:'opaque',               // opaque｜clear（透明體屬階段 2）
+    colorMode:'opaque',               // opaque｜clear
     lights:[true, true, true],
     paperColor:4,
+    // 透明體的三片玻璃紙（由光源往眼睛）。預設只放第 1 片紅色：先看到最單純的「只剩紅光通過」〔C〕
+    sheets:[4, null, null],
   };
 }
 let state = initState();
@@ -2592,12 +2611,25 @@ function syncOverlays(im, P, eye){
       // 三列一律用色塊，不用 .ln 線段：.ln 的預設色是橘色光線，放在這裡會被讀成「橘光」
       row('', lit ? `${sw(lit)}照射的光：${lightList(lit)}${lit === 7 ? '（合起來是白光）' : ''}`
                   : `${sw(0)}沒有光照射`);
-      if (lit){
-        const absorbed = lit & ~seen;
-        row('', `${sw(state.paperColor)}${paper}：${seen ? '反射' + lightList(seen) : '不反射任何照到的光'}`
-          + (absorbed ? `，吸收${lightList(absorbed)}` : ''));
+      if (im.color.clear){
+        // 透明體逐片講：每一片只講**照到它的**光，前面已被吸收的不算在它頭上
+        const multi = im.color.steps.length > 1;
+        for (const st of im.color.steps){
+          const name = (multi ? `第 ${st.k + 1} 片` : '') + sheetName(st.bits), ab = st.inBits & ~st.outBits;
+          row('', `${sw(st.bits)}${name}：` + (!st.inBits ? '沒有光照到'
+            : (st.outBits ? '讓' + lightList(st.outBits) + '通過' : '不讓任何照到的光通過')
+              + (ab ? `，吸收${lightList(ab)}` : '')));
+        }
+        if (!im.color.steps.length) row('', `${sw(7)}沒有放玻璃紙：光直接進入眼睛`);
+        row('', `${sw(seen)}眼睛看到${seen ? COLOR_NAME[seen] + '色' : '黑色：沒有光穿過來'}`);
+      } else {
+        if (lit){
+          const absorbed = lit & ~seen;
+          row('', `${sw(state.paperColor)}${paper}：${seen ? '反射' + lightList(seen) : '不反射任何照到的光'}`
+            + (absorbed ? `，吸收${lightList(absorbed)}` : ''));
+        }
+        row('', `${sw(seen)}看起來是${COLOR_NAME[seen]}色${seen ? '' : '：沒有光進入眼睛'}`);
       }
-      row('', `${sw(seen)}看起來是${COLOR_NAME[seen]}色${seen ? '' : '：沒有光進入眼睛'}`);
     } else if (im.refr){
       // 光的折射：誰的光射進誰的眼睛、眼睛怎麼把它延長回去、法線、像比實際淺還是高
       const o = im.refr, who = o.birdSees ? ['魚', '鳥'] : ['鳥', '魚'];
@@ -2730,6 +2762,9 @@ function syncControls(im){
   const isColor = pg === 5;
   const noFocus = pg === 0 || isEye || isRefr || isColor || (pg === 1 && state.mirror === 'plane');
   document.getElementById('showGroup').hidden = isColor;
+  // 呈色原理切換：色紙一組 ↔ 三片玻璃紙三組
+  document.getElementById('paperColorGroup').hidden = state.colorMode === 'clear';
+  document.getElementById('sheetGroups').hidden = state.colorMode !== 'clear';
   document.getElementById('fGroup').hidden = noFocus;
   document.getElementById('uGroup').hidden = noFocus;
   // 特徵光線：針孔頁與眼睛頁沒有；平面鏡只有兩條（沒有焦點可通過）
@@ -3163,6 +3198,7 @@ function colorInfo(){
   return { lit, seen:lit & state.paperColor };
 }
 function renderColor(L){
+  if (state.colorMode === 'clear') return renderColorClear(L);
   const g = G.g, sc = G.sc, info = colorInfo();
   const S = { x:G.cx + COLOR_SRC.x * g, y:G.axisY + COLOR_SRC.y * g };
   const py = G.axisY + COLOR_PAPER_Y * g;
@@ -3187,7 +3223,7 @@ function renderColor(L){
 
   // 光路：每道光一段入射；被反射的再接一段反射。反射段與入射段等長、方向上下鏡射，
   // 場面左右對稱，所以三道反射光的終點都落在眼睛附近
-  const solid = [], ends = [];
+  const solid = [];
   state.lights.forEach((on, i) => {
     if (!on) return;
     const k = (i - 1) * COLOR_RAY_GAP * g;
@@ -3195,15 +3231,74 @@ function renderColor(L){
     const t = (py - s.y) / d.y;
     const h = { x:s.x + d.x * t, y:py };
     solid.push({ ray:i, x1:s.x, y1:s.y, x2:h.x, y2:h.y });
-    if (info.seen & LIGHT_BIT[i]){
-      const e = { x:h.x + d.x * t, y:h.y - d.y * t };
-      solid.push({ ray:i, x1:h.x, y1:h.y, x2:e.x, y2:e.y });
-      ends.push(e);
-    }
+    if (info.seen & LIGHT_BIT[i])
+      solid.push({ ray:i, x1:h.x, y1:h.y, x2:h.x + d.x * t, y2:h.y - d.y * t });
   });
+  drawColorRays(L, solid);
+  drawLamp(L, S, d, n);
+  // 眼睛：放在反射光的終點再往前一點。沒有光被反射時仍在同一個位置——
+  // 「看起來是黑的」正是因為沒有光進入眼睛，眼睛不能跟著消失
+  placeColorEye(G.cx - (S.x - G.cx) + d.x * 0.5 * g, S.y - d.y * 0.5 * g);
+  syncOverlays({ color:info });
+}
+/* ── 頁 5 色光：透明體 ──
+   光依序穿過最多三片玻璃紙〔**A**「可3片」〕，每一片只讓自己含有的色光通過（AND），
+   其餘吸收、停在那一片的入光面上。穿過全部的光進入眼睛〔**B**「不畫光屏，改由眼睛直接透過玻璃紙看」〕。 */
+function clearInfo(){
+  const lit = state.lights.reduce((a, on, i) => a | (on ? LIGHT_BIT[i] : 0), 0);
+  // 逐片記下「照到這一片的光」與「穿過這一片的光」，圖例卡的結論逐片講
+  let now = lit;
+  const steps = [];
+  state.sheets.forEach((b, k) => {
+    if (b === null) return;
+    steps.push({ k, bits:b, inBits:now, outBits:now & b });
+    now &= b;
+  });
+  return { lit, seen:now, steps, clear:true };
+}
+function renderColorClear(L){
+  const g = G.g, sc = G.sc, info = clearInfo();
+  const S = { x:G.cx + CLEAR_SRC_X * g, y:G.axisY };
+  const eyeX = G.cx + CLEAR_EYE_X * g;
+  const fs = Math.round(13 * U);
+
+  // 玻璃紙：直立的薄片，半透明塗它自己的顏色
+  for (const st of info.steps){
+    const x = G.cx + SHEET_X[st.k] * g;
+    L.append(svgEl('rect', {
+      x:px(x - SHEET_T / 2 * g), y:px(G.axisY - SHEET_H / 2 * g),
+      width:px(SHEET_T * g), height:px(SHEET_H * g), rx:px(0.06 * g),
+      fill:COLOR_FILL[st.bits], 'fill-opacity':0.75,
+      stroke:C.gear, 'stroke-width':px(1.4 * sc),
+    }));
+    const t = svgEl('text', {
+      x:px(x), y:px(G.axisY + SHEET_H / 2 * g + fs + 6), 'text-anchor':'middle',
+      'font-size':fs, 'font-weight':700, fill:C.mark,
+    });
+    t.textContent = sheetName(st.bits);
+    L.append(t);
+  }
+
+  // 每道光從出光口水平往右，走到第一片吸收它的玻璃紙的入光面就停；全部通過的走到眼睛前
+  const solid = [];
+  state.lights.forEach((on, i) => {
+    if (!on) return;
+    const y = S.y + (i - 1) * COLOR_RAY_GAP * g;
+    const stop = info.steps.find(st => !(st.bits & LIGHT_BIT[i]));
+    const x2 = stop ? G.cx + (SHEET_X[stop.k] - SHEET_T / 2) * g : eyeX - 0.7 * g;
+    solid.push({ ray:i, x1:S.x, y1:y, x2, y2:y });
+  });
+  drawColorRays(L, solid);
+  drawLamp(L, S, { x:1, y:0 }, { x:0, y:1 });
+  placeColorEye(eyeX, G.axisY);
+  syncOverlays({ color:info });
+}
+// 三色光線：白色外描邊＋各自顏色＋各自顏色的箭頭，經 clipByAnim 截出播放進度
+function drawColorRays(L, solid){
+  const sc = G.sc;
   const cut = clipByAnim(solid, [], null);
-  // clipByAnim 回傳的線段不帶 ray，要自己對回顏色：同一道光的線段在 solid 裡相鄰、順序不變，
-  // 截過的輸出也照這個順序，所以依序比對起點即可
+  // clipByAnim 回傳的線段不帶 ray（截過的是新物件），要自己對回顏色：截短只改終點，起點不變，
+  // 所以用起點比對回原線段即可
   const colorOf = seg => solid.find(s => Math.abs(s.x1 - seg.x1) < 0.01 && Math.abs(s.y1 - seg.y1) < 0.01).ray;
   if (cut.s.length){
     L.append(svgEl('path', {
@@ -3218,16 +3313,12 @@ function renderColor(L){
       }));
     }
   }
-  drawLamp(L, S, d, n);
-
-  // 眼睛：放在反射光的終點再往前一點。沒有光被反射時仍在同一個位置——
-  // 「看起來是黑的」正是因為沒有光進入眼睛，眼睛不能跟著消失
-  const eyeEl = document.getElementById('colorEye');
-  const ex = G.cx - (S.x - G.cx) + d.x * 0.5 * g, ey = S.y - d.y * 0.5 * g;
-  eyeEl.style.left = px(ex) + 'px';
-  eyeEl.style.top = px(ey) + 'px';
-  eyeEl.style.fontSize = px(1.1 * g) + 'px';
-  syncOverlays({ color:info });
+}
+function placeColorEye(x, y){
+  const el = document.getElementById('colorEye');
+  el.style.left = px(x) + 'px';
+  el.style.top = px(y) + 'px';
+  el.style.fontSize = px(1.1 * G.g) + 'px';
 }
 // 光源：沿光線方向擺放的燈罩，出光口三顆小圓表示三色各自開關（關掉的留白圈）
 function drawLamp(L, S, d, n){
@@ -3285,7 +3376,7 @@ function animGuard(){
              state.eyeType, state.glasses, state.power, state.eyeRays.join(''),
              state.refrView, state.bird.x.toFixed(3), state.bird.h.toFixed(3),
              state.fish.x.toFixed(3), state.fish.d.toFixed(3),
-             state.colorMode, state.lights.join(''), state.paperColor].join('|');
+             state.colorMode, state.lights.join(''), state.paperColor, state.sheets.join()].join('|');
   if (k === animKey) return;
   animKey = k;
   if (state.anim !== null || state.playing){
@@ -3480,6 +3571,42 @@ document.getElementById('paperColorChips').addEventListener('click', e => {
     c.setAttribute('aria-pressed', String(c === b));
   render();
 });
+document.getElementById('colorModeSeg').addEventListener('click', e => {
+  const b = e.target.closest('button[data-cmode]');
+  if (!b || state.colorMode === b.dataset.cmode) return;
+  state.colorMode = b.dataset.cmode;
+  for (const x of document.querySelectorAll('#colorModeSeg button'))
+    x.setAttribute('aria-pressed', String(x === b));
+  render();
+});
+// 三片玻璃紙的膠囊：三組同一份 SHEET_CHOICES，由這裡產生，不在 HTML 寫三份
+{
+  const box = document.getElementById('sheetGroups');
+  for (let k = 0; k < state.sheets.length; k++){
+    const grp = document.createElement('div');
+    grp.className = 'group';
+    grp.innerHTML = `<div class="grouplabel">第 ${k + 1} 片玻璃紙</div><div class="chips" data-sheet="${k}">`
+      + SHEET_CHOICES.map(([b, name]) =>
+          `<button class="chip" data-sbits="${b === null ? '' : b}" aria-pressed="false">${name}</button>`).join('')
+      + '</div>';
+    box.append(grp);
+  }
+  box.addEventListener('click', e => {
+    const b = e.target.closest('.chip[data-sbits]');
+    if (!b) return;
+    const k = +b.closest('.chips').dataset.sheet;
+    state.sheets[k] = b.dataset.sbits === '' ? null : +b.dataset.sbits;
+    syncSheetChips();
+    render();
+  });
+}
+function syncSheetChips(){
+  for (const c of document.querySelectorAll('#sheetGroups .chip')){
+    const v = state.sheets[+c.closest('.chips').dataset.sheet];
+    c.setAttribute('aria-pressed', String(c.dataset.sbits === (v === null ? '' : String(v))));
+  }
+}
+syncSheetChips();
 document.getElementById('shapeChips').addEventListener('click', e => {
   const b = e.target.closest('.chip[data-shape]');
   if (!b) return;
@@ -3646,6 +3773,7 @@ document.getElementById('btnReset').addEventListener('click', () => {
     c.setAttribute('aria-pressed', String(state.lights[+c.dataset.light]));
   for (const c of document.querySelectorAll('#paperColorChips .chip'))
     c.setAttribute('aria-pressed', String(+c.dataset.pcolor === state.paperColor));
+  syncSheetChips();
   syncRayNames();
   for (const c of document.querySelectorAll('#fChips .chip'))
     c.setAttribute('aria-pressed', String(+c.dataset.f === state.f));
