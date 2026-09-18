@@ -474,6 +474,9 @@ label.check input:checked+.box i{visibility:visible}
             <button class="chip" data-light="0" aria-pressed="true">紅光</button>
             <button class="chip" data-light="1" aria-pressed="true">綠光</button>
             <button class="chip" data-light="2" aria-pressed="true">藍光</button>
+            <!-- 白光＝三色全開，不是第四種光：沒有自己的 state，亮不亮由三色反推
+                 〔**A** 使用者 2026-09-18「多加一個白光，會和紅、綠、藍光的選項連動」〕 -->
+            <button class="chip" data-light="w" aria-pressed="true">白光</button>
           </div>
         </div>
         <div class="group" id="paperColorGroup">
@@ -675,7 +678,7 @@ label.check input:checked+.box i{visibility:visible}
 
   </main>
 
-  <!-- 底部導覽列：單元內分頁。五頁**全部已實作**，沒有點進去是死路的頁
+  <!-- 底部導覽列：單元內分頁。六頁**全部已實作**，沒有點進去是死路的頁
        （DESIGN_SPEC 第 1 節／DEV_SPEC 9.5「未完成的功能不得出現在導覽列」已滿足）。 -->
   <!-- 底部抽屜：**只放播放控制**（判準見專案 memory「抽屜只放播放控制」；
        **B** 使用者 2026-09-10 選定「只放播放暫停與速度」，所以沒有單步與進度捲軸）。
@@ -738,7 +741,7 @@ label.check input:checked+.box i{visibility:visible}
     <p>透鏡頁與面鏡頁的器材中央有一條<b>淺灰色的垂直線</b>，那是<b>光轉向的平面</b>。
        作圖法把折射與反射都當成發生在這個平面上，所以三條特徵光線一律在這條線上轉折，
        不是在透鏡的表面或鏡面的弧上。器材本身仍照真實形狀畫，兩者不會完全重合。</p>
-    <p>畫面下方的<b>播放鍵</b>讓光從物體出發往前走，<b>四個頁面都可以播</b>。光線同時發出，
+    <p>畫面下方的<b>播放鍵</b>讓光從物體出發往前走，<b>每個頁面都可以播</b>。光線同時發出，
        走到交會的那一刻像才出現。成的是虛像時，光線發散之後會一起往回延伸虛線，
        <b>同時抵達虛像</b>才顯示。速度有 0.5×、1×、2× 三檔；動到任何器材或設定，
        畫面就回到「整條光路都畫出來」的樣子。</p>
@@ -802,7 +805,8 @@ label.check input:checked+.box i{visibility:visible}
        <b>太弱那一檔，看遠還是糊；太強那一檔，連近處都糊掉</b>，三檔裡只有中間那一檔拖到哪裡都清楚。</p>
     <p>右下角的小窗是<b>視網膜上的像</b>——側視圖看不出來的那一半。像落得離視網膜越遠，那裡就越糊。</p>
     <h3 style="font-size:calc(15px * var(--u));margin:16px 0 8px">色光</h3>
-    <p>光源可以分別打開<b>紅光、綠光、藍光</b>，三道一起開就是<b>白光</b>。光照到<b>不透明</b>的色紙時，
+    <p>光源可以分別打開<b>紅光、綠光、藍光</b>，三道一起開就是<b>白光</b>（按「白光」會一次打開三道），
+       燈罩中間的方框就是混合後發出的顏色。方格紙左下與右下的<b>三圈示意圖</b>，分別是發出的光與眼睛接收的光。光照到<b>不透明</b>的色紙時，
        色紙只把<b>和自己同色</b>的光反射出去，其他顏色的光被<b>吸收</b>（光線停在色紙上）。
        反射出來的光進入眼睛，就是我們看到的顏色。</p>
     <p>所以紅色色紙在白光下是紅的，只照綠光時卻<b>沒有光被反射</b>，看起來就是黑的。
@@ -1021,6 +1025,8 @@ const LIGHT_NAME = ['紅光', '綠光', '藍光'];
 // 位元 → 顏色名與色紙的塗色。0＝黑、7＝白；兩兩疊加的三種只會出現在「看起來的顏色」
 const COLOR_NAME = { 0:'黑', 1:'藍', 2:'綠', 3:'青', 4:'紅', 5:'洋紅', 6:'黃', 7:'白' };
 const COLOR_FILL = { 0:'#1C1C1C', 1:'#2F6BDE', 2:'#1E9E46', 3:'#22C3D6', 4:'#E0342B', 5:'#D63AC8', 6:'#F5D21C', 7:'#FFFFFF' };
+// 播放中光還沒照到的色紙：淺灰。不能用黑——黑是「照到了但全被吸收」的結果，兩者要分得開
+const COLOR_UNLIT = '#DDE1E7';
 /* 場面幾何（格，相對鏡心與主軸，往下為正）。光源在左上、色紙平放在中下、眼睛在右上，
    左右對稱——入射角等於反射角，反射光自然落進眼睛，不必另外解。
    光路區在 1366×768 只有約 8 格高、主軸在正中，上下各約 4 格。光源的燈罩往左上還伸出約 1 格，
@@ -2607,7 +2613,11 @@ function syncOverlays(im, P, eye){
       // 色光頁的文字結論〔**B** 第 9 題「要（推薦）」〕：照了什麼光 → 色紙留下哪些、吃掉哪些 → 看起來什麼顏色。
       // 反射與吸收只講**照到的**光：沒照到的光談不上被吸收
       const { lit, seen } = im.color, paper = COLOR_NAME[state.paperColor] + '色色紙';
-      const sw = bits => `<span style="display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid #5F6B7E;background:${COLOR_FILL[bits]}"></span>`;
+      // sw 收位元或直接收色值（'#…'），後者給「光還在路上」的未照亮淺灰用
+      const sw = c => `<span style="display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid #5F6B7E;background:${typeof c === 'string' ? c : COLOR_FILL[c]}"></span>`;
+      // 結果那一列要等光全部走完（反射光或穿透光抵達眼睛）才出現，比照另外五頁「光到了像才出現」。
+      // animTotal 是這一輪 drawColorRays() 剛算好的，syncOverlays 在它之後才被呼叫
+      const done = state.anim === null || state.anim >= animTotal;
       // 三列一律用色塊，不用 .ln 線段：.ln 的預設色是橘色光線，放在這裡會被讀成「橘光」
       row('', lit ? `${sw(lit)}照射的光：${lightList(lit)}${lit === 7 ? '（合起來是白光）' : ''}`
                   : `${sw(0)}沒有光照射`);
@@ -2621,14 +2631,16 @@ function syncOverlays(im, P, eye){
               + (ab ? `，吸收${lightList(ab)}` : '')));
         }
         if (!im.color.steps.length) row('', `${sw(7)}沒有放玻璃紙：光直接進入眼睛`);
-        row('', `${sw(seen)}眼睛看到${seen ? COLOR_NAME[seen] + '色' : '黑色：沒有光穿過來'}`);
+        if (done) row('', `${sw(seen)}眼睛看到${seen ? COLOR_NAME[seen] + '色' : '黑色：沒有光穿過來'}`);
+        else row(' off', `${sw(COLOR_UNLIT)}光還在路上……`);
       } else {
         if (lit){
           const absorbed = lit & ~seen;
           row('', `${sw(state.paperColor)}${paper}：${seen ? '反射' + lightList(seen) : '不反射任何照到的光'}`
             + (absorbed ? `，吸收${lightList(absorbed)}` : ''));
         }
-        row('', `${sw(seen)}看起來是${COLOR_NAME[seen]}色${seen ? '' : '：沒有光進入眼睛'}`);
+        if (done) row('', `${sw(seen)}看起來是${COLOR_NAME[seen]}色${seen ? '' : '：沒有光進入眼睛'}`);
+        else row(' off', `${sw(COLOR_UNLIT)}光還在路上……`);
       }
     } else if (im.refr){
       // 光的折射：誰的光射進誰的眼睛、眼睛怎麼把它延長回去、法線、像比實際淺還是高
@@ -2685,7 +2697,15 @@ function syncOverlays(im, P, eye){
   // 針孔頁的紙屏永遠在；眼睛頁的「屏」是視網膜，屬眼球構造，同樣常駐不做開關（§2.6 N3）
   // 折射頁沒有紙屏（§13.5）：state.paper 是跨頁保留的，從透鏡頁開著紙屏切過來也不能冒出小窗
   const paperOn = state.screen >= 4 ? false : (state.screen === 0 || isEye) ? true : state.paper;
-  win.hidden = !paperOn;
+  // 色光頁借同一個小窗顯示「眼睛看到的顏色」〔**A** 使用者 2026-09-18「請幫我多做一個小窗，呈現眼睛看到的顏色」〕，
+  // 常駐不設開關。只限這一頁：§6 ② 否決的是成像各頁的「看到的樣子」小窗，那條仍然有效
+  const colorWin = state.screen === 5;
+  win.hidden = !paperOn && !colorWin;
+  if (colorWin){
+    win.style.top = px(G.optH + 12) + 'px';
+    document.getElementById('winCap').textContent = '眼睛看到的顏色';
+    drawColorWindow(im.color);
+  }
   if (paperOn){
     win.style.top = px(G.optH + 12) + 'px';   // 貼齊留白帶頂端，高度由 CSS 的 bottom:12px 撐滿
     document.getElementById('winCap').textContent = isEye ? '視網膜上的像' : '紙屏正面';
@@ -2850,6 +2870,28 @@ function drawWindow(im){
    所以「像糊成什麼樣子」現在只有這個小窗在講，它是這一頁的主要證據面。
    尺度用 EYE_WIN_GRID（窗高 2 格）而不是另外兩頁的 10 格：眼軸只有 4.6 格、
    像高只有 0.32～0.85 格，沿用 10 格會讓像小到看不出糊不糊。 */
+/* 色光頁的小窗：一整塊眼睛看到的顏色＋顏色名。進入眼睛的只有「看起來的顏色」那些光，
+   所以不透明體與透明體畫法相同。播放中光還沒走完之前畫未照亮的淺灰，與結論卡最後一列同一個時機 */
+function drawColorWindow(info){
+  const g2 = document.getElementById('winScene');
+  const svg = document.getElementById('winsvg');
+  g2.textContent = '';
+  g2.removeAttribute('opacity');
+  svg.style.filter = '';          // 透鏡頁與眼睛頁會在這張 svg 掛 blur，切過來要拿掉
+  const w = svg.clientWidth, h = svg.clientHeight;
+  if (!(w > 0 && h > 0)) return;
+  const done = state.anim === null || state.anim >= animTotal;
+  const fs = Math.round(13 * U), pad = 10, textH = fs + 12;
+  g2.append(svgEl('rect', {
+    x:pad, y:pad, width:px(w - pad * 2), height:px(Math.max(10, h - pad * 2 - textH)), rx:6,
+    fill:done ? COLOR_FILL[info.seen] : COLOR_UNLIT, stroke:C.gear, 'stroke-width':1.2,
+  }));
+  const t = svgEl('text', {
+    x:px(w / 2), y:px(h - pad - 2), 'text-anchor':'middle', 'font-size':fs, 'font-weight':700, fill:C.mark,
+  });
+  t.textContent = !done ? '光還在路上' : info.seen ? `${COLOR_NAME[info.seen]}色` : '黑色（沒有光）';
+  g2.append(t);
+}
 function drawEyeWindow(o){
   const g2 = document.getElementById('winScene');
   const svg = document.getElementById('winsvg');
@@ -3192,7 +3234,9 @@ function drawRefrOut(L, o){
 /* ── 頁 5 色光：不透明體（PROJECT_PLAN §14） ──
    光源發出紅、綠、藍三道平行光（開幾道畫幾道），分開畫才看得出哪一道被吸收、哪一道被反射
    〔§14.3 第 2 點，C〕。色紙反射「照射光 AND 色紙成分」，被吸收的光停在色紙表面
-   〔**B**「被吸收的光線停在表面」〕，色紙塗成看起來的顏色〔**B**「物體畫成它看起來的顏色」〕。 */
+   〔**B**「被吸收的光線停在表面」〕。色紙一律塗**它本來的顏色**〔**A** 使用者 2026-09-18
+   「我希望色紙呈現的是他本來就該有的顏色，不是他照到光呈現的」，取代第 4 題 **B**「物體畫成它看起來的顏色」〕；
+   看起來的顏色改由右下小窗、混色示意圖與結論卡呈現。 */
 function colorInfo(){
   const lit = state.lights.reduce((a, on, i) => a | (on ? LIGHT_BIT[i] : 0), 0);
   return { lit, seen:lit & state.paperColor };
@@ -3207,11 +3251,11 @@ function renderColor(L){
   const n = { x:-d.y, y:d.x };                                // 三道光沿這個方向排開
 
   // 色紙：斜看的平行四邊形，才看得到它的表面顏色（側視只剩一條線）。
-  // 白色色紙在白底上靠描邊看得出來
+  // 白色色紙在白底上靠描邊看得出來。本來的顏色不隨光改變，所以播放中也不必等光抵達
   const hw = COLOR_PAPER_W / 2 * g, sk = 0.35 * g;
   L.append(svgEl('path', {
     d:`M${px(G.cx - hw - sk)} ${px(py + sk)}H${px(G.cx + hw - sk)}L${px(G.cx + hw + sk)} ${px(py - sk)}H${px(G.cx - hw + sk)}Z`,
-    fill:COLOR_FILL[info.seen], stroke:C.gear, 'stroke-width':px(1.6 * sc), 'stroke-linejoin':'round',
+    fill:COLOR_FILL[state.paperColor], stroke:C.gear, 'stroke-width':px(1.6 * sc), 'stroke-linejoin':'round',
   }));
   const fs = Math.round(13 * U);
   const label = svgEl('text', {
@@ -3236,6 +3280,7 @@ function renderColor(L){
   });
   drawColorRays(L, solid);
   drawLamp(L, S, d, n);
+  drawMixPair(L, info);
   // 眼睛：放在反射光的終點再往前一點。沒有光被反射時仍在同一個位置——
   // 「看起來是黑的」正是因為沒有光進入眼睛，眼睛不能跟著消失
   placeColorEye(G.cx - (S.x - G.cx) + d.x * 0.5 * g, S.y - d.y * 0.5 * g);
@@ -3262,13 +3307,14 @@ function renderColorClear(L){
   const eyeX = G.cx + CLEAR_EYE_X * g;
   const fs = Math.round(13 * U);
 
-  // 玻璃紙：直立的薄片，半透明塗它自己的顏色
+  // 玻璃紙：直立的薄片，塗它自己的顏色
   for (const st of info.steps){
     const x = G.cx + SHEET_X[st.k] * g;
     L.append(svgEl('rect', {
       x:px(x - SHEET_T / 2 * g), y:px(G.axisY - SHEET_H / 2 * g),
       width:px(SHEET_T * g), height:px(SHEET_H * g), rx:px(0.06 * g),
-      fill:COLOR_FILL[st.bits], 'fill-opacity':0.75,
+      // 不做半透明：降透明度後紅玻璃紙會比光源、小窗的紅淡，全頁同一個顏色必須是同一個色值
+      fill:COLOR_FILL[st.bits],
       stroke:C.gear, 'stroke-width':px(1.4 * sc),
     }));
     const t = svgEl('text', {
@@ -3289,7 +3335,8 @@ function renderColorClear(L){
     solid.push({ ray:i, x1:S.x, y1:y, x2, y2:y });
   });
   drawColorRays(L, solid);
-  drawLamp(L, S, { x:1, y:0 }, { x:0, y:1 });
+  drawLamp(L, S, { x:1, y:0 }, { x:0, y:1 }, true);
+  drawMixPair(L, info);
   placeColorEye(eyeX, G.axisY);
   syncOverlays({ color:info });
 }
@@ -3321,13 +3368,21 @@ function placeColorEye(x, y){
   el.style.fontSize = px(1.1 * G.g) + 'px';
 }
 // 光源：沿光線方向擺放的燈罩，出光口三顆小圓表示三色各自開關（關掉的留白圈）
-function drawLamp(L, S, d, n){
+// labelAbove：標字放燈罩上方（透明體的左下角讓給混色示意圖）
+function drawLamp(L, S, d, n, labelAbove){
   const g = G.g, sc = G.sc;
   const ang = Math.atan2(d.y, d.x) * 180 / Math.PI;
   const grp = svgEl('g', { transform:`translate(${px(S.x)} ${px(S.y)}) rotate(${px(ang)})` });
   grp.append(svgEl('rect', {
     x:px(-1.5 * g), y:px(-0.62 * g), width:px(1.5 * g), height:px(1.24 * g), rx:px(0.18 * g),
     fill:C.gear, stroke:C.mark, 'stroke-width':px(1.4 * sc),
+  }));
+  // 燈罩中間的方框：塗發出的合成光〔**A** 使用者 2026-09-18「光源的灰色間可以有一個方框，
+  // 會隨著射出的光線變色，例如同時射出紅和綠會顯示黃色」〕。全關時是黑的（沒發光）
+  const lit = state.lights.reduce((a, on, i) => a | (on ? LIGHT_BIT[i] : 0), 0);
+  grp.append(svgEl('rect', {
+    x:px(-1.18 * g), y:px(-0.4 * g), width:px(0.8 * g), height:px(0.8 * g), rx:px(0.08 * g),
+    fill:COLOR_FILL[lit], stroke:C.mark, 'stroke-width':px(1.2 * sc),
   }));
   state.lights.forEach((on, i) => {
     grp.append(svgEl('circle', {
@@ -3338,12 +3393,78 @@ function drawLamp(L, S, d, n){
   L.append(grp);
   const fs = Math.round(13 * U);
   const t = svgEl('text', {
-    // 標在燈罩正下方：上方貼近畫布上緣，放上面會被裁掉
-    x:px(S.x - 0.75 * g * d.x), y:px(S.y - 0.75 * g * d.y + 1.45 * g + fs * 0.35), 'text-anchor':'middle',
+    // 不透明體標在燈罩正下方：那裡的光源貼近畫布上緣，放上面會被裁掉
+    x:px(S.x - 0.75 * g * d.x),
+    y:px(S.y - 0.75 * g * d.y + (labelAbove ? -0.95 * g : 1.45 * g + fs * 0.35)), 'text-anchor':'middle',
     'font-size':fs, 'font-weight':700, fill:C.mark,
   });
   t.textContent = '光源';
   L.append(t);
+}
+/* 三原色疊加示意圖，左下「發出的光」、右下「眼睛接收的光」
+   〔**A** 使用者 2026-09-18「在方格紙畫布的左下和右下角增加三原色三個圈圈疊加混色的示意圖，
+     分別對應發出的光和眼睛接收到的光」〕。
+   深色底：色光混合要在暗處看才對。
+   三個圓切成 7 塊，每一塊**直接塗 COLOR_FILL 的對應顏色**（紅綠重疊那塊＝COLOR_FILL[6]），不靠瀏覽器混色。
+   〔沿革：初版用純紅綠藍＋mix-blend-mode:screen，疊出來的黃是 #FFFF00，與光源方框、小窗的 #F5D21C 不同，
+     使用者 2026-09-18「眼睛看到的顏色、光源的顏色、三原色圈圈疊出來的顏色看起來是不一樣的」。
+     全頁的顏色只有 COLOR_FILL 一個來源。〕
+   眼睛那一張要等光走完才亮，與結論卡、小窗同一個時機（animTotal 在 drawColorRays 已算好） */
+function drawMixPair(L, info){
+  const done = state.anim === null || state.anim >= animTotal;
+  drawMix(L, info.lit, '發出的光', false);
+  drawMix(L, done ? info.seen : 0, '眼睛接收的光', true);
+}
+function drawMix(L, bits, caption, right){
+  const g = G.g, r = 0.62 * g, pad = 0.25 * g, edge = 0.2 * g;
+  const fs = Math.round(12 * U), capH = fs + 8;
+  // 框寬至少容得下標題：圈圈跟著格邊長縮放、字級不縮，窄畫布上「眼睛接收的光」會比三個圈寬（中文字約 1em）
+  const w = Math.max(3 * r + pad * 2, fs * caption.length + 14), h = capH + r * (2 + Math.sqrt(3) / 2) + pad * 2;
+  const x0 = right ? G.W - edge - w : edge, y0 = G.optH - edge - h;
+  const grp = svgEl('g', { class:'mixdiag' });
+  const id = right ? 'mixR' : 'mixL';
+  grp.append(svgEl('rect', { x:px(x0), y:px(y0), width:px(w), height:px(h), rx:8, fill:'#1C2433' }));
+  const cap = svgEl('text', {
+    x:px(x0 + w / 2), y:px(y0 + pad * 0.6 + fs), 'text-anchor':'middle',
+    'font-size':fs, 'font-weight':700, fill:'#fff',
+  });
+  cap.textContent = caption;
+  grp.append(cap);
+  // 三圓圓心排成邊長 r 的正三角形：紅左上、綠右上、藍下，兩兩重疊、中央三圓共有
+  const cx = x0 + w / 2, top = y0 + capH + pad + r;
+  const ctr = [[cx - r / 2, top], [cx + r / 2, top], [cx, top + r * Math.sqrt(3) / 2]];
+  const circ = i => ({ cx:px(ctr[i][0]), cy:px(ctr[i][1]), r:px(r) });
+  ctr.forEach((_, i) => {
+    const cp = svgEl('clipPath', { id:`${id}c${i}` });
+    cp.append(svgEl('circle', circ(i)));
+    grp.append(cp);
+  });
+  // 第 cover 塊 ＝ 落在 cover 所含的圓內、且不在其餘圓內的區域：
+  // 「在內」用巢狀 clip-path 取交集，「不在內」用遮罩挖掉。塗的顏色是這塊裡**有開的**那幾色合起來
+  for (let cover = 1; cover < 8; cover++){
+    const col = cover & bits;
+    if (!col) continue;
+    const m = svgEl('mask', { id:`${id}m${cover}`, maskUnits:'userSpaceOnUse',
+                              x:px(x0), y:px(y0), width:px(w), height:px(h) });
+    m.append(svgEl('rect', { x:px(x0), y:px(y0), width:px(w), height:px(h), fill:'#fff' }));
+    ctr.forEach((_, i) => { if (!(cover & LIGHT_BIT[i])) m.append(svgEl('circle', Object.assign(circ(i), { fill:'#000' }))); });
+    grp.append(m);
+    let node = svgEl('rect', { x:px(x0), y:px(y0), width:px(w), height:px(h), fill:COLOR_FILL[col], mask:`url(#${id}m${cover})` });
+    ctr.forEach((_, i) => {
+      if (!(cover & LIGHT_BIT[i])) return;
+      const wrap = svgEl('g', { 'clip-path':`url(#${id}c${i})` });
+      wrap.append(node);
+      node = wrap;
+    });
+    grp.append(node);
+  }
+  // 沒有這一色：只留虛線外框，看得出「這一格空著」而不是圖畫壞了
+  ctr.forEach((_, i) => {
+    if (bits & LIGHT_BIT[i]) return;
+    grp.append(svgEl('circle', Object.assign(circ(i),
+      { fill:'none', stroke:'#7A8496', 'stroke-width':1.2, 'stroke-dasharray':'4 3' })));
+  });
+  L.append(grp);
 }
 // 列出位元裡有哪幾種色光，給圖例卡的結論用
 function lightList(bits){
@@ -3558,11 +3679,22 @@ document.getElementById('refrSeg').addEventListener('click', e => {
 document.getElementById('lightChips').addEventListener('click', e => {
   const b = e.target.closest('.chip[data-light]');
   if (!b) return;
-  const i = +b.dataset.light;
-  state.lights[i] = !state.lights[i];
-  b.setAttribute('aria-pressed', String(state.lights[i]));
+  if (b.dataset.light === 'w'){
+    // 白光：三色沒全開就全開；已經全開再按＝全關（膠囊本來就是按一下切換）
+    const all = state.lights.every(Boolean);
+    state.lights = state.lights.map(() => !all);
+  } else {
+    const i = +b.dataset.light;
+    state.lights[i] = !state.lights[i];
+  }
+  syncLightChips();
   render();
 });
+function syncLightChips(){
+  const all = state.lights.every(Boolean);
+  for (const c of document.querySelectorAll('#lightChips .chip'))
+    c.setAttribute('aria-pressed', String(c.dataset.light === 'w' ? all : state.lights[+c.dataset.light]));
+}
 document.getElementById('paperColorChips').addEventListener('click', e => {
   const b = e.target.closest('.chip[data-pcolor]');
   if (!b) return;
@@ -3769,8 +3901,7 @@ document.getElementById('btnReset').addEventListener('click', () => {
     b.setAttribute('aria-pressed', String(b.dataset.refr === state.refrView));
   for (const b of document.querySelectorAll('#colorModeSeg button'))
     b.setAttribute('aria-pressed', String(b.dataset.cmode === state.colorMode));
-  for (const c of document.querySelectorAll('#lightChips .chip'))
-    c.setAttribute('aria-pressed', String(state.lights[+c.dataset.light]));
+  syncLightChips();
   for (const c of document.querySelectorAll('#paperColorChips .chip'))
     c.setAttribute('aria-pressed', String(+c.dataset.pcolor === state.paperColor));
   syncSheetChips();
