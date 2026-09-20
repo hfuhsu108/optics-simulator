@@ -103,9 +103,33 @@ main{flex:1;position:relative;display:grid;
 /* 控制項多於一屏時左欄自己捲動（PROJECT_PLAN §2.5 第 15 點「由模型調整」）：
    min-height:0 不可省——它是 grid item 又是 flex container，預設 min-height:auto
    會依內容高度撐開整列，捲軸也不會出現。 */
-.panel{grid-column:1;grid-row:1;background:var(--c-surface);border:1px solid var(--c-bd);border-radius:10px;
-  padding:12px;display:flex;flex-direction:column;gap:6px;min-width:0;min-height:0;overflow-y:auto}
-.panel h2{font-size:calc(13px * var(--u));font-weight:700;margin:0}
+/* 左欄改成**透明容器 ＋ 兩張無標題白卡**（2026-09-20，DESIGN_SPEC 第 1 節「左欄的兩張卡片」）：
+   卡 1 放可操弄的變項（進階項收進 .adv），卡 2 放只改畫面的顯示圖層，最後是「重設全部」。
+   原本的 `<h2>設定</h2>` 與 `.panel h2` 一起移除。 */
+/* 卡間距 6 而不是模板的 12：本模擬左欄的控制項密度是四支裡最高的（透鏡頁有焦距、物距、
+   器材、特徵光線、其他光線、進階六組），分卡後多出來的兩道間距 ＋ 44px 的「重設全部」
+   會把透鏡頁擠到捲動。實測 1366×768：gap 8 時溢出 9px，收到 6 之後剛好收得住。 */
+.panel{grid-column:1;grid-row:1;display:flex;flex-direction:column;gap:6px;min-width:0;min-height:0;overflow-y:auto}
+.setcard{background:var(--c-surface);border:1px solid var(--c-bd);border-radius:10px;
+  padding:10px 12px;display:flex;flex-direction:column;gap:6px;min-width:0;flex:none}
+
+/* 進階摺疊區 .adv（DESIGN_SPEC 第 4 節，逐字取自 _shared/template/index.html:106-119） */
+.adv{border-top:1px solid var(--c-bd);flex:none}
+.adv-head{height:44px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;
+  font-size:calc(13px * var(--u));font-weight:700;color:var(--c-text-3);list-style:none}
+.adv-head::-webkit-details-marker{display:none}
+.adv-head i{font-size:calc(11px * var(--u));color:var(--c-text-3);transition:transform .15s}
+.adv[open] .adv-head i{transform:rotate(180deg)}
+.adv-body{display:flex;flex-direction:column;gap:6px;padding-bottom:2px}
+
+/* 「重設全部」：左欄最後一個位置、次要按鈕（DESIGN_SPEC 第 1 節「兩種重設」）。
+   與抽屜的 ↺「重設這一輪」語意不同——↺ 只把光路收回完整樣子，設定全留。 */
+.btn{height:44px;padding:0 16px;border-radius:10px;border:1px solid var(--c-bd-ctl);background:var(--c-surface);
+  color:var(--c-text-2);font-size:calc(13px * var(--u));font-weight:700;
+  display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;flex:none}
+/* 說明彈窗的關閉鈕（主要按鈕）。原本用 .chip，但那是「多選一」的膠囊，
+   規範第 4 節寫的關閉鈕是主要按鈕 h44 r10（2026-09-20 對齊） */
+.btn.primary{background:var(--c-primary);border-color:var(--c-primary);color:#fff}
 .group{display:flex;flex-direction:column;gap:6px}
 /* 平行光模式下「物距」與「特徵光線」都不適用：用**停用**而不是整組藏起來——
    藏起來會讓左欄高度跳動，學生也不知道那些東西去哪了。
@@ -119,7 +143,7 @@ main{flex:1;position:relative;display:grid;
    欄距 10px：每格寬約 145px 遠大於 44，水平方向命中區不會互相重疊。 */
 .checkgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
 /* 〔2026-09-11 移除動作卡：DESIGN_SPEC 第 1 節寫明動作卡是**沒有抽屜**的模擬才用的元件，
-   而重置與叫出設定面板的 chip 都該留在抽屜裡（第 1 節「抽屜只放播放控制…以及跟著它們走的重置」、
+   而重設與叫出設定面板的 chip 都該留在抽屜裡（第 1 節「抽屜只放播放控制…以及跟著它們走的重設」、
    以及「這兩顆 chip 有抽屜的模擬放抽屜裡」）。本模擬兩者都放進了動作卡，是上一批加抽屜時
    沒有回頭查規範造成的。**A** 使用者 2026-09-11「如果我要求加入元件，一定要先看有沒有既有規範」。〕 */
 .stage{grid-column:2;grid-row:1;position:relative;background:var(--c-surface);
@@ -304,8 +328,11 @@ label.check input:checked+.box i{visibility:visible}
 @media (max-width:899px){
   main{grid-template-columns:1fr}
   #panelSettings{display:none}
+  /* 底色用頁面底色而不是白：左欄現在是透明容器，裡面兩張白卡要看得出來是兩張
+     （2026-09-20 左欄分卡的連帶修正，同 _shared/template） */
   body.show-settings #panelSettings{
     display:flex;grid-column:1;grid-row:1;align-self:end;max-height:62%;z-index:5;
+    background:var(--c-bg);border-radius:12px 12px 0 0;padding:12px;
     box-shadow:0 8px 28px rgba(28,36,51,.25)}
   .stage{grid-column:1;grid-row:1}
   /* 叫出設定面板的 chip 在抽屜裡（DESIGN_SPEC 第 1 節：有抽屜的模擬放抽屜）。
@@ -322,51 +349,32 @@ label.check input:checked+.box i{visibility:visible}
     <div class="logo">理</div>
     <div class="title">光的成像</div>
     <div class="actions">
-      <button class="icon-btn" id="btnHelp" aria-label="操作說明"><i class="fa-solid fa-question"></i></button>
+      <button class="icon-btn" id="btnHelp" aria-label="操作說明"><i class="fa-solid fa-circle-question"></i></button>
       <button class="icon-btn" id="btnFull" aria-label="全螢幕"><i class="fa-solid fa-expand"></i></button>
     </div>
   </header>
 
   <!-- 兩欄：設定｜畫布（無右欄、無抽屜） -->
   <main>
+    <!-- 左欄：透明容器 ＋ 兩張無標題卡 ＋ 重設全部（2026-09-20，DESIGN_SPEC 第 1 節）。
+         六頁共用這兩張卡，各頁專屬的內容仍由 .pagectl[data-page] 切換。
+         **`.seg` 一律不加可見標題**（**A**「.seg都不要有標題」）：區段文字本身就說明了
+         它在切什麼（「平面鏡｜凹面鏡｜凸面鏡」不需要有人在上面寫「鏡種」），而左欄在
+         1366×768 只剩個位數的垂直餘裕，一行標題就是一列高度。無障礙靠容器的 aria-label。
+         唯一例外是抽屜裡的播放速度，理由見那裡的註解。 -->
     <section class="panel" id="panelSettings">
-      <h2>設定</h2>
 
-      <!-- ── 頁 0 針孔專屬 ──
-           孔徑三檔用膠囊、直接選不拖動（§2.5 第 9＋17 點，作廢了 §2.3 頁1 的「五檔」與「可拖擋板」） -->
-      <div class="pagectl" data-page="0">
-        <div class="group">
-          <div class="grouplabel">孔徑</div>
-          <div class="chips" id="holeChips">
-            <button class="chip" data-hole="0" aria-pressed="true">小</button>
-            <button class="chip" data-hole="1" aria-pressed="false">中</button>
-            <button class="chip" data-hole="2" aria-pressed="false">大</button>
-          </div>
-        </div>
-        <div class="group">
-          <div class="grouplabel">孔的形狀</div>
-          <div class="chips" id="hshapeChips">
-            <button class="chip" data-hshape="circle" aria-pressed="true">圓</button>
-            <button class="chip" data-hshape="square" aria-pressed="false">方</button>
-            <button class="chip" data-hshape="tri" aria-pressed="false">三角</button>
-          </div>
-        </div>
-        <div class="group">
-          <div class="grouplabel">孔的數量</div>
-          <div class="chips" id="hcountChips">
-            <button class="chip" data-hcount="1" aria-pressed="true">1 個</button>
-            <button class="chip" data-hcount="2" aria-pressed="false">2 個</button>
-            <button class="chip" data-hcount="3" aria-pressed="false">3 個</button>
-          </div>
-        </div>
-      </div>
+      <!-- ══ 卡 1：可操弄的變項（無標題） ══ -->
+      <div class="setcard">
+
+      <!-- 〔2026-09-20：針孔頁的孔徑、孔的形狀、孔的數量三組已移到本卡最底下的「進階」摺疊區
+           （**A** 使用者「針孔頁的孔徑是進階」＋「其他依照你說的做」）。〕 -->
 
       <!-- ── 頁 1 面鏡專屬 ──
            切到平面鏡會把焦距與物距整組收起來（平面鏡沒有焦距），符合 .seg 的連動判準 -->
       <div class="pagectl" data-page="1">
         <div class="group">
-          <div class="grouplabel">鏡種</div>
-          <div class="seg" id="mirrorSeg">
+          <div class="seg" id="mirrorSeg" aria-label="鏡種">
             <button data-mirror="plane" aria-pressed="true">平面鏡</button>
             <button data-mirror="concave" aria-pressed="false">凹面鏡</button>
             <button data-mirror="convex" aria-pressed="false">凸面鏡</button>
@@ -379,8 +387,7 @@ label.check input:checked+.box i{visibility:visible}
            〔**B** 使用者 2026-09-13 選定「.seg 切換（推薦）」〕 -->
       <div class="pagectl" data-page="4">
         <div class="group">
-          <div class="grouplabel">情境</div>
-          <div class="seg" id="refrSeg">
+          <div class="seg" id="refrSeg" aria-label="情境">
             <button data-refr="bird" aria-pressed="true">鳥看魚</button>
             <button data-refr="fish" aria-pressed="false">魚看鳥</button>
           </div>
@@ -392,8 +399,7 @@ label.check input:checked+.box i{visibility:visible}
            第三條特徵光線的定義也跟著換，符合 .seg 的連動判準 -->
       <div class="pagectl" data-page="2">
         <div class="group">
-          <div class="grouplabel">透鏡種類</div>
-          <div class="seg" id="lensSeg">
+          <div class="seg" id="lensSeg" aria-label="透鏡種類">
             <button data-lens="convex" aria-pressed="true">凸透鏡</button>
             <button data-lens="concave" aria-pressed="false">凹透鏡</button>
           </div>
@@ -406,8 +412,7 @@ label.check input:checked+.box i{visibility:visible}
            調節作用只改物距一個參數、旁邊控制項原封不動 → 用膠囊不用 .seg。 -->
       <div class="pagectl" data-page="3">
         <div class="group">
-          <div class="grouplabel">眼睛狀態</div>
-          <div class="seg" id="eyeSeg">
+          <div class="seg" id="eyeSeg" aria-label="眼睛狀態">
             <button data-eye="normal" aria-pressed="true">正常眼</button>
             <button data-eye="myopia" aria-pressed="false">近視眼</button>
             <button data-eye="hyper" aria-pressed="false">遠視眼</button>
@@ -428,14 +433,8 @@ label.check input:checked+.box i{visibility:visible}
         <!-- 眼睛頁的三條特徵光線與另外兩頁**不共用** state：那三條的 ③ 預設關（§2.5 裁示），
              這裡是 ①② 預設開、③ 預設關〔**A** 使用者 2026-09-08「一樣做 3 條特徵光線，
              預設顯示平行主軸、通過鏡心」〕。編號與另外兩頁對齊，學生換頁不必重學。 -->
-        <div class="group" id="eyeRayGroup">
-          <div class="grouplabel">特徵光線</div>
-          <div class="checkgrid">
-            <label class="check"><input type="checkbox" id="chkER1" checked><span class="box"><i class="fa-solid fa-check"></i></span>① 平行主軸</label>
-            <label class="check"><input type="checkbox" id="chkER2" checked><span class="box"><i class="fa-solid fa-check"></i></span>② 通過鏡心</label>
-            <label class="check"><input type="checkbox" id="chkER3"><span class="box"><i class="fa-solid fa-check"></i></span>③ 通過焦點</label>
-          </div>
-        </div>
+        <!-- 〔2026-09-20：眼睛頁的三條特徵光線已移到卡 2（顯示圖層），
+             它是作圖輔助線不是物理條件。原本在這裡，見卡 2 的 #eyeRayGroup。〕 -->
         <!-- 正常眼沒有要矯正的東西，這兩組整組收起來（不是停用）——比照平面鏡收焦距 -->
         <div class="group" id="glassGroup">
           <div class="grouplabel">矯正</div>
@@ -443,18 +442,11 @@ label.check input:checked+.box i{visibility:visible}
             <label class="check"><input type="checkbox" id="chkGlass"><span class="box"><i class="fa-solid fa-check"></i></span>戴上眼鏡</label>
           </div>
         </div>
-        <!-- 度數三檔（使用者 2026-09-07 裁示）。學生要自己調到剛好：太弱看不清楚、過頭往另一邊糊掉 -->
-        <div class="group sliderbox" id="powerGroup">
-          <div class="head"><span class="name">矯正度數</span><span class="val" id="powerName">較弱</span></div>
-          <div class="slidewrap">
-            <input type="range" id="powerSlider" min="0" max="2" step="1" value="0" aria-label="矯正度數">
-            <div class="ticks">
-              <span style="left:calc(12px + (100% - 24px) * 0)">弱</span>
-              <span style="left:calc(12px + (100% - 24px) * .5)"></span>
-              <span style="left:calc(12px + (100% - 24px) * 1)">強</span>
-            </div>
-          </div>
-        </div>
+        <!-- 〔2026-09-20 使用者裁示移除「矯正度數」三檔滑桿（**A**「刪除眼鏡頁的矯正度數功能」）：
+             `#powerGroup`、`#powerSlider`、`powerName`、`POWER_NAME`、`syncPower()`、
+             `state.power`、`EYE_POWER_MUL`／`EYE_POWER`／`EYE_POWER_OK` 與畫鏡片厚度的檔位插值
+             一併拿掉，不留死碼。戴上眼鏡一律配**正確度數**（`eyeCorrectPower()`）。
+             要復原去 git 歷史撈 1ec44b9 之後的版本。〕 -->
       </div>
 
       <!-- ── 頁 5 色光專屬（導覽列排最後，PROJECT_PLAN §14） ──
@@ -464,8 +456,7 @@ label.check input:checked+.box i{visibility:visible}
            切到透明體時「色紙的顏色」整組換成三片玻璃紙〔**A**「可3片」〕。 -->
       <div class="pagectl" data-page="5">
         <div class="group">
-          <div class="grouplabel">物體</div>
-          <div class="seg" id="colorModeSeg">
+          <div class="seg" id="colorModeSeg" aria-label="物體是不透明還是透明">
             <button data-cmode="opaque" aria-pressed="true">不透明體</button>
             <button data-cmode="clear" aria-pressed="false">透明體</button>
           </div>
@@ -525,32 +516,11 @@ label.check input:checked+.box i{visibility:visible}
         </div>
       </div>
 
-      <div class="group" id="shapeGroup">
-        <div class="grouplabel">物體</div>
-        <div class="chips" id="shapeChips">
-          <button class="chip" data-shape="candle" aria-pressed="true">蠟燭</button>
-          <button class="chip" data-shape="arrow" aria-pressed="false">箭頭</button>
-          <button class="chip" data-shape="f" aria-pressed="false">F</button>
-          <!-- 平行光＝物在無限遠，只對有焦距的透鏡／面鏡有意義，針孔頁收起來 -->
-          <button class="chip" id="chipParallel" data-shape="parallel" aria-pressed="false">平行光</button>
-        </div>
-      </div>
-
-      <!-- 特徵光線：三條各自一個核取，①② 預設開、③ 預設關。圈圈數字配合課本（§2.6 C6）。
-           第三條的名稱隨透鏡種類換（凸＝通過焦點、凹＝射向焦點），所以文字包在 span 裡由 JS 寫。 -->
-      <div class="group" id="rayGroup">
-        <div class="grouplabel">特徵光線</div>
-        <div class="checkgrid">
-          <label class="check"><input type="checkbox" id="chkR1" checked><span class="box"><i class="fa-solid fa-check"></i></span><span id="rn0">① 平行主軸</span></label>
-          <label class="check"><input type="checkbox" id="chkR2" checked><span class="box"><i class="fa-solid fa-check"></i></span><span id="rn1">② 通過鏡心</span></label>
-          <label class="check"><input type="checkbox" id="chkR3"><span class="box"><i class="fa-solid fa-check"></i></span><span id="rn2">③ 通過焦點</span></label>
-        </div>
-      </div>
-
       <!-- 針孔頁專屬：物體上的三個發光點，各自發一組通過針孔的光
            〔**A** 使用者 2026-09-10「讓我可以分開顯示從頂點發出的通過針孔光、中點發出的
              通過針孔光、底部發出的通過針孔光」，**B** 選定名稱與預設〕。
-           取代原本單一核取的「單點光束示範」。 -->
+           取代原本單一核取的「單點光束示範」。
+           **留在卡 1**：它決定畫布上真的有沒有那幾組光，不是單純的顯示疊層。 -->
       <div class="group" id="pinPtGroup" hidden>
         <div class="grouplabel">發光點</div>
         <div class="checkgrid">
@@ -560,24 +530,107 @@ label.check input:checked+.box i{visibility:visible}
         </div>
       </div>
 
-      <!-- 教學輔助疊層一律預設關（DESIGN_SPEC 第 4 節） -->
-      <div class="group" id="showGroup">
-        <div class="grouplabel">顯示</div>
+      <!-- 遮板與紙屏：**留在卡 1，而且不叫「顯示」**
+           〔**B** 選定「特徵光線→卡2，遮板紙屏→卡1」、**A**「叫做放入遮板/放入紙屏」〕。
+           它們是「放進光路的器材」——遮板會擋掉一部分光、紙屏是接像的屏幕，兩者都改變
+           物理現場而不只是畫面，所以不符合卡 2「只改畫面呈現」的判準，名稱也不能用「顯示」。
+           同樣預設關（使用者 2026-09-06 裁示）。排序照光行進的順序：遮板（在透鏡）→ 紙屏（在像處）。
+           遮板只在透鏡頁；紙屏在針孔頁是主要器材，預設開且不加開關（§2.7 定案）。 -->
+      <div class="group" id="gearGroup">
         <div class="checkgrid">
-          <!-- 「其他光線」在針孔頁的意思與另外三頁不同：那三頁是「除了特徵光線之外的光」，
-               這一頁是「發出來但被擋板擋住的光」。名稱維持一致（**B** 使用者 2026-09-10 選定），
-               語意差別由圖例卡與畫面本身表達。 -->
-          <label class="check"><input type="checkbox" id="chkBeam"><span class="box"><i class="fa-solid fa-check"></i></span>其他光線</label>
-          <!-- 遮板與紙屏一樣是「放進光路的器材」，開關方式一致、同樣預設關（使用者 2026-09-06 裁示）。
-               排序照光行進的順序：光束 → 遮板（在透鏡）→ 紙屏（在像處）→ 眼睛。
-               遮板只在透鏡頁；紙屏在針孔頁是主要器材，預設開且不加開關（§2.7 定案）。 -->
-          <label class="check" id="wrapMask"><input type="checkbox" id="chkMask"><span class="box"><i class="fa-solid fa-check"></i></span>遮板</label>
-          <label class="check" id="wrapPaper"><input type="checkbox" id="chkPaper"><span class="box"><i class="fa-solid fa-check"></i></span>紙屏</label>
-          <!-- 〔2026-09-08 使用者裁示移除三項：「觀察者眼睛」（暫時移除，整個功能連同 drawEye() 一起拿掉，
-               要復原去 git 歷史撈 59bc779 之後的版本）、眼睛頁的「視覺模擬／看到的樣子」小窗、
-               以及「圖例卡」的開關（圖例卡改成常駐，沒有開關）。〕 -->
+          <label class="check" id="wrapMask"><input type="checkbox" id="chkMask"><span class="box"><i class="fa-solid fa-check"></i></span>放入遮板</label>
+          <label class="check" id="wrapPaper"><input type="checkbox" id="chkPaper"><span class="box"><i class="fa-solid fa-check"></i></span>放入紙屏</label>
         </div>
       </div>
+
+      <!-- 進階摺疊區：預設收合（DESIGN_SPEC 第 4 節 .adv）。
+           放「學生剛開始用不到、但老師會想調」的變項——針孔的三組，以及物體的造型。 -->
+      <details class="adv">
+        <summary class="adv-head">進階<i class="fa-solid fa-chevron-down"></i></summary>
+        <div class="adv-body">
+          <!-- 針孔頁專屬三組：孔徑三檔用膠囊、直接選不拖動
+               （§2.5 第 9＋17 點，作廢了 §2.3 頁1 的「五檔」與「可拖擋板」） -->
+          <div class="pagectl" data-page="0">
+            <div class="group">
+              <div class="grouplabel">孔徑</div>
+              <div class="chips" id="holeChips">
+                <button class="chip" data-hole="0" aria-pressed="true">小</button>
+                <button class="chip" data-hole="1" aria-pressed="false">中</button>
+                <button class="chip" data-hole="2" aria-pressed="false">大</button>
+              </div>
+            </div>
+            <div class="group">
+              <div class="grouplabel">孔的形狀</div>
+              <div class="chips" id="hshapeChips">
+                <button class="chip" data-hshape="circle" aria-pressed="true">圓</button>
+                <button class="chip" data-hshape="square" aria-pressed="false">方</button>
+                <button class="chip" data-hshape="tri" aria-pressed="false">三角</button>
+              </div>
+            </div>
+            <div class="group">
+              <div class="grouplabel">孔的數量</div>
+              <div class="chips" id="hcountChips">
+                <button class="chip" data-hcount="1" aria-pressed="true">1 個</button>
+                <button class="chip" data-hcount="2" aria-pressed="false">2 個</button>
+                <button class="chip" data-hcount="3" aria-pressed="false">3 個</button>
+              </div>
+            </div>
+          </div>
+          <div class="group" id="shapeGroup">
+            <div class="grouplabel">物體</div>
+            <div class="chips" id="shapeChips">
+              <button class="chip" data-shape="candle" aria-pressed="true">蠟燭</button>
+              <button class="chip" data-shape="arrow" aria-pressed="false">箭頭</button>
+              <button class="chip" data-shape="f" aria-pressed="false">F</button>
+              <!-- 平行光＝物在無限遠，只對有焦距的透鏡／面鏡有意義，針孔頁收起來 -->
+              <button class="chip" id="chipParallel" data-shape="parallel" aria-pressed="false">平行光</button>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      </div><!-- ══ 卡 1 結束 ══ -->
+
+      <!-- ══ 卡 2：顯示圖層（無標題） ══
+           只放**改畫面、不改物理條件**的疊層：特徵光線是作圖輔助線（三條全關，像仍在原處），
+           「顯示其他光線」是把沒畫出來的光補上。兩者關掉都不會改變成像。
+           教學輔助疊層一律預設關（DESIGN_SPEC 第 4 節）。 -->
+      <div class="setcard" id="layerCard">
+        <!-- 特徵光線：三條各自一個核取，①② 預設開、③ 預設關。圈圈數字配合課本（§2.6 C6）。
+             第三條的名稱隨透鏡種類換（凸＝通過焦點、凹＝射向焦點），所以文字包在 span 裡由 JS 寫。 -->
+        <div class="group" id="rayGroup">
+          <div class="grouplabel">顯示特徵光線</div>
+          <div class="checkgrid">
+            <label class="check"><input type="checkbox" id="chkR1" checked><span class="box"><i class="fa-solid fa-check"></i></span><span id="rn0">① 平行主軸</span></label>
+            <label class="check"><input type="checkbox" id="chkR2" checked><span class="box"><i class="fa-solid fa-check"></i></span><span id="rn1">② 通過鏡心</span></label>
+            <label class="check"><input type="checkbox" id="chkR3"><span class="box"><i class="fa-solid fa-check"></i></span><span id="rn2">③ 通過焦點</span></label>
+          </div>
+        </div>
+        <!-- 眼睛頁的三條特徵光線：**不與上面那組共用 state**，理由見 initState 的註解。
+             2026-09-20 從頁 3 的 .pagectl 移到這裡——它是顯示疊層，歸卡 2；
+             顯示與否原本就由 syncControls() 的 `eyeRayGroup.hidden = !isEye` 控制，不靠 .pagectl。 -->
+        <div class="group" id="eyeRayGroup">
+          <div class="grouplabel">顯示特徵光線</div>
+          <div class="checkgrid">
+            <label class="check"><input type="checkbox" id="chkER1" checked><span class="box"><i class="fa-solid fa-check"></i></span>① 平行主軸</label>
+            <label class="check"><input type="checkbox" id="chkER2" checked><span class="box"><i class="fa-solid fa-check"></i></span>② 通過鏡心</label>
+            <label class="check"><input type="checkbox" id="chkER3"><span class="box"><i class="fa-solid fa-check"></i></span>③ 通過焦點</label>
+          </div>
+        </div>
+        <div class="group" id="showGroup">
+          <div class="checkgrid">
+            <!-- 「其他光線」在針孔頁的意思與另外三頁不同：那三頁是「除了特徵光線之外的光」，
+                 這一頁是「發出來但被擋板擋住的光」。名稱維持一致（**B** 使用者 2026-09-10 選定），
+                 語意差別由圖例卡與畫面本身表達。2026-09-20 加上「顯示」前綴。 -->
+            <label class="check"><input type="checkbox" id="chkBeam"><span class="box"><i class="fa-solid fa-check"></i></span>顯示其他光線</label>
+            <!-- 〔2026-09-08 使用者裁示移除三項：「觀察者眼睛」（暫時移除，整個功能連同 drawEye() 一起拿掉，
+                 要復原去 git 歷史撈 59bc779 之後的版本）、眼睛頁的「視覺模擬／看到的樣子」小窗、
+                 以及「圖例卡」的開關（圖例卡改成常駐，沒有開關）。〕 -->
+          </div>
+        </div>
+      </div>
+
+      <button class="btn" id="btnResetAll"><i class="fa-solid fa-arrow-rotate-left"></i>重設全部</button>
     </section>
 
     <div class="stage" id="stageWrap">
@@ -689,7 +742,7 @@ label.check input:checked+.box i{visibility:visible}
   <!-- 底部抽屜：**只放播放控制**（判準見專案 memory「抽屜只放播放控制」；
        **B** 使用者 2026-09-10 選定「只放播放暫停與速度」，所以沒有單步與進度捲軸）。
        結構與 dissolution-sim/index.html:585-605 逐項對齊
-       〔**A** 使用者 2026-09-11「以溶解度模擬的為準」〕：播放與重置同在 .playbtns，
+       〔**A** 使用者 2026-09-11「以溶解度模擬的為準」〕：播放與重設同在 .playbtns，
        速度在 .speed，叫出設定面板的 chip 在最右端（窄螢幕才顯示）。
        位置同樣是 main 之後、導覽列之前。
        四頁都掛著這一層而不是只在透鏡頁出現：抽屜進出會讓畫布高度跳動，
@@ -698,13 +751,17 @@ label.check input:checked+.box i{visibility:visible}
     <div class="row">
       <div class="playbtns">
         <button class="round-btn primary" id="btnPlay" aria-label="播放"><i class="fa-solid fa-play" id="playIcon"></i></button>
-        <!-- 重置屬於「跟著播放控制走的重置」（DESIGN_SPEC 第 1 節），所以在抽屜不在左欄。
-             四頁各自重置，aria-label 要講清楚重置的是哪一個範圍 -->
-        <button class="round-btn" id="btnReset" aria-label="重置這一頁"><i class="fa-solid fa-rotate-left"></i></button>
+        <!-- ↺ ＝「重設這一輪」（2026-09-20 語意收斂）：把光路收回成「整條都畫出來」的完整樣子，
+             器材與設定**全部不動**。把設定打回初始值的是左欄最底下的「重設全部」。
+             舊版這一顆做的是「重置這一頁」＝還原設定，那已經是重設全部的行為。 -->
+        <button class="round-btn" id="btnReset" aria-label="重設這一輪"><i class="fa-solid fa-rotate-left"></i></button>
       </div>
+      <!-- **這是 .seg 唯一保留可見標題的地方**：抽屜橫排，區段只有「0.5× 1× 2×」，
+           拿掉標籤就沒有東西說明它是什麼（左欄的 .seg 一律不加標題）。
+           〔用詞修訂鏈：原訂「播放速度」→ 2026-09-04 改「動畫速度」→ 2026-09-20 改回。〕 -->
       <div class="speed">
-        <span class="name">動畫速度</span>
-        <div class="seg" id="segSpeed" role="group" aria-label="動畫速度">
+        <span class="name">播放速度</span>
+        <div class="seg" id="segSpeed" role="group" aria-label="播放速度">
           <button data-speed="0.5" aria-pressed="false">0.5×</button>
           <button data-speed="1" aria-pressed="true">1×</button>
           <button data-speed="2" aria-pressed="false">2×</button>
@@ -735,94 +792,24 @@ label.check input:checked+.box i{visibility:visible}
   </nav>
 </div>
 
+<!-- 2026-09-20 依 DESIGN_SPEC 第 4 節「說明彈窗」整份重寫：**只講操作**。
+     舊版有 20 段、六個 <h3> 小節，寫的是作圖法原理、三條特徵光線各自怎麼走、
+     凹透鏡為什麼只成虛像、色紙與玻璃紙的呈色原理——那些是課本與老師的事。
+     依 **B** 使用者選定「直接刪掉」，不另存備註檔。 -->
 <div class="modal" id="helpModal">
   <div class="box">
     <h3>操作說明</h3>
-    <p>畫面上不標任何數值，長度一律靠背景格線判讀：每一小格是一格，每 5 格有一條較深的主格線。
-       主軸是中央那條水平線，透鏡的鏡心在畫面正中央。</p>
-    <p><b>物體可以直接在畫布上左右拖曳</b>，左欄的物距拖桿會跟著顯示它落在哪一段；
-       反過來拉拖桿，物體會跳到該段的代表位置。打開紙屏後，紙屏也可以左右拖。
-       物體、紙屏、遮板、針孔擋板旁邊那個<b>藍框的小箭頭握把</b>本身也可以直接抓著拖，
-       不必精準點到器材上。</p>
-    <p>透鏡頁與面鏡頁的器材中央有一條<b>淺灰色的垂直線</b>，那是<b>光轉向的平面</b>。
-       作圖法把折射與反射都當成發生在這個平面上，所以三條特徵光線一律在這條線上轉折，
-       不是在透鏡的表面或鏡面的弧上。器材本身仍照真實形狀畫，兩者不會完全重合。</p>
-    <p>畫面下方的<b>播放鍵</b>讓光從物體出發往前走，<b>每個頁面都可以播</b>。光線同時發出，
-       走到交會的那一刻像才出現。成的是虛像時，光線發散之後會一起往回延伸虛線，
-       <b>同時抵達虛像</b>才顯示。速度有 0.5×、1×、2× 三檔；動到任何器材或設定，
-       畫面就回到「整條光路都畫出來」的樣子。</p>
-    <p><b>凸透鏡</b>的三條特徵光線：① 平行主軸射入、經透鏡後通過焦點；② 通過鏡心、方向不變；
-       ③ 通過焦點射入、經透鏡後平行主軸。三條都關掉時像仍在原處——像的位置由光路決定，
-       不是由畫了幾條線決定。</p>
-    <p><b>凹透鏡</b>只有第三條換個講法：射向另一側焦點的光，出射後平行主軸。第一條的出射光
-       不是通過焦點，而是「看起來像從焦點射出來」，所以往回的那一段畫成虛線。
-       不論物體放在哪裡，凹透鏡都只成正立縮小的虛像。</p>
-    <p>勾選<b>「遮板」</b>之後，透鏡正上方會出現一片板子，<b>抓著它往下拉</b>就能把透鏡遮掉一部分
-       （板子旁邊的上下箭頭就是可以拖的意思）。被擋住的光線不再畫出來，但剩下的光仍然聚在同一點——
-       像只會變暗，形狀不會少掉一半。整片遮住時才完全沒有像。</p>
-    <h3 style="font-size:calc(15px * var(--u));margin:16px 0 8px">面鏡成像</h3>
-    <p>面鏡把光<b>折回同一側</b>，所以像與紙屏都在鏡子的左邊。三條特徵光線與透鏡同名，只是反射回去。
-       把物體換成<b>「平行光」</b>之後，光會真的<b>打在鏡面的弧上反射</b>，每一條的反射點都畫出一條
-       <b>黑色虛線的法線</b>（垂直鏡面）——那個模式沒有像的大小與位置要顧，可以完全照反射定律畫。</p>
-    <p><b>平面鏡</b>沒有焦距，所以焦距與物距那兩組控制項會整組收起來，物體改成直接在畫布上拖。
-       主軸下方那兩段標記線，是鏡前的物距與鏡後的像距，各自標出了格數——<b>拖物體時兩段永遠一樣長、
-       兩個格數也永遠一樣</b>，像並沒有貼在鏡面上。這兩個數字是全部四頁唯一標出來的數值，
-       其他地方一律靠格線自己數。</p>
-    <p>把物體換成<b>「F」</b>再看一次：面鏡成的像是<b>左右相反</b>的。光被反射一次就會換手性，
-       這在平面鏡最明顯（正立、同大、但左右顛倒），凹面鏡與凸面鏡也一樣有——
-       凹面鏡成實像時同時上下顛倒，看起來就像整個轉了 180°。蠟燭與箭頭左右對稱，看不出這件事，
-       所以要用 F 才驗得出來。</p>
-    <h3 style="font-size:calc(15px * var(--u));margin:16px 0 8px">視深</h3>
-    <p>光從水裡斜斜射到空氣中（或反過來）時，會在水面<b>轉彎</b>，這就是折射。左欄可以切換<b>「鳥看魚」</b>與
-       <b>「魚看鳥」</b>：兩條光線從魚眼（或鳥的兩眼之間）出發，在水面轉彎之後射進另一隻動物的眼睛；
-       水面上那兩條<b>黑色虛線是法線</b>（垂直水面）。</p>
-    <p>眼睛以為光是沿著直線射來的，會把射進來的光<b>往回延長</b>（橘色虛線），兩條延長線交會的地方，
-       就是牠看到的<b>虛像</b>（灰色虛線框）。所以<b>鳥看到的魚比實際淺，魚看到的鳥比實際高</b>。
-       旁邊並排的兩條量測線，一條量實際的深度（高度）、一條量看起來的深度（高度），長度靠格線自己數。</p>
-    <p><b>鳥和魚都可以左右拖</b>（下方的藍框握把也可以抓）。鳥在魚的正上方時，視深大約是實深的四分之三；
-       <b>越斜著看，魚看起來越淺</b>。反過來魚斜斜往上看時，鳥的像會被拉得越來越高，
-       超出畫面時上方會出現提示。勾<b>「其他光線」</b>可以看到發光點射向其他方向、沒有進入眼睛的光——
-       那些光也會折射，只是眼睛看不到它們。</p>
-    <h3 style="font-size:calc(15px * var(--u));margin:16px 0 8px">針孔成像</h3>
-    <p>針孔沒有焦距，靠的是<b>光的直線前進</b>。左欄的<b>「發光點」</b>可以分別打開物體的頂端、中段、
-       底端，每一個點都射出很多道光，只有對準孔的那幾道通得過；勾<b>「其他光線」</b>就看得到
-       被擋板擋掉的其他光（淡色的那些）。<b>孔小時只有一道通過</b>，屏上就是一個點，清晰但暗；
-       孔大時好幾道都通過、落在屏上不同位置，就變亮但糊——<b>亮和糊是同一件事的兩面</b>。</p>
-    <p>改「孔的形狀」看下方的紙屏正面：糊掉的斑會變成圓的、方的或三角的，<b>但整幅像的形狀不會變</b>。
-       孔要夠大才看得出斑的形狀。改「孔的數量」則會在屏上得到好幾個完整的像。</p>
-    <p><b>擋板本身也可以左右拖</b>：孔往物體靠近，像就變大（屏離孔變遠）；孔往屏靠近，像就變小。
-       物距與像距的比值決定像的大小，這是相似三角形，不是「針孔有放大倍率」。
-       紙屏上直接畫出了那個倒立的像，側視圖看不出來的那一半在下方的紙屏正面小窗。</p>
-    <h3 style="font-size:calc(15px * var(--u));margin:16px 0 8px">眼睛</h3>
-    <p>眼睛就是一片<b>厚薄可以改變的凸透鏡</b>（水晶體）配上一個<b>固定長度的眼球</b>。
-       看遠看近時水晶體會自己改變厚薄，讓像剛好落在視網膜上，這叫<b>調節作用</b>。
-       三種眼睛的<b>水晶體能力完全一樣</b>，差別在<b>眼球的長度</b>——眼球畫出來的長短就是它們的差別。</p>
-    <p><b>蠟燭可以直接在畫布上左右拖</b>。可拖的那一段被分成<b>三等分</b>：靠近眼睛的三分之一是
-       「看近」、中間三分之一沒有名字、最遠的三分之一是「看遠」；左欄那兩顆膠囊只是跳到最近與最遠。
-       正常眼的眼球長度剛剛好，拖到哪裡調節都夠用，所以整段都清楚。</p>
-    <p><b>近視眼是眼球太長</b>：看近的時候調節還夠用，畫面清楚；蠟燭往外拖過某個位置之後，
-       水晶體<b>已經調到最薄</b>還是不夠，光提早在視網膜<b>前面</b>聚好，畫面開始糊，越往外越糊。
-       <b>遠視眼是眼球太短</b>，反過來：看遠都清楚，蠟燭拖到很近的時候水晶體<b>已經調到最厚</b>
-       還是不夠，光還沒聚起來就打到視網膜，像落在視網膜<b>後面</b>。
-       畫面下方會直接寫出像落在視網膜的前面、後面還是上面。</p>
-    <p>勾「戴上眼鏡」會直接配上<b>正確的度數</b>（中間那一檔）：<b>近視配凹透鏡、遠視配凸透鏡</b>
-       （鏡片的形狀畫得很清楚，可以自己看一眼）。眼鏡<b>沒有把眼球變長或變短</b>，
-       也沒有把水晶體治好——眼球的長度從頭到尾都沒變，眼鏡只是先把光偏折一次，讓像落回視網膜上。
-       再去拉<b>矯正度數</b>就看得到度數不對的後果：<b>度數太弱，本來糊的地方還是糊</b>；
-       <b>度數太強，換成另一邊糊掉</b>——近視配太深會看不清近的，遠視配太深會看不清遠的。
-       三檔裡只有中間那一檔拖到哪裡都清楚。</p>
-    <p>右下角的小窗是<b>視網膜上的像</b>——側視圖看不出來的那一半。像落得離視網膜越遠，那裡就越糊。</p>
-    <h3 style="font-size:calc(15px * var(--u));margin:16px 0 8px">色光</h3>
-    <p>光源可以分別打開<b>紅光、綠光、藍光</b>，三道一起開就是<b>白光</b>（按「<b>全部開啟（白光）</b>」會一次打開三道），
-       燈罩中間的方框就是混合後發出的顏色。方格紙左下與右下的<b>三圈示意圖</b>，分別是發出的光與眼睛接收的光。光照到<b>不透明</b>的色紙時，
-       色紙只把<b>和自己同色</b>的光反射出去，其他顏色的光被<b>吸收</b>（光線停在色紙上）。
-       反射出來的光進入眼睛，就是我們看到的顏色。<b>色紙畫的是它看起來的顏色</b>，下方同時標出它實際是什麼顏色。</p>
-    <p>所以紅色色紙在白光下是紅的，只照綠光時卻<b>沒有光被反射</b>，看起來就是黑的。
-       白色色紙反射所有照到的光，黑色色紙吸收所有的光。左下角的卡片會寫出每一種光的去向。</p>
-    <p>切到<b>透明體</b>後，光改成穿過<b>玻璃紙</b>進入眼睛，最多可以疊三片。每一片只讓<b>和自己同色</b>的光通過，
-       其他顏色的光被吸收（光線停在那一片上）。
-       白光穿過紅色玻璃紙只剩紅光；再疊一片綠色玻璃紙，紅光也過不去，眼睛就什麼都看不到了。</p>
-    <button class="chip" id="btnCloseHelp" style="margin-left:auto">關閉</button>
+    <p>左欄<b>上面那張卡</b>是可以調的條件（器材種類、焦距、物距…），
+       最底下的「<b>進階</b>」收了比較少用的項目；
+       <b>下面那張卡</b>的「顯示…」只改畫面，不會改變成像。
+       右邊是畫布，底下是六個頁籤。</p>
+    <p>畫面上<b>不標任何數值</b>，長度一律數背景格線：每一小格是一格，每 5 格有一條深一點的主格線。</p>
+    <p><b>物體可以直接在畫布上左右拖曳</b>，左欄的物距拖桿會跟著動；反過來拉拖桿，物體也會跟著跳。
+       紙屏、遮板、針孔擋板同樣可以拖——抓它們旁邊那個<b>藍框的小箭頭握把</b>最好拖。</p>
+    <p><i class="fa-solid fa-play"></i> 播放，光會從物體出發往前走
+       <i class="fa-solid fa-rotate-left"></i> 重設這一輪（條件不變，光路變回完整的樣子）
+       <b>重設全部</b> 把條件通通調回一開始。</p>
+    <button class="btn primary" id="btnCloseHelp" style="margin-left:auto">關閉</button>
   </div>
 </div>
 
@@ -993,9 +980,9 @@ const eyeNearPoint = L => L * EYE_ACC[0] / (L - EYE_ACC[0]);
 const eyeAxisRatio = () => EYE_AXIS[state.eyeType] / EYE_AXIS_N;
 // 水晶體變形的兩端 ＝ 調節範圍本身（三種眼睛共用同一把厚薄的尺，厚薄才比得起來）
 const EYE_F_RANGE = EYE_ACC;
-/* 矯正度數**三檔**〔**A** 使用者 2026-09-07 裁示「眼鏡矯正的度數3段」〕，
+/* 矯正鏡片的**正確度數**（三檔滑桿已於 2026-09-20 依使用者裁示移除，現在只剩這一個值），
    值是**屈光力** 1/|f|（格⁻¹），越大度數越強。近視配凹、遠視配凸。
-   中間那檔（索引 ＝ EYE_POWER_OK）是**正確度數**，由「把這隻眼睛對不到的那一端，
+   它由「把這隻眼睛對不到的那一端，
    剛好搬到它自己看得清楚的那一端」反解：近視 → 讓最遠處（14.6 格）成的像落在**遠點**；
    遠視 → 讓最近處（5.5 格）成的像落在**近點**。算出來近視 f_g = −41.66 格、遠視 +20.79 格。
    **2026-09-20 改成眼軸模型時這一支非改不可**：遠點與近點以前剛好等於三等分的兩個分界，
@@ -1011,34 +998,13 @@ function eyeCorrectPower(type){
   const v = EYE_GLASS_X - (far ? eyeFarPoint(L) : eyeNearPoint(L));        // 鏡片要把像成在這裡（在鏡片左側，負）
   return Math.abs(1 / uObj + 1 / v);
 }
-/* 弱、強兩檔的倍率是掃出來的，判準沿用舊版：「拖到參考端要明顯糊、且方向正確」。
-   **2026-09-20 眼軸模型改版後整組重掃**〔C 模型判斷，使用者未就倍率表態〕：舊值
-   [0.55, 1, 3.2]／[0.55, 1, 1.7] 在新模型下失效——調節範圍放寬成 [2.45, 3.62] 之後
-   眼睛的補償能力變強，近視「強」檔 3.2× 實測變成**全程清楚、完全沒有症狀**。
-   **兩種眼睛的倍率不同不是筆誤**：近視配凹鏡、遠視配凸鏡，過矯時一個把像拉近、一個把像推遠，
-   眼睛能不能靠調節補回來並不對稱。
-   新值實測（像離視網膜的格數，正＝視網膜後、負＝視網膜前；裸眼症狀是 近視 −0.434／遠視 +0.371）：
-   - 近視 弱 ×0.3：看遠 −0.308（仍在視網膜前，度數不足）；強 ×6：看近 +0.401（過矯，像被拉到視網膜後）
-   - 遠視 弱 ×0.3：看近 +0.258（仍在視網膜後）；強 ×2：看遠 −0.642（過矯，像被推到視網膜前）
-   **與舊版的行為差別（教學上要知道）**：舊版宣稱強檔「全程糊」，新模型下強檔只在
-   **這隻眼睛原本就吃力的那一端**糊——近視強檔看遠仍清楚、遠視強檔看近仍清楚，因為調節補得回來。
-   要做到全程糊得把倍率拉到 12× 以上，那已經不像「度數配太深」而像換了一片不相干的鏡片。
-   只有中間那一檔拖到任何位置都落在視網膜上。 */
-const EYE_POWER_MUL = { myopia:[0.3, 1, 6], hyper:[0.3, 1, 2] };
-const EYE_POWER = {
-  myopia:EYE_POWER_MUL.myopia.map(m => eyeCorrectPower('myopia') * m),
-  hyper: EYE_POWER_MUL.hyper.map(m => eyeCorrectPower('hyper') * m),
-};
-/* 正確度數 ＝ 三檔的中間那一檔。**2026-09-20 起它不再強制對焦**
-   〔**A** 使用者「照codex」，Codex 方案第 5 點「請刪除正確度數直接強制對焦的程式」〕。
-   舊版非強制不可的理由是 09-08 模型的產物：那時戴正確度數的遠視鏡再看遠，鏡片會把光聚成
-   **虛物**（uEye 為負），所需焦距衝到 5.5 格、遠超任何眼睛的調節上限，不強制就一定糊。
-   眼軸模型下這個情形不再發生——實算戴正確度數的遠視鏡看最遠處：uEye = +33.98 格
-   （是實物，不是虛物），need = 3.616 格，落在 EYE_ACC [2.45, 3.62] 之內。
-   於是「矯正後不論看近或看遠成像一律在視網膜上」改由物理自然成立，不必再特判，
-   度數也恢復它真正的物理意義（原先那一版的 **B** 裁示「接受度數的物理意義變成近似開關式」
-   連帶失效——現在三檔都是真的在算兩階段成像）。 */
-const EYE_POWER_OK = 1;
+/* 〔2026-09-20：三檔度數（`EYE_POWER_MUL`／`EYE_POWER`／`EYE_POWER_OK`）整組移除，
+     使用者裁示刪除矯正度數功能（**A**「刪除眼鏡頁的矯正度數功能」）。
+     戴上眼鏡一律直接用上面 `eyeCorrectPower()` 反解出來的**正確度數**。
+     保留的結論（同日稍早才驗過，換人接手時不要再推一次）：正確度數**不需要強制對焦**——
+     眼軸模型下戴正確度數的遠視鏡看最遠處 uEye = +33.98 格（是實物不是虛物）、
+     need = 3.616 格，落在 `EYE_ACC` [2.45, 3.62] 之內，「矯正後看近看遠都落在視網膜上」
+     由物理自然成立。要復原三檔度數去 git 歷史撈 1ec44b9 之後的版本。〕
 /* ── 頁 4 光的折射（導覽列排在面鏡與透鏡之間，data-screen 取 4，見 PROJECT_PLAN §13） ──
    頁籤標題是「視深」〔**A** 使用者 2026-09-14「頁籤標題改成視深」〕；程式碼註解沿用「光的折射頁」這個內部稱呼。
    〔**A** 使用者 2026-09-13「模擬出鳥看水中魚以及魚看空中鳥的視深與實深，可以明確呈現光路與形成的虛像」〕
@@ -1144,7 +1110,7 @@ const IMG_OPACITY = 0.45;   // 實像與虛像的濃淡統一（§2.8 定案）
 // 左上角在原點。把足端移到 (0,0)、水平置中，之後再乘「格→px」的縮放。
 const CANDLE = { h:300.66766, base:'translate(-46.40133,-300.66766)' };
 
-/* ═══ 2. state：單一物件，重置時整個換新 ═══ */
+/* ═══ 2. state：單一物件，「重設全部」時整個換新 ═══ */
 function initState(){
   return {
     screen:2,
@@ -1156,7 +1122,7 @@ function initState(){
     // 針孔頁的三個發光點（頂端／中段／底端），各自發一組通過針孔的光。預設只開頂端
     // 〔**B** 使用者 2026-09-10 選定「頂端／中段／底端，只開頂端」，
     //   取代原本單一核取的「單點光束示範」〕。這三處（HTML 的 checked、這裡、
-    //   重置的還原值）必須一致，DESIGN_SPEC 第 4 節
+    //   「重設全部」的還原值）必須一致，DESIGN_SPEC 第 4 節
     pinPts:[true, false, false],
     f:3,                              // 焦距的**絕對值**（格）。正負號一律由 signedF() 決定，
                                       // state 不存負數——五檔物距、F／2F 記號、透鏡厚度都用絕對值
@@ -1165,7 +1131,7 @@ function initState(){
     u:U_SEGS[U_DEFAULT_SEG].k * 3,   // 物距（格）
     shape:'candle',                   // 課本那張圖就是蠟燭
     // ①② 預設開、③「通過焦點」預設關（使用者 2026-09-06 裁示，取代 §2.2 的「預設全開」）。
-    // 這三處（HTML 的 checked、這裡、重置的還原值）必須一致，DESIGN_SPEC 第 4 節。
+    // 這三處（HTML 的 checked、這裡、「重設全部」的還原值）必須一致，DESIGN_SPEC 第 4 節。
     rays:[true, true, false],
     /* ── 播放動畫（目前只有透鏡頁，**B** 使用者 2026-09-10「先做透鏡頁一頁，驗過再擴」）──
        `anim` ＝ 光從物體出發後已經走了多少 px。**null ＝ 預設態：沒在播也沒播過，光路完整顯示**
@@ -1181,14 +1147,9 @@ function initState(){
     pinX:0,
     eyeType:'normal',                 // 頁 3：normal｜myopia｜hyper。決定水晶體的調節範圍
     glasses:false,                    // 戴上矯正鏡。正常眼沒有這一組（沒有要矯正的東西）
-    // 矯正度數的檔位索引（0–2）。**預設就是正確度數那一檔**
-    // 〔**A** 使用者 2026-09-08「戴上眼鏡後預設顯示正確的矯正度數」，取代 2026-09-07 的
-    //   「預設最弱、先讓學生看到還是糊」〕——戴上眼鏡的第一眼要先看到「矯正之後是什麼樣子」，
-    //   度數不對的後果留給學生自己去拉滑桿試。
-    power:EYE_POWER_OK,
     // 眼睛頁的三條特徵光線，**不與另外兩頁的 rays 共用**：那三條的 ③ 預設關（§2.5 裁示），
     // 這裡是 ①② 預設開、③ 預設關（使用者 2026-09-08 裁示）。
-    // 這三處（HTML 的 checked、這裡、重置的還原值）必須一致，DESIGN_SPEC 第 4 節。
+    // 這三處（HTML 的 checked、這裡、「重設全部」的還原值）必須一致，DESIGN_SPEC 第 4 節。
     eyeRays:[true, true, false],
     // 頁 4 光的折射：誰在看。'bird' ＝ 鳥看魚（魚身上的光射進鳥眼），'fish' ＝ 魚看鳥
     // 〔**B** 使用者 2026-09-13 選定「.seg 切換（推薦）」〕
@@ -1202,7 +1163,7 @@ function initState(){
     bird:{ x:-1.0, h:2.0 },
     fish:{ x:0.5, d:2.2 },
     // 頁 5 色光。預設三色全開（＝白光）照紅色色紙：一開頁先看到「白光下它就是紅的」，
-    // 再讓學生自己關掉紅光看它變黑〔C〕。這三處（HTML 的 aria-pressed、這裡、重置）必須一致
+    // 再讓學生自己關掉紅光看它變黑〔C〕。這三處（HTML 的 aria-pressed、這裡、「重設全部」）必須一致
     colorMode:'opaque',               // opaque｜clear
     lights:[true, true, true],
     paperColor:4,
@@ -1324,7 +1285,8 @@ function uRange(){
 function eyeGlassOn(){ return state.glasses && state.eyeType !== 'normal'; }
 // 近視配**凹**透鏡（焦距取負）、遠視配**凸**透鏡——迷思概念「近視眼鏡是凸透鏡」就打在這裡
 function eyeGlassF(){
-  const p = EYE_POWER[state.eyeType][state.power];
+  // 2026-09-20 起只有一種度數：反解出來的正確度數（三檔滑桿已依使用者裁示移除）
+  const p = eyeCorrectPower(state.eyeType);
   return state.eyeType === 'myopia' ? -1 / p : 1 / p;
 }
 function eyeOptics(){
@@ -2376,10 +2338,9 @@ function drawSpectacle(L, o){
   const g = G.g, ax = G.axisY, x = optCx() - EYE_GLASS_X * g, half = EYE_GLASS_H / 2 * g;
   const e = 0.09 * g;                            // 邊緣半厚（兩種鏡片一樣）
   const B = 0.35 * g;                            // 彎月的基弧：兩面共同的彎曲量
-  /* 三檔的曲率差**照檔位平均分**（0、0.5、1），不照屈光力的實際比例：
-     兩種眼睛的弱／強倍率不對稱（近視的強檔是 3.2×），照比例算會讓中間那檔畫得幾乎跟最弱一樣薄，
-     學生就看不出「我把度數調強了」。滑桿本來就不標數值，畫面要表達的是**檔位**不是屈光度。 */
-  const t = state.power / (EYE_POWER[state.eyeType].length - 1);
+  /* 鏡片厚度：度數滑桿移除後只剩正確度數一種，取原本三檔的中間值（t = 0.5）——
+     畫出來的鏡片與舊版「中等」那一檔完全一樣，不必為了單一檔位再引入一個常數。 */
+  const t = 0.5;
   const D = (0.05 + 0.08 * t) * g;               // 兩面的曲率差 ＝ 中央與邊緣的厚度差
   /* 兩片鏡子**同向**：凸面一律朝左（朝物體）、凹面朝右（朝眼睛），差別只在中央厚薄
      〔**A** 使用者 2026-09-10「遠視眼的凹凸透鏡幫我左右鏡像」，
@@ -2882,8 +2843,18 @@ function syncControls(im){
   document.getElementById('wrapMask').hidden = pg !== 2;
   document.getElementById('pinPtGroup').hidden = pg !== 0;
   document.getElementById('wrapPaper').hidden = pg === 0 || isEye || isRefr || isColor;
+  /* 遮板與紙屏那一組（卡 1）兩項都藏起來時整組收掉，否則會留一塊空白（2026-09-20 分卡後新增）。
+     讀 .hidden 而不是重算一次條件：兩處各寫一份判斷正是規範第 4 節在防的那種分岔。 */
+  document.getElementById('gearGroup').hidden =
+    document.getElementById('wrapMask').hidden && document.getElementById('wrapPaper').hidden;
   // 眼睛頁的特徵光線是自己那三條，與另外兩頁的三條分開（預設值不同）
   document.getElementById('eyeRayGroup').hidden = !isEye;
+  /* 卡 2 三組全藏時整張卡收掉（2026-09-20 分卡後新增）：色光頁與視深頁沒有任何顯示疊層，
+     留著會在左欄多一塊空白的白卡。同樣讀 .hidden 不重算條件。 */
+  document.getElementById('layerCard').hidden =
+    document.getElementById('rayGroup').hidden
+    && document.getElementById('eyeRayGroup').hidden
+    && document.getElementById('showGroup').hidden;
   // 眼睛頁的物體一律蠟燭（§2.5 第 7 點），造型整組收起來
   document.getElementById('shapeGroup').hidden = isEye || isRefr || isColor;
   // 「看遠／看近」的選中態依**蠟燭落在哪一區**反推（三等分），拖到中間區時兩顆都不亮——
@@ -2893,9 +2864,9 @@ function syncControls(im){
     for (const c of document.querySelectorAll('#lookChips .chip'))
       c.setAttribute('aria-pressed', String(zone === (c.dataset.look === 'far' ? 2 : 0)));
   }
-  // 正常眼沒有要矯正的東西，那兩組整組收起來（比照平面鏡收焦距）；度數要先戴上眼鏡才出現
+  // 正常眼沒有要矯正的東西，「戴上眼鏡」整組收起來（比照平面鏡收焦距）。
+  // 原本還有一行收「矯正度數」，該功能已於 2026-09-20 依使用者裁示移除
   document.getElementById('glassGroup').hidden = !isEye || state.eyeType === 'normal';
-  document.getElementById('powerGroup').hidden = !isEye || state.eyeType === 'normal' || !state.glasses;
   // 平行光＝物在無限遠，針孔、平面鏡、眼睛頁都不適用
   document.getElementById('chipParallel').hidden = noFocus;
 
@@ -3590,14 +3561,14 @@ let animRaf = 0, animLast = 0, animKey = '';
 function animPlayable(){ return animTotal > 0; }
 /* 改任何參數都回到「完整顯示」：半條光線配著新的物距是錯的畫面。
    用**參數指紋**比對而不是在每個事件處理裡各加一行——後者只要漏掉一處就會留下錯畫面，
-   而四頁改得動狀態的入口有幾十個。播放中指紋不變，所以不會自己把自己重置掉。
+   而四頁改得動狀態的入口有幾十個。播放中指紋不變，所以不會自己把自己重設掉。
    指紋要涵蓋**四頁所有會改變光路的參數**，漏一個就會出現「動了器材、光線卻停在半路」。 */
 function animGuard(){
   const k = [state.screen, state.lens, state.mirror, state.f, state.u.toFixed(3), state.shape,
              state.rays.join(''), state.maskOn, state.mask.toFixed(2), state.beam,
              state.hole, state.hshape, state.hcount, state.pinPts.join(''), state.pinX.toFixed(3),
              state.paperV === null ? 'auto' : state.paperV.toFixed(3), state.paper,
-             state.eyeType, state.glasses, state.power, state.eyeRays.join(''),
+             state.eyeType, state.glasses, state.eyeRays.join(''),
              state.refrView, state.bird.x.toFixed(3), state.bird.h.toFixed(3),
              state.fish.x.toFixed(3), state.fish.d.toFixed(3),
              state.colorMode, state.lights.join(''), state.paperColor, state.sheets.join()].join('|');
@@ -3717,23 +3688,13 @@ function setF(v){
   // u 的數值不動，但它相對於新的 F／2F 落在哪一段會變，setU 會重新判段並把拖桿移過去。
   setU(state.u, false);
 }
-// 度數不標數值（§2.2「一律不標任何數值」四頁通用），只講相對強弱
-const POWER_NAME = ['較弱', '中等', '較強'];
-function syncPower(){
-  const sl = document.getElementById('powerSlider');
-  sl.value = state.power; refreshFill(sl);
-  document.getElementById('powerName').textContent = POWER_NAME[state.power];
-}
 function setEyeType(v){
   if (state.eyeType === v) return;
   state.eyeType = v;
   for (const b of document.querySelectorAll('#eyeSeg button'))
     b.setAttribute('aria-pressed', String(b.dataset.eye === v));
-  // 兩種眼睛的度數檔位表不同，換眼睛時一律回到**正確度數**那一檔
-  // （與勾「戴上眼鏡」時同一個預設，使用者 2026-09-08 裁示）。
-  // 把上一種眼睛的檔位帶過來會出現「換了眼睛、度數卻還停在上一副的強弱」
-  state.power = EYE_POWER_OK;
-  syncPower();
+  // 度數已於 2026-09-20 移除，換眼睛不需要再同步檔位——eyeGlassF() 每次都依
+  // 當下的 eyeType 重算正確度數，換過去自然就是那隻眼睛該配的鏡片
   render();
 }
 document.getElementById('eyeSeg').addEventListener('click', e => {
@@ -3751,12 +3712,6 @@ for (const [id, idx] of [['chkER1', 0], ['chkER2', 1], ['chkER3', 2]]){
     state.eyeRays[idx] = e.target.checked; render();
   });
 }
-document.getElementById('powerSlider').addEventListener('input', e => {
-  refreshFill(e.target);
-  state.power = +e.target.value;
-  document.getElementById('powerName').textContent = POWER_NAME[state.power];
-  render();
-});
 document.getElementById('lensSeg').addEventListener('click', e => {
   const b = e.target.closest('button[data-lens]');
   if (b) setLens(b.dataset.lens);
@@ -3879,9 +3834,8 @@ for (const [id, key] of [['chkBeam','beam'], ['chkMask','maskOn'], ['chkPaper','
     if (key === 'paper' && e.target.checked) state.paperV = null;
     // 重新放進光路的遮板一律從停放位置開始，不留上一次拉到哪裡的殘留狀態
     if (key === 'maskOn' && e.target.checked) state.mask = 0;
-    // 戴上眼鏡就直接配好**正確度數**（使用者 2026-09-08 裁示）：第一眼要先看到矯正後的樣子，
-    // 度數不對的後果留給學生自己拉滑桿試。摘下再戴回去也一律回到正確那一檔
-    if (key === 'glasses' && e.target.checked){ state.power = EYE_POWER_OK; syncPower(); }
+    // 戴上眼鏡一律配好**正確度數**（使用者 2026-09-08 裁示）。2026-09-20 移除度數滑桿之後
+    // 這件事由 eyeGlassF() 恆成立，不必再在這裡特別設一次
     render();
   });
 }
@@ -3991,8 +3945,24 @@ for (const [id, kind] of [['hintBird', 'bird'], ['hintFish', 'fish']]){
   bindDragSurface(el);
 }
 
-document.getElementById('btnReset').addEventListener('click', () => {
-  // 「重置這一頁」只把設定還原，**留在原本那一頁**——重置不該把學生踢回別的分頁
+/* ── 兩種重設（2026-09-20，DEV_SPEC 第 1 節、DESIGN_SPEC 第 1 節「兩種重設」）──
+   舊版只有抽屜那顆 ↺，做的是「把設定還原」——在新語意下那是**重設全部**的行為，
+   而 ↺ 應該只清播放進度。兩者現在各自一顆、各自一個函式。 */
+
+/* 「重設這一輪」（抽屜的 ↺）＝回到按播放鍵前：光路收回成「整條都畫出來」的完整樣子，
+   器材、焦距、物距、特徵光線、顯示開關**全部不動**。
+   這正是 animGuard() 在參數變動時做的事，只是這裡由學生主動觸發。 */
+function resetRun(){
+  state.playing = false;
+  state.anim = null;     // null ＝ 沒在播、一切原封輸出（見 state.anim 的定義註解）
+  animLast = 0;
+  render();
+  syncPlayBtn();
+}
+
+/* 「重設全部」（左欄最底下）＝把六頁共用的設定全部還原，**留在原本那一頁**
+   ——重設不該把學生踢回別的分頁。 */
+function resetAll(){
   const keep = state.screen;
   state = initState();
   state.screen = keep;
@@ -4020,7 +3990,6 @@ document.getElementById('btnReset').addEventListener('click', () => {
       c.setAttribute('aria-pressed', String(c.dataset[attr] === val));
   for (const b of document.querySelectorAll('#eyeSeg button'))
     b.setAttribute('aria-pressed', String(b.dataset.eye === state.eyeType));
-  syncPower();
   const sl = document.getElementById('uSlider');
   sl.value = U_DEFAULT_SEG; refreshFill(sl);
   // 這一份清單必須與 initState() 逐項對得上（DESIGN_SPEC 第 4 節）
@@ -4030,7 +3999,10 @@ document.getElementById('btnReset').addEventListener('click', () => {
                          ['chkER1',true], ['chkER2',true], ['chkER3',false]])
     document.getElementById(id).checked = v;
   setU(state.u, false);
-});
+}
+
+document.getElementById('btnReset').addEventListener('click', resetRun);
+document.getElementById('btnResetAll').addEventListener('click', resetAll);
 
 // 分頁切換（單一 html 內 display 切換）
 document.getElementById('nav').addEventListener('click', e => {
